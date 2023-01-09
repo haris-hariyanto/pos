@@ -105,8 +105,6 @@ class ImportCSV extends Command
                     $chain = null;
                 }
 
-                continue;
-
                 // Hotel brand
                 if (!empty($brandID)) {
                     $brand = Brand::firstOrCreate(
@@ -230,10 +228,15 @@ class ImportCSV extends Command
                     'accommodation_type' => !empty($accommodationType) ? $accommodationType : null,
                 ]);
 
+                $photoToSave = [];
                 foreach ($photos as $photo) {
                     $photoURL = $photo;
                     $photoURL = parse_url($photoURL, PHP_URL_SCHEME) . '://' . parse_url($photoURL, PHP_URL_HOST) . parse_url($photoURL, PHP_URL_PATH);
                     $photoThumbnailURL = $photo;
+
+                    $photoToSave[] = [
+
+                    ];
 
                     Photo::create([
                         'hotel_id' => $hotel->id,
