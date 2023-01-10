@@ -231,7 +231,7 @@ class ImportCSV extends Command
                     'rating_average' => !empty($ratingAverages) ? $ratingAverages : null,
                     'rates_currency' => !empty($ratesCurrency) ? $ratesCurrency : null,
                     'rates_from_exclusive' => !empty($ratesFromExclusive) ? $ratesFromExclusive : null,
-                    'photos' => json_decode($photoToSave),
+                    'photos' => json_encode($photoToSave),
                     'accommodation_type' => !empty($accommodationType) ? $accommodationType : null,
                 ]);
 
