@@ -52,6 +52,7 @@ class ImportCSV extends Command
         while ($loop) {
             $source = Source::where('is_saved', 'N')->first();
             if (!$source) {
+                dd($source);
                 return 0;
             }
             $source->update([
