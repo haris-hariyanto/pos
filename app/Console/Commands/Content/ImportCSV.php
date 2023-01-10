@@ -48,8 +48,7 @@ class ImportCSV extends Command
             );
         }
         
-        $loop = true;
-        while ($loop) {
+        while (true) {
             $source = Source::where('is_saved', 'N')->first();
             if (!$source) {
                 return 0;
@@ -65,7 +64,6 @@ class ImportCSV extends Command
             foreach ($records as $record) {
                 // Skip if data incomplete
                 if (!isset($record[40])) {
-                    dd('OK');
                     continue;
                 }
 
