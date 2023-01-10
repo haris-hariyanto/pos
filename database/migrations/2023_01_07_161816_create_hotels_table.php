@@ -17,7 +17,9 @@ return new class extends Migration
             $table->id();
             $table->string('slug');
             $table->integer('chain_id')->nullable();
+            $table->string('chain')->nullable();
             $table->integer('brand_id')->nullable();
+            $table->string('brand')->nullable();
             $table->string('name');
             $table->string('formerly_name')->nullable();
             $table->string('translated_name')->nullable();
