@@ -95,7 +95,6 @@ class ImportCSV extends Command
                 $ratesFromExclusive = trim($record[39]);
                 $accommodationType = trim($record[40]);
 
-                /*
                 // Hotel chain
                 if (!empty($chainID)) {
                     $chain = Chain::firstOrCreate(
@@ -175,7 +174,6 @@ class ImportCSV extends Command
                     $cityID = null;
                     $cityName = null;
                 }
-                */
 
                 // Prevent duplicate slug
                 $baseSlug = Str::slug($hotelName);
