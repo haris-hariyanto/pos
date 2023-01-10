@@ -50,7 +50,8 @@ return new class extends Migration
             $table->string('rates_currency')->nullable();
             $table->string('rates_from_exclusive')->nullable();
             $table->string('accommodation_type')->nullable();
-            $table->text('cache_data')->nullable();
+            $table->text('photos')->nullable();
+            $table->text('additional_data')->nullable();
             $table->timestamps();
         });
     }

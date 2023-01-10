@@ -42,6 +42,7 @@ class ImportCSV extends Command
         
         foreach ($csvFiles as $csvFile) {
             $path = storage_path('app/' . $csvFile);
+
             $csv = Reader::createFromPath($path);
             $records = $csv->getRecords();
 
@@ -190,6 +191,11 @@ class ImportCSV extends Command
                     }
                 }
 
+                $photoToSave = [];
+                foreach ($photos as $photo) {
+                    $photoToSave[] = $photo;
+                }
+
                 $hotel = Hotel::create([
                     'slug' => $hotelSlug,
                     'chain_id' => $chain ? $chain->id : $chain,
@@ -225,25 +231,9 @@ class ImportCSV extends Command
                     'rating_average' => !empty($ratingAverages) ? $ratingAverages : null,
                     'rates_currency' => !empty($ratesCurrency) ? $ratesCurrency : null,
                     'rates_from_exclusive' => !empty($ratesFromExclusive) ? $ratesFromExclusive : null,
+                    'photos' => json_decode($photoToSave),
                     'accommodation_type' => !empty($accommodationType) ? $accommodationType : null,
                 ]);
-
-                $photoToSave = [];
-                foreach ($photos as $photo) {
-                    $photoURL = $photo;
-                    $photoURL = parse_url($photoURL, PHP_URL_SCHEME) . '://' . parse_url($photoURL, PHP_URL_HOST) . parse_url($photoURL, PHP_URL_PATH);
-                    $photoThumbnailURL = $photo;
-
-                    $photoToSave[] = [
-
-                    ];
-
-                    Photo::create([
-                        'hotel_id' => $hotel->id,
-                        'url' => $photoURL,
-                        'url_thumbnail' => $photo,
-                    ]);
-                }
 
                 $this->info('[ * ] Import Data Hotel');
                 $this->info('[ * ] Nama hotel : ' . $hotelName);

@@ -13,14 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('cities', function (Blueprint $table) {
+        Schema::create('scrape_histories', function (Blueprint $table) {
             $table->id();
-            $table->string('slug');
-            $table->string('name');
-            $table->integer('state_id')->nullable();
-            $table->integer('country_id');
-            $table->integer('continent_id');
-            $table->enum('is_scraped', ['Y', 'N', 'PROCESS'])->default('N');
+            $table->integer('city_id');
+            $table->integer('google_place_type');
         });
     }
 
@@ -31,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cities');
+        Schema::dropIfExists('scrape_histories');
     }
 };
