@@ -13,6 +13,7 @@ use App\Models\Location\Continent;
 use App\Models\Location\Country;
 use App\Models\Location\State;
 use App\Models\Location\City;
+use App\Models\Source;
 use Illuminate\Support\Str;
 
 class ImportCSV extends Command
@@ -39,9 +40,24 @@ class ImportCSV extends Command
     public function handle()
     {
         $csvFiles = Storage::files('csv');
-        
+
         foreach ($csvFiles as $csvFile) {
             $path = storage_path('app/' . $csvFile);
+            Source::firstOrCreate(
+                ['name' => $path]
+            );
+        }
+        
+        $loop = true;
+        while ($loop) {
+            $source = Source::where('is_saved', 'N')->first();
+            if (!$source) {
+                return 0;
+            }
+            $source->update([
+                'is_saved' => 'PROCESS'
+            ]);
+            $path = $source->name;
 
             $csv = Reader::createFromPath($path);
             $records = $csv->getRecords();
@@ -236,6 +252,10 @@ class ImportCSV extends Command
 
                 $this->line('--------------------');
             }
+
+            $source->update([
+                'is_saved' => 'Y'
+            ]);
         }
     }
 }
