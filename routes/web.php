@@ -14,9 +14,7 @@ use App\Http\Controllers;
 |
 */
 
-Route::get('/', function () {
-    return view('main.index');
-})->name('index');
+Route::get('/', [Controllers\Main\HomeController::class, 'index'])->name('index');
 
 Route::get('/p/{page}', [Controllers\Main\Misc\PageController::class, 'page'])->name('page');
 Route::get('/contact', [Controllers\Main\Misc\ContactController::class, 'contact'])->name('contact');

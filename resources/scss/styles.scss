@@ -3,6 +3,21 @@ $link-decoration: none;
 $link-hover-decoration: underline;
 
 $white: #fff;
+$slate-50: #f8fafc;
+$slate-200: #e2e8f0;
+$slate-300: #cbd5e1;
+$gray-800: #1f2937;
+
+$primary: #4f46e5;
+$body-bg: #f1f5f9;
+$body-color: $gray-800;
+
+$navbar-dark-color: $slate-200;
+$navbar-dark-hover-color: $white;
+
+$card-bg: $white;
+$card-border-width: 0;
+$card-border-color: null;
 
 @import "~bootstrap/scss/bootstrap";
 
@@ -10,17 +25,21 @@ $white: #fff;
     display: none !important;
 }
 
+body {
+    padding-top: 56px;
+}
+
 .cursor-pointer {
     cursor: pointer;
 }
 
 a.footer-link {
-    color: rgba($white, .55);
+    color: $slate-200;
     &:hover {
-        color: rgba($white, .75);
+        color: $white;
     }
 }
 
 p.footer-copyright {
-    color: rgba($white, .55);
+    color: $slate-300;
 }

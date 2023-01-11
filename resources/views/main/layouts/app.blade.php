@@ -15,6 +15,7 @@
         @endif
 
         @vite(['resources/js/app.js'])
+        @vite(['resources/css/tailwind.css'])
 
         @stack('scripts')
     </head>
