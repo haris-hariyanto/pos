@@ -17,8 +17,11 @@ return new class extends Migration
             $table->id();
             $table->string('slug');
             $table->string('name');
-            $table->integer('country_id');
-            $table->integer('continent_id');
+            $table->integer('country_id')->nullable();
+            $table->string('country')->nullable();
+            $table->integer('continent_id')->nullable();
+            $table->string('continent')->nullable();
+            $table->enum('is_scraped', ['Y', 'N', 'PROCESS'])->default('N');
         });
     }
 

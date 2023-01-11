@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->integer('hotel_id');
             $table->integer('place_id');
+            $table->integer('m_distance');
             $table->text('additional_data')->nullable();
         });
     }

@@ -18,7 +18,9 @@ return new class extends Migration
             $table->string('slug');
             $table->string('name');
             $table->string('iso_code');
-            $table->integer('continent_id');
+            $table->integer('continent_id')->nullable();
+            $table->string('continent')->nullable();
+            $table->enum('is_scraped', ['Y', 'N', 'PROCESS'])->default('N');
         });
     }
 

@@ -114,8 +114,8 @@ class ImportCSV extends Command
                 // Hotel chain
                 if (!empty($chainID)) {
                     $chain = Chain::firstOrCreate(
-                        ['name' => $chainName], 
                         ['slug' => Str::slug($chainName)]
+                        ['name' => $chainName]
                     );
                 }
                 else {
@@ -250,8 +250,8 @@ class ImportCSV extends Command
                     'rating_average' => !empty($ratingAverages) ? $ratingAverages : null,
                     'rates_currency' => !empty($ratesCurrency) ? $ratesCurrency : null,
                     'rates_from_exclusive' => !empty($ratesFromExclusive) ? $ratesFromExclusive : null,
-                    'photos' => json_encode($photoToSave),
                     'accommodation_type' => !empty($accommodationType) ? $accommodationType : null,
+                    'photos' => json_encode($photoToSave),
                 ]);
 
                 $this->info('[ * ] Import Data Hotel');

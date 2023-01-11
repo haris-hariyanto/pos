@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'places_api' => 'AIzaSyC8J7g3HCSabp2w78WjDQwE4UthDc5m0U4',
+    'places_api' => env('GOOGLE_PLACE_API_KEY', ''),
     'place_types_to_fetch' => [
         'airport',
         /*
@@ -14,4 +14,6 @@ return [
         'university',
         */
     ],
+    'maximum_page' => 2,
+    'language' => 'id',
 ];

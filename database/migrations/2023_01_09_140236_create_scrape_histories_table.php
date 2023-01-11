@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('scrape_histories', function (Blueprint $table) {
             $table->id();
-            $table->integer('city_id');
-            $table->integer('google_place_type');
+            $table->string('location_id');
+            $table->string('google_place_type');
         });
     }
 
