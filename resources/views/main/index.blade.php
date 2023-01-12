@@ -27,13 +27,13 @@
                     <div class="card shadow-sm h-100">
                         <div class="card-body">
                             <div class="mb-3">
-                                <img src="https://cdn.pixabay.com/photo/2022/12/23/16/03/sunrise-7674594_960_720.jpg" alt="{{ $continent->name }}" class="img-fluid rounded" loading="lazy">
+                                <img src="https://cdn.pixabay.com/photo/2022/12/23/16/03/sunrise-7674594_960_720.jpg" alt="{{ $continent['name'] }}" class="img-fluid rounded" loading="lazy">
                             </div>
-                            <h3 class="fs-5 mb-2">{{ $continent->name }}</h3>
+                            <h3 class="fs-5 mb-2">{{ $continent['name'] }}</h3>
                             <div class="row">
-                                @foreach ($continent->countries()->take(8)->get() as $country)
+                                @foreach ($continent['countries'] as $country)
                                     <div class="col-6 tw-line-clamp-1 mb-1">
-                                        <a href="#">{{ $country->name }}</a>
+                                        <a href="#">{{ $country['name'] }}</a>
                                     </div>
                                 @endforeach
                             </div>
@@ -57,8 +57,8 @@
                             @foreach ($popularPlaces as $popularPlace)
                                 <div class="col-12 col-lg-6">
                                     <div class="mb-2">
-                                        <div class="tw-line-clamp-1"><a href="#">{{ $popularPlace->name }}</a></div>
-                                        <div class="tw-line-clamp-1">{{ $popularPlace->country }}</div>
+                                        <div class="tw-line-clamp-1"><a href="#">{{ $popularPlace['name'] }}</a></div>
+                                        <div class="tw-line-clamp-1">{{ $popularPlace['country'] }}</div>
                                     </div>
                                 </div>
                             @endforeach

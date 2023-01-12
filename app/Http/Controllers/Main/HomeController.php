@@ -17,8 +17,35 @@ class HomeController extends Controller
 
         }
         else {
-            $continents = Continent::with('countries')->get();
-            $popularPlaces = Place::orderBy('user_ratings_total', 'DESC')->take(12)->get();
+            // Continents and countries
+            $modelContinents = Continent::with('countries')->get();
+            $continents = [];
+            foreach ($modelContinents as $modelContinent) {
+                $continent = [];
+                $continent['name'] = $modelContinent->name;
+                
+                $continent['countries'] = [];
+                foreach ($modelContinent->countries()->take(8)->get() as $country) {
+                    $continent['countries'][] = [
+                        'name' => $country->name,
+                    ];
+                }
+
+                $continents[] = $continent;
+            }
+
+            // Popular places
+            $modelPopularPlaces = Place::orderBy('user_ratings_total', 'DESC')->take(12)->get();
+            $popularPlaces = [];
+            foreach ($modelPopularPlaces as $modelPopularPlace) {
+                $popularPlaces[] = [
+                    'name' => $modelPopularPlace->name,
+                    'country' => $modelPopularPlace->country,
+                ];
+            }
+
+            
+
             $popularHotels = Hotel::orderBy('number_of_reviews', 'DESC')->take(12)->get();
         }
 
