@@ -263,6 +263,8 @@ class ImportCSV extends Command
             $source->update([
                 'is_saved' => 'Y'
             ]);
+
+            sleep(10);
         }
     }
 }
