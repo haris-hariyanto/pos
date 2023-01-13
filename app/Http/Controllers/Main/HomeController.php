@@ -23,11 +23,13 @@ class HomeController extends Controller
             foreach ($modelContinents as $modelContinent) {
                 $continent = [];
                 $continent['name'] = $modelContinent->name;
+                $continent['slug'] = $modelContinent->slug;
                 
                 $continent['countries'] = [];
                 foreach ($modelContinent->countries()->take(8)->get() as $country) {
                     $continent['countries'][] = [
                         'name' => $country->name,
+                        'slug' => $country->slug,
                     ];
                 }
 
@@ -36,17 +38,11 @@ class HomeController extends Controller
 
             // Popular places
             $modelPopularPlaces = Place::orderBy('user_ratings_total', 'DESC')->take(12)->get();
-            $popularPlaces = [];
-            foreach ($modelPopularPlaces as $modelPopularPlace) {
-                $popularPlaces[] = [
-                    'name' => $modelPopularPlace->name,
-                    'country' => $modelPopularPlace->country,
-                ];
-            }
+            $popularPlaces = $modelPopularPlaces->toArray();
 
-            
-
-            $popularHotels = Hotel::orderBy('number_of_reviews', 'DESC')->take(12)->get();
+            // Popular hotels
+            $modelPopularHotels = Hotel::orderBy('number_of_reviews', 'DESC')->take(12)->get();
+            $popularHotels = $modelPopularHotels->toArray();
         }
 
         return view('main.index', compact('continents', 'popularPlaces', 'popularHotels'));

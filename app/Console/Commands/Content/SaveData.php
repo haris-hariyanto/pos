@@ -153,7 +153,6 @@ class SaveData extends Command
             }
         }
 
-        /*
         $hotels = Hotel::select('chain', 'brand')->get();
         foreach ($hotels as $hotel) {
             if (!empty($hotel->chain)) {
@@ -182,6 +181,5 @@ class SaveData extends Command
                 $this->line('[ * ] Brand : ' . $brand->name);
             }
         }
-        */
     }
 }

@@ -23,7 +23,7 @@
 
         <div class="row g-2 tw-justify-center">
             @foreach ($continents as $continent)
-                <div class="col-12 col-lg-4 col-xl-3">
+                <div class="col-12 col-md-6 col-lg-4 col-xl-3">
                     <div class="card shadow-sm h-100">
                         <div class="card-body">
                             <div class="mb-3">
@@ -33,13 +33,13 @@
                             <div class="row">
                                 @foreach ($continent['countries'] as $country)
                                     <div class="col-6 tw-line-clamp-1 mb-1">
-                                        <a href="#">{{ $country['name'] }}</a>
+                                        <a href="{{ route('country', ['country' => $country['slug']]) }}">{{ $country['name'] }}</a>
                                     </div>
                                 @endforeach
                             </div>
                         </div>
                         <div class="card-footer text-end py-2">
-                            <a href="#" class="btn btn-outline-primary btn-sm">{{ __('More Countries') }}</a>
+                            <a href="{{ route('continent', ['continent' => $continent['slug']]) }}" class="btn btn-outline-primary btn-sm">{{ __('More Countries') }}</a>
                         </div>
                     </div>
                 </div>
@@ -74,8 +74,8 @@
                             @foreach ($popularHotels as $popularHotel)
                                 <div class="col-12 col-lg-6">
                                     <div class="mb-2">
-                                        <div class="tw-line-clamp-1"><a href="#">{{ $popularHotel->name }}</a></div>
-                                        <div class="tw-line-clamp-1">{{ $popularHotel->country }}</div>
+                                        <div class="tw-line-clamp-1"><a href="#">{{ $popularHotel['name'] }}</a></div>
+                                        <div class="tw-line-clamp-1">{{ $popularHotel['country'] }}</div>
                                     </div>
                                 </div>
                             @endforeach
