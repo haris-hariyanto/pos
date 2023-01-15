@@ -61,6 +61,15 @@ class ImportCSV extends Command
         $csv = Reader::createFromPath($path);
         $records = $csv->getRecords();
 
+        $firstID = Hotel::orderBy('id', 'DESC')->first();
+        if (!$firstID) {
+            $firstID = 1;
+        }
+        else {
+            $firstID = $firstID->id;
+            $firstID++;
+        }
+
         foreach ($records as $record) {
             // Skip if data incomplete
             if (!isset($record[40])) {
@@ -110,6 +119,7 @@ class ImportCSV extends Command
             $ratesFromExclusive = trim($record[39]);
             $accommodationType = trim($record[40]);
 
+            /*
             // Prevent duplicate slug
             $baseSlug = Str::slug($hotelName);
             $hotelSlug = $baseSlug;
@@ -125,6 +135,8 @@ class ImportCSV extends Command
                     $tailID++;
                 }
             }
+            */
+            $hotelSlug = $firstID . '-' . Str::slug($hotelName);
 
             $photoToSave = [];
             foreach ($photos as $photo) {
@@ -171,6 +183,8 @@ class ImportCSV extends Command
                 'accommodation_type' => !empty($accommodationType) ? $accommodationType : null,
                 'photos' => json_encode($photoToSave),
             ]);
+            $firstID = $hotel->id;
+            $firstID++;
 
             $this->info('[ * ] Import Data Hotel');
             $this->info('[ * ] Nama hotel : ' . $hotelName);

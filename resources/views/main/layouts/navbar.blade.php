@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-primary fixed-top">
-    <div class="container">
+    <div class="container px-4">
 
         <a href="{{ route('index') }}" class="navbar-brand">{{ config('app.name', 'DNM') }}</a>
 

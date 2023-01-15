@@ -57,7 +57,7 @@ class Hotels extends Command
             $googlePlaces = new GooglePlaces();
             $hotels = $googlePlaces->nearbyHotels($place->latitude, $place->longitude, $limitPage);
 
-            $resultCount = 1;
+            $resultCount = 0;
             foreach ($hotels['results'] as $hotel) {
                 /*
                 $hotelName = str_replace('hotel', '', $hotel);

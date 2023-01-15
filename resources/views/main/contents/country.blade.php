@@ -2,7 +2,7 @@
     <x-slot:pageTitle>{{ $country['name'] }}</x-slot:pageTitle>
 
     <div class="bg-white shadow-sm">
-        <div class="container py-2">
+        <div class="container py-2 px-4">
 
             <!-- Breadcrumb -->
             <div class="mt-2">
@@ -76,6 +76,32 @@
     </div>
 
     <div class="container pb-4">
+        <h2 class="fs-3 mb-3">{{ __('Popular Places in :country', ['country' => $country['name']]) }}</h2>
+        <div class="card shadow-sm mb-3">
+            <div class="card-body">
+                <div class="row g-2">
+                    @foreach ($places as $place)
+                        <div class="col-12 col-lg-4">
+                            <div class="mb-2">
+                                <div class="tw-line-clamp-1">
+                                    <a href="{{ route('place', [$place['slug']]) }}">{{ $place['name'] }}</a>
+                                </div>
+                                <div class="text-muted small tw-line-clamp-1">
+                                    {{ $place['address'] }}
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+                <hr>
+                @foreach ($categories as $category)
+                    <a href="#" class="btn btn-outline-secondary shadow-sm mb-1">{{ __($category->name) }}</a>
+                @endforeach
+            </div>
+        </div>
+    </div>
+
+    <div class="container pb-4">
         <h2 class="fs-3 mb-3">{{ __('Best Hotels in :country', ['country' => $country['name']]) }}</h2>
         <div class="card shadow-sm">
             <div class="card-body">
@@ -84,7 +110,7 @@
                         <div class="col-12 col-lg-4">
                             <div class="mb-3">
                                 <div class="tw-line-clamp-1">
-                                    <a href="#">{{ $bestHotel['name'] }}</a>
+                                    <a href="{{ route('hotel', [$bestHotel['slug']]) }}">{{ $bestHotel['name'] }}</a>
                                 </div>
                                 <div class="mb-1">
                                     @for ($i = 0; $i < $bestHotel['star_rating']; $i++)

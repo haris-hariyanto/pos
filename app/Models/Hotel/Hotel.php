@@ -24,4 +24,24 @@ class Hotel extends Model
             'name' => '-',
         ]);
     }
+
+    public function continent()
+    {
+        return $this->belongsTo(\App\Models\Location\Continent::class);
+    }
+
+    public function country()
+    {
+        return $this->belongsTo(\App\Models\Location\Country::class);
+    }
+
+    public function state()
+    {
+        return $this->belongsTo(\App\Models\Location\State::class);
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(\App\Models\Location\City::class);
+    }
 }

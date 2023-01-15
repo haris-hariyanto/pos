@@ -2,7 +2,7 @@
     <x-slot:pageTitle>{{ $continent['name'] }}</x-slot:pageTitle>
 
     <div class="bg-white shadow-sm">
-        <div class="container py-2">
+        <div class="container py-2 px-4">
 
             <!-- Breadcrumb -->
             <div class="mt-2">

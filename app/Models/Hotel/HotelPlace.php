@@ -14,4 +14,9 @@ class HotelPlace extends Model
     public $timestamps = false;
 
     protected $table = 'hotel_place';
+
+    public function hotel()
+    {
+        return $this->belongsTo(Hotel::class);
+    }
 }

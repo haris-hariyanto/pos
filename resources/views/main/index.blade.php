@@ -2,7 +2,7 @@
     <x-slot:pageTitle>{{ __('Register') }}</x-slot>
 
     <div class="bg-white shadow-sm">
-        <div class="container py-5 px-3">
+        <div class="container py-5 px-4">
             <div class="row justify-content-start">
                 <div class="col-12 col-lg-8">
                     <h1>{{ config('app.name') }}</h1>
@@ -74,7 +74,7 @@
                             @foreach ($popularHotels as $popularHotel)
                                 <div class="col-12 col-lg-6">
                                     <div class="mb-2">
-                                        <div class="tw-line-clamp-1"><a href="#">{{ $popularHotel['name'] }}</a></div>
+                                        <div class="tw-line-clamp-1"><a href="{{ route('hotel', [$popularHotel['slug']]) }}">{{ $popularHotel['name'] }}</a></div>
                                         <div class="tw-line-clamp-1">{{ $popularHotel['country'] }}</div>
                                     </div>
                                 </div>

@@ -17,7 +17,12 @@ class GooglePlaces
     public function search($type, $location, $maxPage = 2)
     {
         $currentPage = 1;
-        $searchQuery = str_replace('_', ' ', $type) . ' in ' . $location;
+        if (config('app.locale')) {
+            $searchQuery = config('scraper.queries_translation.' . $type) . ' di ' . $location;
+        }
+        else {
+            $searchQuery = config('scraper.queries_translation.' . $type) . ' in ' . $location;
+        }
         $nextPageToken = null;
         $results = [];
 
@@ -29,7 +34,7 @@ class GooglePlaces
             if ($nextPageToken) {
                 $params['pagetoken'] = $nextPageToken;
             }
-            // $params['language'] = config('scraper.language');
+            $params['language'] = config('scraper.language');
 
             $response = Http::get($this->endpoint . 'textsearch/json', $params);
 
@@ -55,7 +60,7 @@ class GooglePlaces
                         'id' => $result['place_id'],
                         'types' => $result['types'],
                         'address' => $result['formatted_address'],
-                        'user_ratings_total' => $result['user_ratings_total'],
+                        'user_ratings_total' => !empty($result['user_ratings_total']) ? $result['user_ratings_total'] : 0,
                     ];
                 }
 

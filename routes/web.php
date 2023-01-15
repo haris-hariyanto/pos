@@ -18,6 +18,8 @@ Route::get('/', [Controllers\Main\HomeController::class, 'index'])->name('index'
 
 Route::get('/continent/{continent}', [Controllers\Main\Content\ContinentController::class, 'index'])->name('continent');
 Route::get('/country/{country}', [Controllers\Main\Content\CountryController::class, 'index'])->name('country');
+Route::get('/place/{place}', [Controllers\Main\Content\PlaceController::class, 'index'])->name('place');
+Route::get('/hotel/{hotel}', [Controllers\Main\Content\HotelController::class, 'index'])->name('hotel');
 
 Route::get('/p/{page}', [Controllers\Main\Misc\PageController::class, 'page'])->name('page');
 Route::get('/contact', [Controllers\Main\Misc\ContactController::class, 'contact'])->name('contact');
