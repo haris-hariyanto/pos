@@ -78,7 +78,7 @@ class SaveData extends Command
      */
     public function handle()
     {
-        $hotels = Hotel::select('chain')->groupBy('chain')->dd();
+        $hotels = Hotel::select('chain')->groupBy('chain')->get();
         $chainFirstID = Chain::orderBy('id', 'DESC')->first();
         if (!$chainFirstID) {
             $chainFirstID = 1;
@@ -130,7 +130,7 @@ class SaveData extends Command
             }
         }
 
-        $hotels = Hotel::select('city', 'state', 'country', 'continent')->groupBy('city', 'state', 'country', 'continent')->dd();
+        $hotels = Hotel::select('city', 'state', 'country', 'continent')->groupBy('city', 'state', 'country', 'continent')->get();
         $cityFirstID = City::orderBy('id', 'DESC')->first();
         if (!$cityFirstID) {
             $cityFirstID = 1;
