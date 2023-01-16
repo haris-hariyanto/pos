@@ -78,7 +78,7 @@ class SaveData extends Command
      */
     public function handle()
     {
-        $hotels = Hotel::select('chain')->distinct()->get();
+        $hotels = Hotel::select('chain')->groupBy('chain')->dd();
         $chainFirstID = Chain::orderBy('id', 'DESC')->first();
         if (!$chainFirstID) {
             $chainFirstID = 1;
@@ -104,7 +104,7 @@ class SaveData extends Command
             }
         }
 
-        $hotels = Hotel::select('brand')->distinct()->get();
+        $hotels = Hotel::select('brand')->groupBy('brand')->get();
         $brandFirstID = Brand::orderBy('id', 'DESC')->first();
         if (!$brandFirstID) {
             $brandFirstID = 1;
@@ -130,7 +130,7 @@ class SaveData extends Command
             }
         }
 
-        $hotels = Hotel::select('city', 'state', 'country', 'continent')->distinct()->get();
+        $hotels = Hotel::select('city', 'state', 'country', 'continent')->groupBy('city', 'state', 'country', 'continent')->dd();
         $cityFirstID = City::orderBy('id', 'DESC')->first();
         if (!$cityFirstID) {
             $cityFirstID = 1;
@@ -156,7 +156,7 @@ class SaveData extends Command
             }
         }
 
-        $hotels = Hotel::select('state', 'country', 'continent')->distinct()->get();
+        $hotels = Hotel::select('state', 'country', 'continent')->groupBy('state', 'country', 'continent')->get();
         $stateFirstID = State::orderBy('id', 'DESC')->first();
         if (!$stateFirstID) {
             $stateFirstID = 1;
@@ -186,7 +186,7 @@ class SaveData extends Command
             }
         }
 
-        $hotels = Hotel::select('country', 'country_iso_code', 'continent')->distinct()->get();
+        $hotels = Hotel::select('country', 'country_iso_code', 'continent')->groupBy('country', 'country_iso_code', 'continent')->get();
         $countryFirstID = Country::orderBy('id', 'DESC')->first();
         if (!$countryFirstID) {
             $countryFirstID = 1;
@@ -220,7 +220,7 @@ class SaveData extends Command
             }
         }
 
-        $hotels = Hotel::select('continent')->distinct()->get();
+        $hotels = Hotel::select('continent')->groupBy('continent')->get();
         $continentFirstID = Continent::orderBy('id', 'DESC')->first();
         if (!$continentFirstID) {
             $continentFirstID = 1;
