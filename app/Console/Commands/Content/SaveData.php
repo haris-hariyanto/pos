@@ -96,9 +96,11 @@ class SaveData extends Command
                     ['name' => $hotel->chain],
                 );
 
+                /*
                 Hotel::where('chain', $chain->name)->update([
                     'chain_id' => $chain->id,
                 ]);
+                */
 
                 $this->line('[ * ] Chain : ' . $chain->name);
             }
@@ -122,9 +124,11 @@ class SaveData extends Command
                     ['name' => $hotel->brand],
                 );
 
+                /*
                 Hotel::where('brand', $brand->name)->update([
                     'brand_id' => $brand->id,
                 ]);
+                */
 
                 $this->line('[ * ] Brand : ' . $brand->name);
             }
@@ -148,9 +152,11 @@ class SaveData extends Command
                     ['name' => $hotel->city]
                 );
     
+                /*
                 Hotel::where('city', $city->name)->update([
                     'city_id' => $city->id,
                 ]);
+                */
     
                 $this->line('[ * ] City : ' . $city->name);
             }
@@ -174,6 +180,7 @@ class SaveData extends Command
                     ['name' => $hotel->state]
                 );
 
+                /*
                 Hotel::where('state', $state->name)->update([
                     'state_id' => $state->id,
                 ]);
@@ -181,6 +188,7 @@ class SaveData extends Command
                 City::where('state', $state->name)->update([
                     'state_id' => $state->id,
                 ]);
+                */
 
                 $this->line('[ * ] State : ' . $state->name);
             }
@@ -204,6 +212,7 @@ class SaveData extends Command
                     ['name' => $hotel->country, 'iso_code' => $hotel->country_iso_code],
                 );
     
+                /*
                 Hotel::where('country', $country->name)->update([
                     'country_id' => $country->id,
                 ]);
@@ -215,6 +224,7 @@ class SaveData extends Command
                 State::where('country', $country->name)->update([
                     'country_id' => $country->id,
                 ]);
+                */
     
                 $this->line('[ * ] Country : ' . $country->name);
             }
@@ -238,6 +248,7 @@ class SaveData extends Command
                     ['name' => $hotel->continent]
                 );
 
+                /*
                 City::where('continent', $continent->name)->update([
                     'continent_id' => $continent->id,
                 ]);
@@ -253,6 +264,7 @@ class SaveData extends Command
                 Country::where('continent', $continent->name)->update([
                     'continent_id' => $continent->id,
                 ]);
+                */
 
                 $this->line('[ * ] Continent : ' . $continent->name);
             }
