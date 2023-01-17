@@ -33,7 +33,7 @@ class Hotel extends Model
 
     public function country()
     {
-        return $this->belongsTo(\App\Models\Location\Country::class, 'country', 'name');
+        return $this->belongsTo(\App\Models\Location\Country::class, ['country', 'continent'], ['name', 'continent']);
     }
 
     public function state()
