@@ -12,6 +12,6 @@ return [
         'train_station',
         'university',
     ],
-    'maximum_page' => 2,
+    'maximum_page' => 3,
     'language' => 'en',
 ];
