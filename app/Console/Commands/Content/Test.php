@@ -42,6 +42,7 @@ class Test extends Command
             $this->line($hotel->brand->name);
         }
         */
+        /*
         Chain::truncate();
         Brand::truncate();
         HotelPlace::truncate();
@@ -49,6 +50,7 @@ class Test extends Command
         Country::truncate();
         State::truncate();
         City::truncate();
+        */
         Place::truncate();
     }
 }

@@ -59,17 +59,6 @@ class Hotels extends Command
 
             $resultCount = 0;
             foreach ($hotels['results'] as $hotel) {
-                /*
-                $hotelName = str_replace('hotel', '', $hotel);
-                $hotelNameItems = explode(' ', $hotelName);
-                $hotelNameParts = [];
-                foreach ($hotelNameItems as $hotelNameItem) {
-                    if (!empty(trim($hotelNameItem))) {
-                        $hotelNameParts[] = $hotelNameItem;
-                    }
-                }
-                */
-
                 $latitude = explode('.', $hotel['latitude']);
                 $longitude = explode('.', $hotel['longitude']);
 

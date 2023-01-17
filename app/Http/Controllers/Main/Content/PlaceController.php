@@ -16,7 +16,7 @@ class PlaceController extends Controller
 
         }
         else {
-            $modelPlace = Place::where('slug', $place)->first();
+            $modelPlace = Place::with('continent', 'country')->where('slug', $place)->first();
             if (!$modelPlace) {
                 return redirect()->route('index');
             }

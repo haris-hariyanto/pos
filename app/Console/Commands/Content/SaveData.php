@@ -96,12 +96,6 @@ class SaveData extends Command
                     ['name' => $hotel->chain],
                 );
 
-                /*
-                Hotel::where('chain', $chain->name)->update([
-                    'chain_id' => $chain->id,
-                ]);
-                */
-
                 $this->line('[ * ] Chain : ' . $chain->name);
             }
         }
@@ -124,17 +118,11 @@ class SaveData extends Command
                     ['name' => $hotel->brand],
                 );
 
-                /*
-                Hotel::where('brand', $brand->name)->update([
-                    'brand_id' => $brand->id,
-                ]);
-                */
-
                 $this->line('[ * ] Brand : ' . $brand->name);
             }
         }
 
-        $hotels = Hotel::select('city', 'state', 'country', 'continent')->groupBy('city', 'state', 'country', 'continent')->get();
+        $hotels = Hotel::select('city', 'state', 'country', 'continent')->groupBy('city', 'country')->get();
         $cityFirstID = City::orderBy('id', 'DESC')->first();
         if (!$cityFirstID) {
             $cityFirstID = 1;
@@ -152,17 +140,11 @@ class SaveData extends Command
                     ['name' => $hotel->city]
                 );
     
-                /*
-                Hotel::where('city', $city->name)->update([
-                    'city_id' => $city->id,
-                ]);
-                */
-    
                 $this->line('[ * ] City : ' . $city->name);
             }
         }
 
-        $hotels = Hotel::select('state', 'country', 'continent')->groupBy('state', 'country', 'continent')->get();
+        $hotels = Hotel::select('state', 'country', 'continent')->groupBy('state', 'country')->get();
         $stateFirstID = State::orderBy('id', 'DESC')->first();
         if (!$stateFirstID) {
             $stateFirstID = 1;
@@ -180,21 +162,11 @@ class SaveData extends Command
                     ['name' => $hotel->state]
                 );
 
-                /*
-                Hotel::where('state', $state->name)->update([
-                    'state_id' => $state->id,
-                ]);
-
-                City::where('state', $state->name)->update([
-                    'state_id' => $state->id,
-                ]);
-                */
-
                 $this->line('[ * ] State : ' . $state->name);
             }
         }
 
-        $hotels = Hotel::select('country', 'country_iso_code', 'continent')->groupBy('country', 'country_iso_code', 'continent')->get();
+        $hotels = Hotel::select('country', 'country_iso_code', 'continent')->groupBy('country')->get();
         $countryFirstID = Country::orderBy('id', 'DESC')->first();
         if (!$countryFirstID) {
             $countryFirstID = 1;
@@ -211,20 +183,6 @@ class SaveData extends Command
                     ['slug' => $countrySlug, 'continent' => $hotel->continent],
                     ['name' => $hotel->country, 'iso_code' => $hotel->country_iso_code],
                 );
-    
-                /*
-                Hotel::where('country', $country->name)->update([
-                    'country_id' => $country->id,
-                ]);
-    
-                City::where('country', $country->name)->update([
-                    'country_id' => $country->id,
-                ]);
-    
-                State::where('country', $country->name)->update([
-                    'country_id' => $country->id,
-                ]);
-                */
     
                 $this->line('[ * ] Country : ' . $country->name);
             }
@@ -248,122 +206,8 @@ class SaveData extends Command
                     ['name' => $hotel->continent]
                 );
 
-                /*
-                City::where('continent', $continent->name)->update([
-                    'continent_id' => $continent->id,
-                ]);
-
-                Hotel::where('continent', $continent->name)->update([
-                    'continent_id' => $continent->id,
-                ]);
-
-                State::where('continent', $continent->name)->update([
-                    'continent_id' => $continent->id,
-                ]);
-
-                Country::where('continent', $continent->name)->update([
-                    'continent_id' => $continent->id,
-                ]);
-                */
-
                 $this->line('[ * ] Continent : ' . $continent->name);
             }
         }
-
-        // Insert all cities, states, countries, and continents into places table
-        /*
-        $cities = City::get();
-        foreach ($cities as $city) {
-            $hotelsInThisCity = Hotel::select('id')
-                ->where('city_id', $city->id)
-                ->get();
-
-            $placeSlug = $this->createUniqueSlug($city->name, 'place');
-            $place = Place::create([
-                'slug' => $placeSlug,
-                'name' => $city->name,
-                'type' => 'CITY',
-                'latitude' => '0',
-                'longitude' => '0',
-                'state' => $city->state,
-                'state_id' => $city->state_id,
-                'country' => $city->country,
-                'country_id' => $city->country_id,
-                'continent' => $city->continent,
-                'continent_id' => $city->continent_id,
-                'is_hotels_scraped' => 'Y',
-                'hotels_nearby' => count($hotelsInThisCity),
-            ]);
-
-            foreach ($hotelsInThisCity as $hotelInThisCity) {
-                $this->line('[ * ] Menambahkan daftar hotel ke daftar kota');
-                HotelPlace::create([
-                    'hotel_id' => $hotelInThisCity->id,
-                    'place_id' => $place->id,
-                    'm_distance' => 0,
-                ]);
-            }
-        }
-
-        $states = State::get();
-        foreach ($states as $state) {
-            $hotelsInThisState = Hotel::select('id')
-                ->where('state_id', $state->id)
-                ->get();
-            
-            $placeSlug = $this->createUniqueSlug($state->name, 'place');
-            $place = Place::create([
-                'slug' => $placeSlug,
-                'name' => $state->name,
-                'type' => 'STATE',
-                'latitude' => '0',
-                'longitude' => '0',
-                'country' => $state->country,
-                'country_id' => $state->country_id,
-                'continent' => $state->continent,
-                'continent_id' => $state->continent_id,
-                'is_hotels_scraped' => 'Y',
-                'hotels_nearby' => count($hotelsInThisState),
-            ]);
-
-            foreach ($hotelsInThisState as $hotelInThisState) {
-                $this->line('[ * ] Menambahkan daftar hotel ke daftar state');
-                HotelPlace::create([
-                    'hotel_id' => $hotelInThisState->id,
-                    'place_id' => $place->id,
-                    'm_distance' => 0,
-                ]);
-            }
-        }
-
-        $countries = Country::get();
-        foreach ($countries as $country) {
-            $hotelsInThisCountry = Hotel::select('id')
-                ->where('country_id', $country->id)
-                ->get();
-            
-            $placeSlug = $this->createUniqueSlug($country->name, 'place');
-            $place = Place::create([
-                'slug' => $placeSlug,
-                'name' => $country->name,
-                'type' => 'COUNTRY',
-                'latitude' => '0',
-                'longitude' => '0',
-                'continent' => $country->continent,
-                'continent_id' => $country->continent_id,
-                'is_hotels_scraped' => 'Y',
-                'hotels_nearby' => count($hotelsInThisCountry),
-            ]);
-
-            foreach ($hotelsInThisCountry as $hotelInThisCountry) {
-                $this->line('[ * ] Menambahkan daftar hotel ke daftar negara');
-                HotelPlace::create([
-                    'hotel_id' => $hotelInThisCountry->id,
-                    'place_id' => $place->id,
-                    'm_distance' => 0,
-                ]);
-            }
-        }
-        */
     }
 }

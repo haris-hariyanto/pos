@@ -139,7 +139,12 @@ class Places extends Command
             }
             else {
                 $googlePlaces = new GooglePlaces();
-                $places = $googlePlaces->search($type, $location->name, config('scraper.maximum_page'));
+                if ($locationType == 'country') {
+                    $places = $googlePlaces->search($type, $location->name, config('scraper.maximum_page'), $location->iso_code);
+                }
+                else {
+                    $places = $googlePlaces->search($type, $location->name, config('scraper.maximum_page'));
+                }
 
                 if (!$places['success']) {
                     $this->error('[ * ] API Error : ' . $places['description']);
@@ -160,17 +165,9 @@ class Places extends Command
                         $dataToSave['latitude'] = $place['latitude'];
 
                         if ($locationType == 'country') {
-                            if (!empty($location->id)) {
-                                $dataToSave['country_id'] = $location->id;
-                            }
-    
                             if (!empty($location->name)) {
                                 $dataToSave['country'] = $location->name;
                             }
-                        }
-
-                        if (!empty($location->continent_id)) {
-                            $dataToSave['continent_id'] = $location->continent_id;
                         }
 
                         if (!empty($location->continent)) {

@@ -25,12 +25,12 @@
                                 @endif
                                 @if (!empty($hotel['state']))
                                     <li class="breadcrumb-item">
-                                        <a href="#">{{ $hotel['state']['name'] }}</a>
+                                        <a href="{{ route('hotel.location', ['state', $hotel['state']['slug']]) }}">{{ $hotel['state']['name'] }}</a>
                                     </li>
                                 @endif
                                 @if (!empty($hotel['city']))
                                     <li class="breadcrumb-item">
-                                        <a href="#">{{ $hotel['city']['name'] }}</a>
+                                        <a href="{{ route('hotel.location', ['city', $hotel['city']['slug']]) }}">{{ $hotel['city']['name'] }}</a>
                                     </li>
                                 @endif
                                 <li class="breadcrumb-item active tw-line-clamp-1" aria-current="page">{{ $hotel['name'] }}</li>
@@ -153,19 +153,19 @@
                                                     <td class="fw-bold">{{ $hotel['address_line_1'] }}</td>
                                                 </tr>
                                             @endif
-                                            @if (!empty($hotel['city']))
+                                            @if (!empty($hotel['city']) && is_array($hotel['city']))
                                                 <tr>
                                                     <td>{{ __('City') }}</td>
                                                     <td class="fw-bold">
-                                                        <a href="#">{{ $hotel['city']['name'] }}</a>
+                                                        <a href="{{ route('hotel.location', ['city', $hotel['city']['slug']]) }}">{{ $hotel['city']['name'] }}</a>
                                                     </td>
                                                 </tr>
                                             @endif
-                                            @if (!empty($hotel['state']))
+                                            @if (!empty($hotel['state']) && is_array($hotel['state']))
                                                 <tr>
                                                     <td>{{ __('State / Province') }}</td>
                                                     <td class="fw-bold">
-                                                        <a href="#">{{ $hotel['state']['name'] }}</a>
+                                                        <a href="{{ route('hotel.location', ['state', $hotel['state']['slug']]) }}">{{ $hotel['state']['name'] }}</a>
                                                     </td>
                                                 </tr>
                                             @endif
@@ -219,7 +219,7 @@
                                                     @if ($hotel['rates_currency'] == 'IDR')
                                                         <td class="fw-bold">{{ $hotel['rates_currency'] }} {{ number_format($hotel['rates_from'], 0, ',', '.') }}</td>
                                                     @else
-                                                        <td class="fw-bold">{{ $hotel['rates_currency'] }} {{ number_format($hotel['rates_from'], 0, '.', ',') }}</td>
+                                                        <td class="fw-bold">{{ number_format($hotel['rates_from'], 0, '.', ',') }} {{ $hotel['rates_currency'] }}</td>
                                                     @endif
                                                 </tr>
                                             @endif
@@ -229,7 +229,7 @@
                                                     @if ($hotel['rates_currency'] == 'IDR')
                                                         <td class="fw-bold">{{ $hotel['rates_currency'] }} {{ number_format($hotel['rates_from_exclusive'], 0, ',', '.') }}</td>
                                                     @else
-                                                        <td class="fw-bold">{{ $hotel['rates_currency'] }} {{ number_format($hotel['rates_from_exclusive'], 0, '.', ',') }}</td>
+                                                        <td class="fw-bold">{{ number_format($hotel['rates_from_exclusive'], 0, '.', ',') }} {{ $hotel['rates_currency'] }}</td>
                                                     @endif
                                                 </tr>
                                             @endif

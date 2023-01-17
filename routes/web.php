@@ -18,8 +18,12 @@ Route::get('/', [Controllers\Main\HomeController::class, 'index'])->name('index'
 
 Route::get('/continent/{continent}', [Controllers\Main\Content\ContinentController::class, 'index'])->name('continent');
 Route::get('/country/{country}', [Controllers\Main\Content\CountryController::class, 'index'])->name('country');
+Route::get('/country/{country}/cities', [Controllers\Main\Content\CountryController::class, 'cities'])->name('country.cities');
+Route::get('/country/{country}/states', [Controllers\Main\Content\CountryController::class, 'states'])->name('country.states');
+Route::get('/country/{country}/places/{place}', [Controllers\Main\Content\CountryController::class, 'places'])->name('country.places');
 Route::get('/place/{place}', [Controllers\Main\Content\PlaceController::class, 'index'])->name('place');
 Route::get('/hotel/{hotel}', [Controllers\Main\Content\HotelController::class, 'index'])->name('hotel');
+Route::get('/hotel/{type}/{location}', [Controllers\Main\Content\LocationController::class, 'index'])->name('hotel.location');
 
 Route::get('/p/{page}', [Controllers\Main\Misc\PageController::class, 'page'])->name('page');
 Route::get('/contact', [Controllers\Main\Misc\ContactController::class, 'contact'])->name('contact');

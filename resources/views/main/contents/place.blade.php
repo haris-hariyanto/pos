@@ -16,13 +16,13 @@
 
                                 @if (!empty($place['continent']))
                                     <li class="breadcrumb-item">
-                                        <a href="{{ route('continent', [Str::slug($place['continent'])]) }}">{{ $place['continent'] }}</a>
+                                        <a href="{{ route('continent', [Str::slug($place['continent']['slug'])]) }}">{{ $place['continent']['name'] }}</a>
                                     </li>
                                 @endif
 
                                 @if (!empty($place['country']))
                                     <li class="breadcrumb-item">
-                                        <a href="{{ route('country', [Str::slug($place['country'])]) }}">{{ $place['country'] }}</a>
+                                        <a href="{{ route('country', [Str::slug($place['country']['slug'])]) }}">{{ $place['country']['name'] }}</a>
                                     </li>
                                 @endif
 
@@ -73,7 +73,7 @@
                                         <div class="small text-muted mb-2">{{ __(':distance from :place', ['distance' => round($hotel['m_distance'] / 1000, 1) . ' KM', 'place' => $place['name']]) }}</div>
                                         <div>
                                             <p class="tw-line-clamp-3 mb-2">{{ $hotel['hotel']['overview'] }}</p>
-                                            <p class="tw-line-clamp-3 mb-3"><b>{{ __('Address') }}</b> : {{ $hotel['hotel']['address_line_1'] }}</p>
+                                            <p class="tw-line-clamp-1 mb-3">{{ __('Rates from') }} : <b>{{ !empty($hotel['hotel']['rates_from']) ? number_format($hotel['hotel']['rates_from'], 0, '.', ',') : number_format($hotel['hotel']['rates_from_exclusive'], 0, '.', ',') }} {{ $hotel['hotel']['rates_currency'] }}</b></p>
                                         </div>
                                     </div>
                                     <div>

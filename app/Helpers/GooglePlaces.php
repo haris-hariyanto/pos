@@ -14,27 +14,29 @@ class GooglePlaces
         $this->key = config('scraper.places_api');
     }
 
-    public function search($type, $location, $maxPage = 2)
+    public function search($type, $location, $maxPage = 2, $isoCode = false)
     {
         $currentPage = 1;
-        if (config('app.locale')) {
-            $searchQuery = config('scraper.queries_translation.' . $type) . ' di ' . $location;
-        }
-        else {
-            $searchQuery = config('scraper.queries_translation.' . $type) . ' in ' . $location;
-        }
         $nextPageToken = null;
         $results = [];
 
         for ($i = $currentPage; $i <= $maxPage; $i++) {
             $params = [];
             $params['key'] = $this->key;
-            $params['query'] = $searchQuery;
+            if (config('scraper.language') == 'id') {
+                $params['query'] = str_replace('_', ' ', $type) . ' di ' . $location;
+            }
+            elseif (config('scraper.language') == 'en') {
+                $params['query'] = str_replace('_', ' ', $type) . ' in ' . $location;
+            }
+
             $params['type'] = $type;
             if ($nextPageToken) {
                 $params['pagetoken'] = $nextPageToken;
             }
-            $params['language'] = config('scraper.language');
+            if ($isoCode) {
+                $params['region'] = $isoCode;
+            }
 
             $response = Http::get($this->endpoint . 'textsearch/json', $params);
 
@@ -59,7 +61,7 @@ class GooglePlaces
                         ],
                         'id' => $result['place_id'],
                         'types' => $result['types'],
-                        'address' => $result['formatted_address'],
+                        'address' => !empty($result['formatted_address']) ? $result['formatted_address'] : null,
                         'user_ratings_total' => !empty($result['user_ratings_total']) ? $result['user_ratings_total'] : 0,
                     ];
                 }
@@ -69,7 +71,11 @@ class GooglePlaces
                     sleep(3);
                 }
                 else {
-                    break;
+                    return [
+                        'success' => true,
+                        'description' => $response['status'],
+                        'results' => $results,
+                    ];
                 }
             }
             else {

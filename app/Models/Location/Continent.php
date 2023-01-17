@@ -15,6 +15,6 @@ class Continent extends Model
 
     public function countries()
     {
-        return $this->hasMany(Country::class);
+        return $this->hasMany(Country::class, 'continent', 'name');
     }
 }

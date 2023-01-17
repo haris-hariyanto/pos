@@ -16,9 +16,7 @@ return new class extends Migration
         Schema::create('hotels', function (Blueprint $table) {
             $table->id();
             $table->string('slug');
-            $table->integer('chain_id')->nullable();
             $table->string('chain')->nullable();
-            $table->integer('brand_id')->nullable();
             $table->string('brand')->nullable();
             $table->string('name');
             $table->string('formerly_name')->nullable();
@@ -43,10 +41,6 @@ return new class extends Migration
             $table->string('year_renovated')->nullable();
             $table->text('overview')->nullable();
             $table->string('rates_from')->nullable();
-            $table->integer('continent_id')->nullable();
-            $table->integer('country_id')->nullable();
-            $table->integer('state_id')->nullable();
-            $table->integer('city_id')->nullable();
             $table->integer('number_of_reviews')->default(0);
             $table->string('rating_average')->nullable();
             $table->string('rates_currency')->nullable();

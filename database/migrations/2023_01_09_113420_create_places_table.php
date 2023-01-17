@@ -21,13 +21,9 @@ return new class extends Migration
             $table->text('address')->nullable();
             $table->string('longitude');
             $table->string('latitude');
-            $table->integer('city_id')->nullable();
             $table->string('city')->nullable();
-            $table->integer('state_id')->nullable();
             $table->string('state')->nullable();
-            $table->integer('country_id')->nullable();
             $table->string('country')->nullable();
-            $table->integer('continent_id')->nullable();
             $table->string('continent')->nullable();
             $table->string('gmaps_id')->nullable();
             $table->string('category')->nullable();

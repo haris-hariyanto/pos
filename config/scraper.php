@@ -19,5 +19,5 @@ return [
         'tourist_attraction' => 'Object wisata',
     ],
     'maximum_page' => 2,
-    'language' => 'id',
+    'language' => 'en',
 ];

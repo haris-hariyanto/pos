@@ -57,7 +57,7 @@
                             @foreach ($popularPlaces as $popularPlace)
                                 <div class="col-12 col-lg-6">
                                     <div class="mb-2">
-                                        <div class="tw-line-clamp-1"><a href="#">{{ $popularPlace['name'] }}</a></div>
+                                        <div class="tw-line-clamp-1"><a href="{{ route('place', [$popularPlace['slug']]) }}">{{ $popularPlace['name'] }}</a></div>
                                         <div class="tw-line-clamp-1">{{ $popularPlace['country'] }}</div>
                                     </div>
                                 </div>

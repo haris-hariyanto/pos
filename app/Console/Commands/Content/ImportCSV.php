@@ -8,7 +8,6 @@ use League\Csv\Reader;
 use App\Models\Hotel\Chain;
 use App\Models\Hotel\Brand;
 use App\Models\Hotel\Hotel;
-use App\Models\Hotel\Photo;
 use App\Models\Location\Continent;
 use App\Models\Location\Country;
 use App\Models\Location\State;
@@ -119,23 +118,6 @@ class ImportCSV extends Command
             $ratesFromExclusive = trim($record[39]);
             $accommodationType = trim($record[40]);
 
-            /*
-            // Prevent duplicate slug
-            $baseSlug = Str::slug($hotelName);
-            $hotelSlug = $baseSlug;
-            $tailID = 1;
-            $loop = true;
-            while ($loop) {
-                $slugCount = Hotel::where('slug', $hotelSlug)->count();
-                if ($slugCount == 0) {
-                    $loop = false;
-                }
-                else {
-                    $hotelSlug = $baseSlug . '-' . $tailID;
-                    $tailID++;
-                }
-            }
-            */
             $hotelSlug = $firstID . '-' . Str::slug($hotelName);
 
             $photoToSave = [];
@@ -145,8 +127,6 @@ class ImportCSV extends Command
 
             $hotel = Hotel::create([
                 'slug' => $hotelSlug,
-                // 'chain_id' => $chain ? $chain->id : $chain,
-                // 'brand_id' => $brand ? $brand->id : $brand,
                 'chain' => !empty($chainID) ? $chainName : null,
                 'brand' => !empty($brandID) ? $brandName : null,
                 'name' => $hotelName,
@@ -156,14 +136,10 @@ class ImportCSV extends Command
                 'address_line_2' => !empty($addressLine2) ? $addressLine2 : null,
                 'zipcode' => !empty($zipCode) ? $zipCode : null,
                 'continent' => $continent,
-                // 'continent_id' => $continentID,
                 'country' => $country,
-                // 'country_id' => $countryID,
                 'country_iso_code' => $countryISOCode,
                 'state' => $state,
-                // 'state_id' => $stateID,
                 'city' => $city,
-                // 'city_id' => $cityID,
                 'star_rating' => !empty($starRating) ? $starRating : null,
                 'longitude' => !empty($longitude) ? $longitude : null,
                 'latitude' => !empty($latitude) ? $latitude : null,

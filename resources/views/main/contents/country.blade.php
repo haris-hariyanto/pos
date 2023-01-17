@@ -12,7 +12,7 @@
                             <a href="{{ route('index') }}">{{ __('Home') }}</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="{{ route('continent', [Str::slug($country['continent'])]) }}">{{ $country['continent'] }}</a>
+                            <a href="{{ route('continent', [$country['continent']['slug']]) }}">{{ $country['continent']['name'] }}</a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">{{ $country['name'] }}</li>
                     </ol>
@@ -26,7 +26,7 @@
 
     <div class="container py-4">
         <iframe 
-            src="https://www.google.com/maps/embed/v1/place?key={{ config('services.google_maps.key') }}&q={{ $country['name'] }}"
+            src="https://www.google.com/maps/embed/v1/place?key={{ config('services.google_maps.key') }}&q={{ urlencode($country['name']) }}"
             class="border-0 w-100 tw-h-96"
             frameborder="0"
             referrerpolicy="no-referrer-when-downgrade"
@@ -37,7 +37,7 @@
     <div class="container pb-4">
         <div class="row g-2">
             <div class="col-12 col-lg-6 d-flex flex-column">
-                <h2 class="fs-3 mb-3">{{ __('Cities in :country', ['country' => $country['name']]) }}</h2>
+                <h2 class="fs-3 mb-3"><a href="{{ route('country.cities', [$country['slug']]) }}">{{ __('Cities in :country', ['country' => $country['name']]) }}</a></h2>
                 <!-- Cities list -->
                 <div class="card shadow-sm flex-grow-1">
                     <div class="card-body">
@@ -45,17 +45,20 @@
                             @foreach ($cities as $city)
                                 <div class="col-6 col-md-4 col-lg-3">
                                     <div class="mb-2 tw-line-clamp-1">
-                                        <a href="#">{{ $city['name'] }}</a>
+                                        <a href="{{ route('hotel.location', ['city', $city['slug']]) }}">{{ $city['name'] }}</a>
                                     </div>
                                 </div>
                             @endforeach
                         </div>
                     </div>
                 </div>
+                <div class="mt-2 text-end">
+                    <a href="{{ route('country.cities', [$country['slug']]) }}" class="btn btn-outline-primary btn-sm">{{ __('All Cities') }} &raquo;</a>
+                </div>
                 <!-- [END] Cities list -->
             </div>
             <div class="col-12 col-lg-6 d-flex flex-column">
-                <h2 class="fs-3 mb-3 mt-2 mt-lg-0">{{ __('States in :country', ['country' => $country['name']]) }}</h2>
+                <h2 class="fs-3 mb-3 mt-2 mt-lg-0"><a href="{{ route('country.states', [$country['slug']]) }}">{{ __('States in :country', ['country' => $country['name']]) }}</a></h2>
                 <!-- States list -->
                 <div class="card shadow-sm flex-grow-1">
                     <div class="card-body">
@@ -63,12 +66,15 @@
                             @foreach ($states as $state)
                                 <div class="col-6 col-md-4 col-lg-3">
                                     <div class="mb-2 tw-line-clamp-1">
-                                        <a href="#">{{ $state['name'] }}</a>
+                                        <a href="{{ route('hotel.location', ['state', $state['slug']]) }}">{{ $state['name'] }}</a>
                                     </div>
                                 </div>
                             @endforeach
                         </div>
                     </div>
+                </div>
+                <div class="mt-2 text-end">
+                    <a href="{{ route('country.states', [$country['slug']]) }}" class="btn btn-outline-primary btn-sm">{{ __('All States') }} &raquo;</a>
                 </div>
                 <!-- [END] States list -->
             </div>
@@ -95,7 +101,7 @@
                 </div>
                 <hr>
                 @foreach ($categories as $category)
-                    <a href="#" class="btn btn-outline-secondary shadow-sm mb-1">{{ __($category->name) }}</a>
+                    <a href="{{ route('country.places', [$country['slug'], $category['slug']]) }}" class="btn btn-outline-secondary shadow-sm mb-1">{{ __(ucwords(str_replace('_', ' ', $category->name))) }}</a>
                 @endforeach
             </div>
         </div>

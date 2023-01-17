@@ -21,12 +21,9 @@ class ContinentController extends Controller
             }
             $continent = $modelContinent->toArray();
 
-            $countries = [];
-            foreach ($modelContinent->countries()->orderBy('name', 'asc')->get() as $country) {
-                $countries[] = $country->toArray();
-            }
+
         }
 
-        return view('main.contents.continent', compact('continent', 'countries'));
+        return view('main.contents.continent', compact('continent'));
     }
 }
