@@ -134,17 +134,13 @@
                                             @if (!empty($hotel['chain']))
                                                 <tr>
                                                     <td>{{ __('Hotel Chain') }}</td>
-                                                    <td class="fw-bold">
-                                                        <a href="#">{{ $hotel['chain'] }}</a>
-                                                    </td>
+                                                    <td class="fw-bold">{{ $hotel['chain'] }}</td>
                                                 </tr>
                                             @endif
                                             @if (!empty($hotel['brand']))
                                                 <tr>
                                                     <td>{{ __('Brand') }}</td>
-                                                    <td class="fw-bold">
-                                                        <a href="#">{{ $hotel['brand'] }}</a>
-                                                    </td>
+                                                    <td class="fw-bold">{{ $hotel['brand'] }}</td>
                                                 </tr>
                                             @endif
                                             @if (!empty($hotel['address_line_1']))

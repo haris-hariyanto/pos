@@ -37,7 +37,7 @@ class LocationController extends Controller
                     $hotel['photos'] = json_decode($hotel['photos']);
                     $hotels[] = $hotel;
                 }
-                $links = $modelHotels->links();
+                $links = $modelHotels->links('components.main.components.simple-pagination');
             }
 
             if ($type == 'state') {

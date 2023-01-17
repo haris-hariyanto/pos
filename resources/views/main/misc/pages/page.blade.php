@@ -5,21 +5,44 @@
         {!! $metaData->render() !!}
     @endpush
 
-    <div class="container">
-        <div class="row g-2 justify-content-center">
-            <div class="col-12 col-sm-10 col-md-8">
+    <div class="bg-white shadow-sm">
+        <div class="container py-2 px-4">
 
-                <x-main.components.breadcrumb :links="$breadcrumb" class="mb-2" />
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-8">
+                    <!-- Breadcrumb -->
+                    <div class="mt-2">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a href="{{ route('index') }}">{{ __('Home') }}</a>
+                                </li>
+                                <li class="breadcrumb-item active" aria-current="page">
+                                    {{ $page->title }}
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
+                    <!-- [END] Breadcrumb -->
 
-                <div class="card">
-                    <div class="card-body">
-                        <h1 class="fs-2 mb-3">{{ $page->title }}</h1>
-                        <div>
+                    <h1 class="fs-2 mb-2">{{ $page->title }}</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-1">
+        <div class="container py-4">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-8">
+    
+                    <div class="card shadow-sm">
+                        <div class="card-body">
                             {!! $page->content() !!}
                         </div>
                     </div>
+    
                 </div>
-
             </div>
         </div>
     </div>

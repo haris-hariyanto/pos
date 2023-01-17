@@ -5,7 +5,7 @@
 
                 {{-- Previous Page Link --}}
                 @if ($paginator->onFirstPage())
-                    <button type="button" class="btn btn-outline-secondary" disabled>{!! __('pagination.previous') !!}</button>
+                    <button type="button" class="btn btn-outline-primary" disabled>{!! __('pagination.previous') !!}</button>
                 @else
                     <a href="{{ $paginator->previousPageUrl() }}" class="btn btn-outline-primary" rel="prev">{!! __('pagination.previous') !!}</a>
                 @endif
@@ -18,7 +18,7 @@
                 @if ($paginator->hasMorePages())
                     <a href="{{ $paginator->nextPageUrl() }}" class="btn btn-outline-primary" rel="next">{!! __('pagination.next') !!}</a>
                 @else
-                    <button type="button" class="btn btn-outline-secondary" disabled>{!! __('pagination.next') !!}</button>
+                    <button type="button" class="btn btn-outline-primary" disabled>{!! __('pagination.next') !!}</button>
                 @endif
 
             </div>
