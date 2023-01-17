@@ -62,8 +62,16 @@ class Hotels extends Command
                 $latitude = explode('.', $hotel['latitude']);
                 $longitude = explode('.', $hotel['longitude']);
 
-                $findHotels = Hotel::select('id', 'name', 'latitude', 'longitude')->where('latitude', 'like', $latitude[0] . '.' . substr($latitude[1], 0, 2) . '%')
+                $findHotels = Hotel::select('id', 'name', 'latitude', 'longitude')
+                    ->where('latitude', 'like', $latitude[0] . '.' . substr($latitude[1], 0, 2) . '%')
                     ->where('longitude', 'like', $longitude[0] . '.' . substr($longitude[1], 0, 2) . '%')
+                    ->where('overview', '<>', '')
+                    ->where('number_of_reviews', '>', 0)
+                    ->where(function ($query) {
+                        $query->whereNotNull('rates_from')
+                            ->orWhereNotNull('rates_from_exclusive');
+                    })
+                    ->whereNotNull('star_rating')
                     ->get();
 
                 foreach ($findHotels as $findHotel) {

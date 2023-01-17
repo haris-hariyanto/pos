@@ -30,12 +30,6 @@ class Reset extends Command
      */
     public function handle()
     {
-        City::where('is_scraped', 'Y')->orWhere('is_scraped', 'PROCESS')->update([
-            'is_scraped' => 'N',
-        ]);
-        State::where('is_scraped', 'Y')->orWhere('is_scraped', 'PROCESS')->update([
-            'is_scraped' => 'N',
-        ]);
         Country::where('is_scraped', 'Y')->orWhere('is_scraped', 'PROCESS')->update([
             'is_scraped' => 'N',
         ]);

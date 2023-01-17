@@ -45,12 +45,12 @@ class Test extends Command
         /*
         Chain::truncate();
         Brand::truncate();
-        HotelPlace::truncate();
         Continent::truncate();
         Country::truncate();
         State::truncate();
         City::truncate();
         */
-        Place::truncate();
+        // HotelPlace::truncate();
+        // Place::update(['hotels_nearby' => 0]);
     }
 }
