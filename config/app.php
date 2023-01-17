@@ -218,6 +218,6 @@ return [
         'Image' => Intervention\Image\Facades\Image::class,
     ])->toArray(),
 
-    'open_register' => true,
+    'open_register' => false,
 
 ];
