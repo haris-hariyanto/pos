@@ -39,15 +39,17 @@
         </div>
     </div>
 
-    <div class="container py-4">
-        <div class="row justify-content-center">
-            <div class="col-12 col-lg-10">
-                @foreach ($hotels as $hotel)
-                    <x-main.components.contents.hotel :hotel="$hotel" />
-                @endforeach
-            </div>
-            <div class="col-12 col-lg-10">
-                {!! $links !!}
+    <div class="p-1">
+        <div class="container py-4">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-10">
+                    @foreach ($hotels as $hotel)
+                        <x-main.components.contents.hotel :hotel="$hotel" />
+                    @endforeach
+                </div>
+                <div class="col-12 col-lg-10">
+                    {!! $links !!}
+                </div>
             </div>
         </div>
     </div>

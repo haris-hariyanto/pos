@@ -65,7 +65,11 @@
                                 <div class="col-12 col-lg-6">
                                     <div class="row g-2 my-0 h-100">
                                         <div class="col-12 d-flex">
-                                            <img src="{{ \App\Helpers\Image::removeQueryParameters($hotel['photos'][0]) }}" class="rounded img-cover" loading="lazy" alt="{{ $hotel['name'] }}">
+                                            @if (!empty($hotel['photos'][0]))
+                                                <img src="{{ \App\Helpers\Image::removeQueryParameters($hotel['photos'][0]) }}" class="rounded img-cover" loading="lazy" alt="{{ $hotel['name'] }}">
+                                            @else
+                                                <img src="{{ asset('assets/main/images/no-image.png') }}" class="rounded img-cover" loading="lazy" alt="No image">
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -73,9 +77,15 @@
                                     <div class="row g-2 my-0 h-100">
                                         @foreach ($hotel['photos'] as $index => $photo)
                                             @if ($index > 0)
-                                                <div class="col-6 d-flex">
-                                                    <img src="{{ \App\Helpers\Image::removeQueryParameters($photo) }}" class="rounded img-cover-small" loading="lazy" alt="{{ $hotel['name'] }}">
-                                                </div>
+                                                @if (!empty($photo))
+                                                    <div class="col-6 d-flex">
+                                                        <img src="{{ \App\Helpers\Image::removeQueryParameters($photo) }}" class="rounded img-cover-small" loading="lazy" alt="{{ $hotel['name'] }}">
+                                                    </div>
+                                                @else
+                                                    <div class="col-6 d-flex">
+                                                        <img src="{{ asset('assets/main/images/no-image.png') }}" class="rounded img-cover-small" loading="lazy" alt="No image">
+                                                    </div>
+                                                @endif
                                             @endif
                                         @endforeach
                                     </div>

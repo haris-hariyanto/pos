@@ -50,7 +50,7 @@ class CountryController extends Controller
                 ->where('type', 'PLACE')
                 ->where('is_hotels_scraped', 'Y')
                 ->where('hotels_nearby', '>', 0)
-                ->take(20)
+                ->take(15)
                 ->orderBy('user_ratings_total', 'DESC')
                 ->get();
             $places = $modelPlaces->toArray();
