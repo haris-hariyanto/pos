@@ -40,13 +40,5 @@ class AuthServiceProvider extends ServiceProvider
                     ['url' => $url]
                 );
         });
-
-        Gate::define('auth-check', function (User $user, $checkBoolean) {
-            return $checkBoolean;
-        });
-
-        Gate::define('is-admin', function (User $user) {
-            return $user->group->is_admin == 'Y' ? Response::allow() : Response::denyAsNotFound();
-        });
     }
 }

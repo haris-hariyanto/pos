@@ -24,10 +24,6 @@
 
                         <x-admin.forms.input-text name="username" :label="__('Username')" :value="old('username') ?? $user->username" />
                         <x-admin.forms.input-text name="email" :label="__('Email')" :value="old('email') ?? $user->email" />
-                        
-                        @can('auth-check', $userAuth->authorize('admin-users-group'))
-                            <x-admin.forms.select name="group_id" :label="__('Group')" :options="$groups" :selected="$user->group_id" />
-                        @endcan
 
                     </div>
                     <div class="card-footer">

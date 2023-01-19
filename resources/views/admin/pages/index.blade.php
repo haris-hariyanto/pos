@@ -14,9 +14,7 @@
     @endif
 
     <div class="d-flex justify-content-end mb-3">
-        @can('auth-check', $userAuth->authorize('admin-pages-create'))
-            <a href="{{ route('admin.pages.create') }}" class="btn btn-primary">{{ __('Create Page') }}</a>
-        @endcan
+        <a href="{{ route('admin.pages.create') }}" class="btn btn-primary">{{ __('Create Page') }}</a>
     </div>
 
     <div x-data="modalDelete">

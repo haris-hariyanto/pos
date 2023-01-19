@@ -5,15 +5,11 @@ namespace App\Http\Controllers\Main\Account;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use App\Helpers\Permission;
 
 class UsernameController extends Controller
 {
     public function edit(Request $request)
     {
-        $userAuth = new Permission($request->user()->group, 'member');
-        $this->authorize('auth-check', $userAuth->authorize('member-account-username'));
-        
         $user = $request->user();
 
         return view('main.account.account-settings.username', compact('user'));
@@ -21,9 +17,6 @@ class UsernameController extends Controller
 
     public function update(Request $request)
     {
-        $userAuth = new Permission($request->user()->group, 'member');
-        $this->authorize('auth-check', $userAuth->authorize('member-account-username'));
-
         $user = $request->user();
 
         $request->validate([

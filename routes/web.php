@@ -45,36 +45,35 @@ Route::prefix('settings')->name('account.account-settings.')->middleware(['auth'
 
     Route::get('/password', [Controllers\Main\Account\PasswordController::class, 'edit'])->name('password.edit');
     Route::put('/password', [Controllers\Main\Account\PasswordController::class, 'update'])->name('password.update');
-
-    Route::get('/avatar', [Controllers\Main\Account\AvatarController::class, 'edit'])->name('avatar.edit');
-    Route::get('/avatar/crop', [Controllers\Main\Account\AvatarController::class, 'edit']);
-    
-    Route::post('/avatar/crop', [Controllers\Main\Account\AvatarController::class, 'crop'])->name('avatar.crop');
-    Route::post('/avatar', [Controllers\Main\Account\AvatarController::class, 'update'])->name('avatar.update');
 });
 
-Route::prefix('admin')->name('admin.')->middleware(['auth', 'can:is-admin'])->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
     Route::get('/', function () {
         return view('admin.index');
     })->name('index');
+
+    Route::resource('hotels', Controllers\Admin\Content\HotelController::class);
+    Route::get('/hotels-index.json', [Controllers\Admin\Content\HotelController::class, 'indexData'])->name('hotels.index.data');
+
+    Route::resource('places', Controllers\Admin\Content\PlaceController::class);
+    Route::get('/places-index.json', [Controllers\Admin\Content\PlaceController::class, 'indexData'])->name('places.index.data');
+
+    Route::resource('cities', Controllers\Admin\Content\CityController::class);
+    Route::get('/cities-index.json', [Controllers\Admin\Content\CityController::class, 'indexData'])->name('cities.index.data');
+
+    Route::resource('states', Controllers\Admin\Content\StateController::class);
+    Route::get('/states-index.json', [Controllers\Admin\Content\StateController::class, 'indexData'])->name('states.index.data');
+
+    Route::resource('countries', Controllers\Admin\Content\CountryController::class);
+    Route::get('/countries-index.json', [Controllers\Admin\Content\CountryController::class, 'indexData'])->name('countries.index.data');
+
+    Route::resource('continents', Controllers\Admin\Content\ContinentController::class);
+    Route::get('/continents-index.json', [Controllers\Admin\Content\ContinentController::class, 'indexData'])->name('continents.index.data');
 
     Route::resource('users', Controllers\Admin\UserController::class);
     Route::get('/users-index.json', [Controllers\Admin\UserController::class, 'indexData'])->name('users.index.data');
     Route::get('/users/{user}/password', [Controllers\Admin\UserController::class, 'editPassword'])->name('users.password.edit');
     Route::put('/users/{user}/password', [Controllers\Admin\UserController::class, 'updatePassword'])->name('users.password.update');
-
-    Route::resource('groups', Controllers\Admin\GroupController::class);
-    Route::get('/groups-index.json', [Controllers\Admin\GroupController::class, 'indexData'])->name('groups.index.data');
-
-    Route::resource('admins', Controllers\Admin\AdminController::class)->parameters([
-        'admins' => 'group',
-    ]);
-    Route::get('/admins-index.json', [Controllers\Admin\AdminController::class, 'indexData'])->name('admins.index.data');
-
-    Route::get('/groups/{group}/member-permissions', [Controllers\Admin\PermissionController::class, 'editMemberPermissions'])->name('groups.member-permissions.edit');
-    Route::put('/groups/{group}/member-permissions', [Controllers\Admin\PermissionController::class, 'updateMemberPermissions'])->name('groups.member-permissions.update');
-    Route::get('/groups/{group}/admin-permissions', [Controllers\Admin\PermissionController::class, 'editAdminPermissions'])->name('groups.admin-permissions.edit');
-    Route::put('/groups/{group}/admin-permissions', [Controllers\Admin\PermissionController::class, 'updateAdminPermissions'])->name('groups.admin-permissions.update');
 
     Route::resource('pages', Controllers\Admin\PageController::class);
     Route::get('/pages-index.json', [Controllers\Admin\PageController::class, 'indexData'])->name('pages.index.data');

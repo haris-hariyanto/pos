@@ -19,51 +19,72 @@
                     </a>
                 </li>
 
-                @can('auth-check', $userAuth->authorize('admin-users-index'))
-                    <li class="nav-item">
-                        <a href="{{ route('admin.users.index') }}" @class(['nav-link', 'active' => Route::currentRouteName() == 'admin.users.index'])>
-                            <i class="nav-icon fas fa-user"></i>
-                            <p>{{ __('Users') }}</p>
-                        </a>
-                    </li>
-                @endcan
+                <li class="nav-header">{{ strtoupper(__('Contents')) }}</li>
 
-                @can('auth-check', $userAuth->authorize('admin-groups-index'))
-                    <li class="nav-item">
-                        <a href="{{ route('admin.groups.index') }}" @class(['nav-link', 'active' => Route::currentRouteName() == 'admin.groups.index'])>
-                            <i class="nav-icon fas fa-users"></i>
-                            <p>{{ __('Groups') }}</p>
-                        </a>
-                    </li>
-                @endcan
+                <li class="nav-item">
+                    <a href="{{ route('admin.hotels.index') }}" @class(['nav-link', 'active' => Route::currentRouteName() == 'admin.hotels.index'])>
+                        <i class="nav-icon fas fa-hotel"></i>
+                        <p>{{ __('Hotels') }}</p>
+                    </a>
+                </li>
 
-                @can('auth-check', $userAuth->authorize('admin-pages-index'))
-                    <li class="nav-item">
-                        <a href="{{ route('admin.pages.index') }}" @class(['nav-link', 'active' => Route::currentRouteName() == 'admin.pages.index'])>
-                            <i class="nav-icon fas fa-file-alt"></i>
-                            <p>{{ __('Pages') }}</p>
-                        </a>
-                    </li>
-                @endcan
+                <li class="nav-item">
+                    <a href="{{ route('admin.places.index') }}" @class(['nav-link', 'active' => Route::currentRouteName() == 'admin.places.index'])>
+                        <i class="nav-icon fas fa-map-marker-alt"></i>
+                        <p>{{ __('Places') }}</p>
+                    </a>
+                </li>
 
-                @can('auth-check', $userAuth->authorize('admin-contacts-index'))
-                    <li class="nav-item">
-                        <a href="{{ route('admin.contacts.index') }}" @class(['nav-link', 'active' => Route::currentRouteName() == 'admin.contacts.index'])>
-                            <i class="nav-icon fas fa-envelope"></i>
-                            <p>{{ __('Messages') }}</p>
-                        </a>
-                    </li>
-                @endcan
+                <li class="nav-item">
+                    <a href="{{ route('admin.cities.index') }}" @class(['nav-link', 'active' => Route::currentRouteName() == 'admin.cities.index'])>
+                        <i class="nav-icon fas fa-city"></i>
+                        <p>{{ __('Cities') }}</p>
+                    </a>
+                </li>
 
-                @can('auth-check', $userAuth->authorize('admin-admins-index'))
-                    <li class="nav-header">{{ strtoupper(__('Staff')) }}</li>
-                    <li class="nav-item">
-                        <a href="{{ route('admin.admins.index') }}" @class(['nav-link', 'active' => Route::currentRouteName() == 'admin.admins.index'])>
-                            <i class="nav-icon fas fa-lock"></i>
-                            <p>{{ __('Administrators') }}</p>
-                        </a>
-                    </li>
-                @endcan
+                <li class="nav-item">
+                    <a href="{{ route('admin.states.index') }}" @class(['nav-link', 'active' => Route::currentRouteName() == 'admin.states.index'])>
+                        <i class="nav-icon fas fa-city"></i>
+                        <p>{{ __('States') }}</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ route('admin.countries.index') }}" @class(['nav-link', 'active' => Route::currentRouteName() == 'admin.countries.index'])>
+                        <i class="nav-icon fas fa-flag"></i>
+                        <p>{{ __('Countries') }}</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ route('admin.continents.index') }}" @class(['nav-link', 'active' => Route::currentRouteName() == 'admin.continents.index'])>
+                        <i class="nav-icon fas fa-globe-asia"></i>
+                        <p>{{ __('Continents') }}</p>
+                    </a>
+                </li>
+
+                <li class="nav-header">{{ strtoupper(__('Settings')) }}</li>
+
+                <li class="nav-item">
+                    <a href="{{ route('admin.users.index') }}" @class(['nav-link', 'active' => Route::currentRouteName() == 'admin.users.index'])>
+                        <i class="nav-icon fas fa-user"></i>
+                        <p>{{ __('Users') }}</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ route('admin.pages.index') }}" @class(['nav-link', 'active' => Route::currentRouteName() == 'admin.pages.index'])>
+                        <i class="nav-icon fas fa-file-alt"></i>
+                        <p>{{ __('Pages') }}</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ route('admin.contacts.index') }}" @class(['nav-link', 'active' => Route::currentRouteName() == 'admin.contacts.index'])>
+                        <i class="nav-icon fas fa-envelope"></i>
+                        <p>{{ __('Messages') }}</p>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- [END] Sidebar menu -->

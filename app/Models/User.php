@@ -23,13 +23,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'username',
         'email',
         'password',
-        'group_id',
         'email_verified_at',
-        'avatar',
-        'avatar_path',
-        'avatar_tem',
-        'avatar_tem_path',
-        'avatar_tem_expired',
     ];
 
     /**
@@ -56,15 +50,5 @@ class User extends Authenticatable implements MustVerifyEmail
         $resetPasswordURL = route('password.reset', ['token' => $token, 'email' => $this->email]);
 
         $this->notify(new ResetPassword($resetPasswordURL, $this->username));
-    }
-
-    public function group()
-    {
-        return $this->belongsTo(Group::class);
-    }
-
-    public function avatar()
-    {
-        return $this->avatar ? $this->avatar : 'https://ui-avatars.com/api/?name=' . $this->username . '&size=128&length=1';
     }
 }

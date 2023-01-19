@@ -18,6 +18,7 @@
     "City": "Kota",
     "State / Province": "Negara Bagian / Provinsi",
     "Country": "Negara",
+    "Continent": "Benua",
     "Rates from": "Harga mulai",
     "Hotel Chain": "Jaringan Hotel",
     "Year Opened": "Tahun Dibuka",
@@ -32,6 +33,9 @@
     ":place in :country": ":place di :country",
     "No places available.": "Tidak ada tempat tersedia.",
     "Hotels in :location, :country": "Hotel di :location, :country",
+    "Places": "Tempat",
+    "Place Name": "Nama Tempat",
+    "Category": "Kategori",
 
     "Book via :platform": "Pesan di :platform",
 
@@ -42,6 +46,29 @@
     "Park": "Taman",
     "Shopping Mall": "Pusat Perbelanjaan",
     "Tourist Attraction": "Objek Wisata",
+    "Accounting": "Akuntansi",
+    "Amusement Park": "Taman Hiburan",
+    "Aquarium": "Akuarium",
+    "Dentist": "Dokter Gigi",
+    "Embassy": "Kedutaan",
+    "Hospital": "Rumah Sakit",
+    "Point Of Interest": "Tempat Menarik",
+    "Stadium": "Stadium",
+    "Subway Station": "Stasiun Subway",
+    "Train Station": "Stasiun Kereta",
+    "Transit Station": "Stasiun Transit",
+    "University": "Universitas",
+    "Zoo": "Kebun Binatang",
+    "Hotels Nearby": "Hotel di Sekitar",
+    ":count Hotels": ":count Hotel",
+    "Cities": "Kota",
+    "City Name": "Nama Kota",
+    "State": "Provinsi / Negara Bagian",
+    "States": "Provinsi / Negara Bagian",
+    "Countries": "Negara",
+    "Continents": "Benua",
+
+    "Hotels": "Hotel",
 
     "Register": "Daftar",
     "Username": "Username",
@@ -170,5 +197,7 @@
     "Delete message:": "Hapus pesan:",
     "Message has been deleted!": "Pesan telah dihapus!",
     "This website uses cookies to ensure you get the best experience on our website.": "Website ini menggunakan cookie untuk memaksimalkan pengalaman Anda di website ini.",
-    "Accept": "Terima"
+    "Accept": "Terima",
+    "Settings": "Settings",
+    "Contents": "Konten"
 }

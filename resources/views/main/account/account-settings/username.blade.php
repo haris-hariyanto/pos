@@ -15,8 +15,8 @@
                 @include('main.account.account-settings._sidebar')
             </div>
             <div class="col-12 col-sm-10 col-md-7 col-lg-9">
-                <div class="card">
-                    <div class="card-header">{{ __('Change Username') }}</div>
+                <div class="card shadow-sm">
+                    <div class="card-header"><b>{{ __('Change Username') }}</b></div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-12 col-lg-6">

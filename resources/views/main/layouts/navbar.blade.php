@@ -38,20 +38,15 @@
                 @endguest
 
                 @auth
-                    <li class="nav-item d-none d-md-flex align-items-center ms-3">
-                        <img src="{{ Auth::user()->avatar() }}" alt="{{ Auth::user()->username }}" class="rounded-circle img-fluid" loading="lazy" style="width: 38px;">
-                    </li>
                     <li class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ Auth::user()->username }}</a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            @if (Auth::user()->group_id == 1)
-                                <li>
-                                    <a href="{{ route('admin.index') }}" class="dropdown-item" target="_blank">{{ __('Dashboard') }}</a>
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                            @endif
+                        <ul class="dropdown-menu bg-white dropdown-menu-end">
+                            <li>
+                                <a href="{{ route('admin.index') }}" class="dropdown-item" target="_blank">{{ __('Dashboard') }}</a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
                             <li>
                                 <a href="{{ route('account.account-settings.index') }}" class="dropdown-item">{{ __('Account Settings') }}</a>
                             </li>

@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use App\Helpers\Permission;
 
 class ContactController extends Controller
 {
@@ -17,9 +16,6 @@ class ContactController extends Controller
      */
     public function index(Request $request)
     {
-        $userAuth = new Permission($request->user()->group, 'admin');
-        $this->authorize('auth-check', $userAuth->authorize('admin-contacts-index'));
-
         $breadcrumb = [
             __('Dashboard') => route('admin.index'),
             __('Messages') => '',
@@ -30,9 +26,6 @@ class ContactController extends Controller
 
     public function indexData(Request $request)
     {
-        $userAuth = new Permission($request->user()->group, 'admin');
-        $this->authorize('auth-check', $userAuth->authorize('admin-contacts-index'));
-
         $queryLimit = $request->query('limit', 10);
         $queryOffset = $request->query('offset', 0);
         $querySort = $request->query('sort', 'id');
@@ -101,9 +94,6 @@ class ContactController extends Controller
      */
     public function show(Request $request, Contact $contact)
     {
-        $userAuth = new Permission($request->user()->group, 'admin');
-        $this->authorize('auth-check', $userAuth->authorize('admin-contacts-index'));
-
         $breadcrumb = [
             __('Dashboard') => route('admin.index'),
             __('Messages') => route('admin.contacts.index'),
@@ -117,9 +107,6 @@ class ContactController extends Controller
 
     public function toggleStatus(Request $request, Contact $contact)
     {
-        $userAuth = new Permission($request->user()->group, 'admin');
-        $this->authorize('auth-check', $userAuth->authorize('admin-contacts-index'));
-
         if ($contact->status == 'READ') {
             $contact->update(['status' => 'UNREAD']);
         }

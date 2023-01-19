@@ -32,19 +32,6 @@
                         <x-admin.forms.textarea name="page_content" :label="__('Page content')">{{ old('page_content') ?? $page->content }}</x-admin.forms.textarea>
                         <input type="hidden" name="status" x-model="status">
 
-                        <div class="form-group">
-                            <button class="btn btn-secondary" type="button" @click="togglePageSettings">
-                                {{ __('Page settings') }}
-                                <i class="fa-fw fas fa-caret-down" x-show="pageSettings == false"></i>
-                                <i class="fa-fw fas fa-caret-up" x-show="pageSettings == true"></i>
-                            </button>
-                        </div>
-
-                        <div x-show="pageSettings">
-                            <x-admin.forms.input-text name="page_slug" :label="__('URL')" :value="old('page_slug') ?? $page->slug" />
-                            <x-admin.forms.textarea name="page_description" :label="__('Meta Description')" rows="3">{{ old('page_description') ?? $page->description }}</x-admin.forms.textarea>
-                        </div>
-
                     </div>
                 </div>
             </div>
@@ -64,15 +51,11 @@
             document.addEventListener('alpine:init', () => {
                 Alpine.data('form', () => ({
                     status: '{{ $page->status }}',
-                    pageSettings: {{ $errors->has('page_slug') || $errors->has('page_description') ? 'true' : 'false' }},
                     submit(e) {
                         e.target.submit();
                     },
                     saveMode(mode) {
                         this.status = mode;
-                    },
-                    togglePageSettings() {
-                        this.pageSettings = !this.pageSettings;
                     },
                 }));
             });

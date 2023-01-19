@@ -7,7 +7,6 @@ use App\Models\Page;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
-use App\Helpers\Permission;
 
 class PageController extends Controller
 {
@@ -17,10 +16,7 @@ class PageController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
-    {
-        $userAuth = new Permission($request->user()->group, 'admin');
-        $this->authorize('auth-check', $userAuth->authorize('admin-pages-index'));
-        
+    {   
         $breadcrumb = [
             __('Dashboard') => route('admin.index'),
             __('Pages') => '',
@@ -31,9 +27,6 @@ class PageController extends Controller
 
     public function indexData(Request $request)
     {
-        $userAuth = new Permission($request->user()->group, 'admin');
-        $this->authorize('auth-check', $userAuth->authorize('admin-pages-index'));
-
         $queryLimit = $request->query('limit', 10);
         $queryOffset = $request->query('offset', 0);
         $querySort = $request->query('sort', 'id');
@@ -55,13 +48,13 @@ class PageController extends Controller
         return [
             'total' => $pagesCountFiltered,
             'totalNotFiltered' => $pagesCount,
-            'rows' => $pages->map(function ($page) use ($userAuth) {
+            'rows' => $pages->map(function ($page) {
                 return [
                     'id' => $page->id,
                     'slug' => $page->slug,
                     'title' => $page->title,
                     'status' => $page->status == 'PUBLISHED' ? '<span class="badge badge-info">' . __('Published') . '</span>' : '<span class="badge badge-secondary">' . __('Draft') . '</span>',
-                    'menu' => view('admin.pages._menu', ['page' => $page, 'userAuth' => $userAuth])->render(),
+                    'menu' => view('admin.pages._menu', ['page' => $page])->render(),
                 ];
             }),
         ];
@@ -74,9 +67,6 @@ class PageController extends Controller
      */
     public function create(Request $request)
     {
-        $userAuth = new Permission($request->user()->group, 'admin');
-        $this->authorize('auth-check', $userAuth->authorize('admin-pages-create'));
-
         $breadcrumb = [
             __('Dashboard') => route('admin.index'),
             __('Pages') => route('admin.pages.index'),
@@ -94,9 +84,6 @@ class PageController extends Controller
      */
     public function store(Request $request)
     {
-        $userAuth = new Permission($request->user()->group, 'admin');
-        $this->authorize('auth-check', $userAuth->authorize('admin-pages-create'));
-
         if ($request->page_slug) {
             $pageSlugRule = ['between:1,200', 'unique:pages,slug'];
 
@@ -135,7 +122,6 @@ class PageController extends Controller
             'slug' => $pageSlug,
             'user_id' => $request->user()->id,
             'title' => $request->page_title,
-            'description' => $request->page_description,
             'content' => $request->page_content,
             'status' => $request->status,
         ]);
@@ -162,9 +148,6 @@ class PageController extends Controller
      */
     public function edit(Request $request, Page $page)
     {
-        $userAuth = new Permission($request->user()->group, 'admin');
-        $this->authorize('auth-check', $userAuth->authorize('admin-pages-edit'));
-
         $breadcrumb = [
             __('Dashboard') => route('admin.index'),
             __('Pages') => route('admin.pages.index'),
@@ -183,22 +166,15 @@ class PageController extends Controller
      */
     public function update(Request $request, Page $page)
     {
-        $userAuth = new Permission($request->user()->group, 'admin');
-        $this->authorize('auth-check', $userAuth->authorize('admin-pages-edit'));
-
         $request->validate([
             'page_title' => ['required', 'between:1,200'],
             'page_content' => ['max:60000'],
-            'page_description' => ['max:500'],
             'status' => ['in:PUBLISHED,DRAFT'],
-            'page_slug' => ['between:1,200', Rule::unique('pages', 'slug')->ignore($page->id)],
         ]);
 
         $page->update([
-            'slug' => $request->page_slug,
             'title' => $request->page_title,
             'content' => $request->page_content,
-            'description' => $request->page_description,
             'status' => $request->status,
         ]);
 
@@ -213,9 +189,6 @@ class PageController extends Controller
      */
     public function destroy(Request $request, Page $page)
     {
-        $userAuth = new Permission($request->user()->group, 'admin');
-        $this->authorize('auth-check', $userAuth->authorize('admin-pages-delete'));
-
         $page->delete();
 
         return redirect()->back()->with('success', __('Page has been deleted!'));

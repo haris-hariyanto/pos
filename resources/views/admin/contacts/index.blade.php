@@ -43,8 +43,8 @@
                     <thead>
                         <tr>
                             <th data-field="id" data-sortable="true" data-width="1" data-visible="false">{{ __('ID') }}</th>
-                            <th data-field="name" data-sortable="true" data-visible="false">{{ __('Name') }}</th>
-                            <th data-field="email" data-sortable="true" data-visible="false">{{ __('Email') }}</th>
+                            <th data-field="name" data-sortable="true" data-visible="true">{{ __('Name') }}</th>
+                            <th data-field="email" data-sortable="true" data-visible="true">{{ __('Email') }}</th>
                             <th data-field="subject" data-sortable="true">{{ __('Subject') }}</th>
                             <th data-field="status" data-sortable="true" data-width="1">{{ __('Status') }}</th>
                             <th data-field="created_at" data-sortable="true">{{ __('Created at') }}</th>

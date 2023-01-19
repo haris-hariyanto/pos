@@ -24,7 +24,6 @@
 
                         <x-admin.forms.input-text name="username" :label="__('Username')" />
                         <x-admin.forms.input-text name="email" :label="__('Email')" />
-                        <x-admin.forms.select name="group_id" :label="__('Group')" :options="$groups" :selected="old('group_id')" />
                         <x-admin.forms.password name="password" :label="__('Password')" />
 
                     </div>

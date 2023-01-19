@@ -276,6 +276,8 @@ class CloneDB extends Command
                     'name' => $continentClone->name,
                 ]);
             }
+
+            $segment++;
         }
         // [END] Clone continents
 
@@ -318,6 +320,8 @@ class CloneDB extends Command
                     'additional_data' => $placeClone->additional_data,
                 ]);
             }
+
+            $segment++;
         }
         // [END] Clone places
 

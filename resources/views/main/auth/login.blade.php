@@ -1,7 +1,7 @@
 <x-main.layouts.app>
     <x-slot:pageTitle>{{ __('Login') }}</x-slot>
 
-    <div class="container">
+    <div class="container py-4">
         <div class="row g-2 justify-content-center">
             <div class="col-12 col-sm-10 col-md-8 col-lg-6">
 
@@ -9,7 +9,7 @@
                     <div class="alert alert-success mb-2">{{ session('status') }}</div>
                 @endif
 
-                <div class="card">
+                <div class="card shadow-sm">
                     <div class="card-body">
                         <h1 class="fs-2">{{ __('Login') }}</h1>
 
@@ -26,22 +26,10 @@
                                 </div>
                             </div>
 
-                            @if (Route::has('password.request'))
-                                <div class="mb-3 text-end">
-                                    <a href="{{ route('password.request') }}">{{ __('Forgot your password?') }}</a>
-                                </div>
-                            @endif
-
                             <div class="mb-3">
                                 <button type="submit" class="btn btn-primary">{{ __('Login') }}</button>
                             </div>
                         </form>
-
-                        @if (config('app.open_register'))
-                            <p class="mb-0">
-                                {{ __('Don\'t have an account?') }} <a href="{{ route('register') }}">{{ __('Register') }}</a>
-                            </p>
-                        @endif
                     </div>
                 </div>
 

@@ -12,8 +12,7 @@ class ViewServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        View::composer('admin/*', AdminComposer::class);
-        View::composer('main/*', MemberComposer::class);
+        //
     }
 
 }
