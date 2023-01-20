@@ -20,11 +20,9 @@ class DatabaseSeeder extends Seeder
                 'username' => 'admin',
                 'email' => 'admin@example.com',
                 'email_verified_at' => now(),
-                'group_id' => 1,
             ]);
         
         $this->call([
-            GroupSeeder::class,
             PageSeeder::class,
         ]);
     }
