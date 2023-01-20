@@ -14,6 +14,7 @@ use App\Models\Location\Country;
 use App\Models\Location\Continent;
 use App\Models\Location\Place;
 use App\Models\Location\Category;
+use App\Models\Location\CategoryPlace;
 use App\Models\ScrapeHistory;
 
 class CloneDB extends Command
@@ -312,8 +313,6 @@ class CloneDB extends Command
                     'country' => $placeClone->country,
                     'continent' => $placeClone->continent,
                     'gmaps_id' => $placeClone->gmaps_id,
-                    'category' => $placeClone->category,
-                    'category_id' => $placeClone->category_id,
                     'is_hotels_scraped' => $placeClone->is_hotels_scraped,
                     'hotels_nearby' => $placeClone->hotels_nearby,
                     'user_ratings_total' => $placeClone->user_ratings_total,
@@ -352,6 +351,34 @@ class CloneDB extends Command
             $segment++;
         }
         // [END] Clone categories
+
+        // Clone category place
+        $segment = 1;
+        while (true) {
+            $limit = 1000;
+            $skip = ($segment - 1) * $limit;
+
+            $placeCategoriesModelClone = new CategoryPlace;
+            $placeCategoriesClone = $placeCategoriesModelClone
+                ->setConnection('clone')
+                ->skip($skip)
+                ->take($limit)
+                ->get();
+            
+            if (count($placeCategoriesClone) < 1) {
+                break;
+            }
+
+            foreach ($placeCategoriesClone as $placeCategoryClone) {
+                CategoryPlace::create([
+                    'place_id' => $placeCategoryClone->place_id,
+                    'category_id' => $placeCategoryClone->category_id,
+                ]);
+            }
+
+            $segment++;
+        }
+        // [END] Clone category place
 
         // Clone hotel place
         $segment = 1;

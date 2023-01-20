@@ -28,4 +28,9 @@ class City extends Model
     {
         return $this->belongsTo(\App\Models\Location\Country::class, 'country', 'name');
     }
+
+    public function hotels()
+    {
+        return $this->hasMany(\App\Models\Hotel\Hotel::class, ['city', 'country'], ['name', 'country']);
+    }
 }

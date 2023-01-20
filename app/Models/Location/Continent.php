@@ -17,4 +17,24 @@ class Continent extends Model
     {
         return $this->hasMany(Country::class, 'continent', 'name');
     }
+
+    public function states()
+    {
+        return $this->hasMany(State::class, 'continent', 'name');   
+    }
+
+    public function cities()
+    {
+        return $this->hasMany(City::class, 'continent', 'name');
+    }
+
+    public function places()
+    {
+        return $this->hasMany(Place::class, 'continent', 'name');
+    }
+
+    public function hotels()
+    {
+        return $this->hasMany(\App\Models\Hotel\Hotel::class, 'continent', 'name');
+    }
 }

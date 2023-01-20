@@ -28,4 +28,14 @@ class State extends Model
     {
         return $this->belongsTo(\App\Models\Location\Country::class, 'country', 'name');
     }
+
+    public function cities()
+    {
+        return $this->hasMany(\App\Models\Location\City::class, ['state', 'country'], ['name', 'country']);
+    }
+
+    public function hotels()
+    {
+        return $this->hasMany(\App\Models\Hotel\Hotel::class, ['state', 'country'], ['name', 'country']);
+    }
 }

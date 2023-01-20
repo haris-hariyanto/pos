@@ -26,8 +26,6 @@ return new class extends Migration
             $table->string('country')->nullable();
             $table->string('continent')->nullable();
             $table->string('gmaps_id')->nullable();
-            $table->string('category')->nullable();
-            $table->integer('category_id')->nullable();
             $table->enum('is_hotels_scraped', ['Y', 'N', 'PROCESS'])->default('N');
             $table->integer('hotels_nearby')->default(0);
             $table->integer('user_ratings_total')->default(0);

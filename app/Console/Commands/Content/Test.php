@@ -12,6 +12,9 @@ use App\Models\Location\Country;
 use App\Models\Location\State;
 use App\Models\Location\City;
 use App\Models\Location\Place;
+use App\Models\Location\Category;
+use App\Models\Location\CategoryPlace;
+use Illuminate\Support\Str;
 
 class Test extends Command
 {
@@ -36,21 +39,25 @@ class Test extends Command
      */
     public function handle()
     {
-        /*
-        $hotels = Hotel::with('brand')->limit(1000)->get();
-        foreach ($hotels as $hotel) {
-            $this->line($hotel->brand->name);
+        $places = Place::get();
+        foreach ($places as $place) {
+            $additionalData = $place->additional_data;
+            $additionalData = json_decode($additionalData, true);
+
+            if (!empty($additionalData['types'])) {
+                $categories = $additionalData['types'];
+                foreach ($categories as $category) {
+                    $categoryInstance = Category::firstOrCreate([
+                        'slug' => Str::slug($category),
+                        'name' => $category,
+                    ]);
+
+                    CategoryPlace::firstOrCreate([
+                        'category_id' => $categoryInstance->id,
+                        'place_id' => $place->id,
+                    ]);
+                }
+            }
         }
-        */
-        /*
-        Chain::truncate();
-        Brand::truncate();
-        Continent::truncate();
-        Country::truncate();
-        State::truncate();
-        City::truncate();
-        */
-        // HotelPlace::truncate();
-        // Place::update(['hotels_nearby' => 0]);
     }
 }

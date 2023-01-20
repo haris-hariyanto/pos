@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Content;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Location\Place;
+use App\Models\Hotel\HotelPlace;
 
 class PlaceController extends Controller
 {
@@ -132,8 +133,11 @@ class PlaceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Place $place)
     {
-        //
+        HotelPlace::where('place_id', $place->id)->delete();
+        $place->delete();
+
+        return redirect()->back()->with('success', __('Place has been deleted!'));
     }
 }

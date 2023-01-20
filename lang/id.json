@@ -199,5 +199,27 @@
     "This website uses cookies to ensure you get the best experience on our website.": "Website ini menggunakan cookie untuk memaksimalkan pengalaman Anda di website ini.",
     "Accept": "Terima",
     "Settings": "Settings",
-    "Contents": "Konten"
+    "Contents": "Konten",
+
+    "Delete Continent?": "Hapus Benua?",
+    "Delete continent:": "Hapus benua:",
+    "Continent has been deleted!": "Benua telah dihapus!",
+    "All related data will be deleted (countries, hotels, etc.)": "Semua data terkait akan dihapus (negara, hotel, dll.)",
+    "Delete Country?": "Hapus Negara?",
+    "Delete country:": "Hapus negara:",
+    "All related data will be deleted (cities, hotels, etc.)": "Semua data terkait akan dihapus (kota, hotel, dll.)",
+    "Country has been deleted!": "Negara telah dihapus!",
+    "Delete State?": "Hapus Provinsi / Negara Bagian",
+    "Delete state:": "Hapus provinsi / negara bagian:",
+    "State has been deleted!": "Provinsi / Negara Bagian telah dihapus!",
+    "Delete City?": "Hapus Kota?",
+    "Delete city:": "Hapus kota:",
+    "All hotels in this city will be removed.": "Semua hotel di kota ini akan dihapus.",
+    "City has been deleted!": "Kota telah dihapus!",
+    "Delete Place?": "Hapus Tempat?",
+    "Delete place:": "Hapus tempat:",
+    "Place has been deleted!": "Tempat telah dihapus!",
+    "Delete Hotel?": "Hapus Hotel?",
+    "Delete hotel:": "Hapus hotel:",
+    "Hotel has been deleted!": "Hotel telah dihapus!"
 }

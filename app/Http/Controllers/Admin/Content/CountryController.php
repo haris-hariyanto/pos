@@ -124,8 +124,14 @@ class CountryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Country $country)
     {
-        //
+        $country->states()->delete();
+        $country->cities()->delete();
+        $country->places()->delete();
+        $country->hotels()->delete();
+        $country->delete();
+
+        return redirect()->back()->with('success', __('Country has been deleted!'));
     }
 }

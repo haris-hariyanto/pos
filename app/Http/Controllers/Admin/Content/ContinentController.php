@@ -133,8 +133,15 @@ class ContinentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Continent $continent)
     {
-        //
+        $continent->countries()->delete();
+        $continent->states()->delete();
+        $continent->cities()->delete();
+        $continent->places()->delete();
+        $continent->hotels()->delete();
+        $continent->delete();
+
+        return redirect()->back()->with('success', __('Continent has been deleted!'));
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Content;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Hotel\Hotel;
+use App\Models\Hotel\HotelPlace;
 
 class HotelController extends Controller
 {
@@ -129,8 +130,11 @@ class HotelController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Hotel $hotel)
     {
-        //
+        HotelPlace::where('hotel_id', $hotel->id)->delete();
+        $hotel->delete();
+
+        return redirect()->back()->with('success', __('Hotel has been deleted!'));
     }
 }

@@ -8,6 +8,7 @@ use App\Models\Location\State;
 use App\Models\Location\Country;
 use App\Models\Location\Place;
 use App\Models\Location\Category;
+use App\Models\Location\CategoryPlace;
 use App\Models\ScrapeHistory;
 use App\Helpers\GooglePlaces;
 use Illuminate\Support\Str;
@@ -175,23 +176,26 @@ class Places extends Command
                         }
 
                         $dataToSave['gmaps_id'] = $place['id'];
-                        $dataToSave['category'] = $place['types'][0];
-
-                        $category = Category::firstOrCreate([
-                            'name' => $place['types'][0],
-                            'slug' => Str::slug($place['types'][0]),
-                        ]);
-                        $dataToSave['category_id'] = $category->id;
 
                         $additionalData = [];
                         $additionalData['viewport'] = $place['viewport'];
-                        $additionalData['types'] = $place['types'];
                         $dataToSave['additional_data'] = json_encode($additionalData);
 
                         $dataToSave['user_ratings_total'] = $place['user_ratings_total'];
 
-                        Place::create($dataToSave);
+                        $placeInstance = Place::create($dataToSave);
 
+                        foreach ($place['types'] as $category) {
+                            $category = Category::firstOrCreate([
+                                'name' => $category,
+                                'slug' => Str::slug($category),
+                            ]);
+
+                            CategoryPlace::firstOrCreate([
+                                'category_id' => $category->id,
+                                'place_id' => $placeInstance->id,
+                            ]);
+                        } // [END] foreach
                     }
                 }
 
