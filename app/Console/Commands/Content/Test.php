@@ -52,14 +52,14 @@ class Test extends Command
                         'name' => $category,
                     ]);
 
-                    dd($place->country);
-
-                    CategoryPlace::firstOrCreate([
+                    $categoryPlace = CategoryPlace::firstOrCreate([
                         'category_id' => $categoryInstance->id,
                         'place_id' => $place->id,
                         'country' => $place->country,
                         'continent' => $place->continent,
                     ]);
+
+                    dd($categoryPlace);
                 }
             }
         }
