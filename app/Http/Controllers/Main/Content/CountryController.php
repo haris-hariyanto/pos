@@ -9,6 +9,7 @@ use App\Models\Location\City;
 use App\Models\Location\State;
 use App\Models\Location\Place;
 use App\Models\Location\Category;
+use App\Models\Location\CategoryPlace;
 use App\Models\Hotel\Hotel;
 
 class CountryController extends Controller
@@ -111,9 +112,16 @@ class CountryController extends Controller
             $country = $modelCountry->toArray();
             $category = $modelCategory->toArray();
             $category['name'] = __(ucwords(str_replace('_', ' ', $category['name'])));
+
+            $placesInCategory = CategoryPlace::select('place_id')
+                ->where('category_id', $modelCategory->id)
+                ->get()
+                ->pluck('place_id')
+                ->toArray();
+
             $modelPlaces = $modelCountry
                 ->places()
-                ->where('category_id', $modelCategory->id)
+                ->whereIn('id', $placesInCategory)
                 ->where('hotels_nearby', '>', 0)
                 ->get();
             $places = $modelPlaces->toArray();

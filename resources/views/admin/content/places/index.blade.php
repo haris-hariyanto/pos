@@ -29,7 +29,6 @@
                         <tr>
                             <th data-field="id" data-sortable="true" data-visible="false" data-width="1">{{ __('ID') }}</th>
                             <th data-field="name" data-sortable="true">{{ __('Place Name') }}</th>
-                            <th data-field="category" data-visible="true">{{ __('Category') }}</th>
                             <th data-field="country" data-visible="true">{{ __('Country') }}</th>
                             <th data-field="continent" data-visible="false">{{ __('Continent') }}</th>
                             <th data-field="hotels_nearby" data-="visible">{{ __('Hotels Nearby') }}</th>

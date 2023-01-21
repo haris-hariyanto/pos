@@ -64,7 +64,6 @@ class PlaceController extends Controller
                     'name' => $place->name,
                     'country' => $place->country,
                     'continent' => $place->continent,
-                    'category' => __(ucwords(str_replace('_', ' ', $place->category))),
                     'hotels_nearby' => $place->hotels_nearby,
                     'menu' => view('admin.content.places._menu', ['place' => $place])->render(),
                 ];

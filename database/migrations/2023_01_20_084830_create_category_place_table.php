@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->integer('category_id');
             $table->integer('place_id');
+            $table->integer('country_id');
         });
     }
 
