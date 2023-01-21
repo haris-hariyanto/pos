@@ -198,7 +198,7 @@
     "Message has been deleted!": "Pesan telah dihapus!",
     "This website uses cookies to ensure you get the best experience on our website.": "Website ini menggunakan cookie untuk memaksimalkan pengalaman Anda di website ini.",
     "Accept": "Terima",
-    "Settings": "Settings",
+    "Settings": "Setting",
     "Contents": "Konten",
 
     "Delete Continent?": "Hapus Benua?",
@@ -221,5 +221,7 @@
     "Place has been deleted!": "Tempat telah dihapus!",
     "Delete Hotel?": "Hapus Hotel?",
     "Delete hotel:": "Hapus hotel:",
-    "Hotel has been deleted!": "Hotel telah dihapus!"
+    "Hotel has been deleted!": "Hotel telah dihapus!",
+    "Home Settings": "Setting Halaman Awal",
+    "Image Covers": "Gambar Cover"
 }

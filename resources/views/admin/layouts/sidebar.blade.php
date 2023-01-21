@@ -66,6 +66,15 @@
                 <li class="nav-header">{{ strtoupper(__('Settings')) }}</li>
 
                 <li class="nav-item">
+                    <a href="{{ route('admin.settings.home') }}" @class(['nav-link', 'active' => Route::currentRouteName() == 'admin.settings.home'])>
+                        <i class="nav-icon fas fa-home"></i>
+                        <p>{{ __('Home') }}</p>
+                    </a>
+                </li>
+
+                <li class="nav-header">{{ strtoupper(__('Others')) }}</li>
+
+                <li class="nav-item">
                     <a href="{{ route('admin.users.index') }}" @class(['nav-link', 'active' => Route::currentRouteName() == 'admin.users.index'])>
                         <i class="nav-icon fas fa-user"></i>
                         <p>{{ __('Users') }}</p>

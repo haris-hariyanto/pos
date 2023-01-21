@@ -52,6 +52,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
         return view('admin.index');
     })->name('index');
 
+    Route::prefix('settings')->name('settings.')->group(function () {
+        Route::get('/home', [Controllers\Admin\Setting\HomeSettingController::class, 'index'])->name('home');
+    });
+
     Route::resource('hotels', Controllers\Admin\Content\HotelController::class);
     Route::get('/hotels-index.json', [Controllers\Admin\Content\HotelController::class, 'indexData'])->name('hotels.index.data');
 
