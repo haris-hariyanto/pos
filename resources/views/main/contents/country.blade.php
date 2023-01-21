@@ -85,6 +85,7 @@
         <h2 class="fs-3 mb-3">{{ __('Popular Places in :country', ['country' => $country['name']]) }}</h2>
         <div class="card shadow-sm mb-3">
             <div class="card-body">
+                <!-- Places list -->
                 <div class="row g-2">
                     @foreach ($places as $place)
                         <div class="col-12 col-lg-4">
@@ -99,6 +100,7 @@
                         </div>
                     @endforeach
                 </div>
+                <!-- [END] Places list -->
                 <hr>
                 @foreach ($categories as $category)
                     <a href="{{ route('country.places', [$country['slug'], $category['slug']]) }}" class="btn btn-outline-secondary shadow-sm mb-1">{{ __(ucwords(str_replace('_', ' ', $category->name))) }}</a>

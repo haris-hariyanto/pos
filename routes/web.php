@@ -24,6 +24,7 @@ Route::get('/country/{country}/places/{place}', [Controllers\Main\Content\Countr
 Route::get('/place/{place}', [Controllers\Main\Content\PlaceController::class, 'index'])->name('place');
 Route::get('/hotel/{hotel}', [Controllers\Main\Content\HotelController::class, 'index'])->name('hotel');
 Route::get('/hotel/{type}/{location}', [Controllers\Main\Content\LocationController::class, 'index'])->name('hotel.location');
+Route::get('/search', [Controllers\Main\Content\SearchController::class, 'index'])->name('search');
 
 Route::get('/p/{page}', [Controllers\Main\Misc\PageController::class, 'page'])->name('page');
 Route::get('/contact', [Controllers\Main\Misc\ContactController::class, 'contact'])->name('contact');

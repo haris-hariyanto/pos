@@ -8,10 +8,12 @@
                     <h1>{{ config('app.name') }}</h1>
                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus ut, sequi accusamus porro nesciunt deleniti corporis quidem nisi dolorum aliquam?</p>
                     <div>
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="{{ __('Enter place or address') }}">
-                            <button class="btn btn-primary" type="submit">{{ __('Search') }}</button>
-                        </div>
+                        <form action="{{ route('search') }}" method="GET">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="{{ __('Enter place or address') }}" name="q">
+                                <button class="btn btn-primary" type="submit">{{ __('Search') }}</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
