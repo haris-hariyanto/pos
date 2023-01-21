@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Setting;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Location\Continent;
+use Illuminate\Support\Facades\Validator;
 
 class HomeSettingController extends Controller
 {
@@ -22,6 +23,14 @@ class HomeSettingController extends Controller
 
     public function setCoverImages(Request $request)
     {
-        dd($request->all());
+        $validationRules = [];
+        $fieldNames = [];
+        $continents = Continent::get();
+        foreach ($continents as $continent) {
+            $validationRules[$continent->slug] = ['url'];
+            $fieldNames[$continent->slug] = __('Cover image');
+        }
+        
+        Validator::make($request->all(), $validationRules, [], $fieldNames)->validate();
     }
 }

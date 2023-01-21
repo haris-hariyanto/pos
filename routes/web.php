@@ -54,6 +54,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
 
     Route::prefix('settings')->name('settings.')->group(function () {
         Route::get('/home', [Controllers\Admin\Setting\HomeSettingController::class, 'index'])->name('home');
+        Route::put('/home', [Controllers\Admin\Setting\HomeSettingController::class, 'setCoverImages']);
     });
 
     Route::resource('hotels', Controllers\Admin\Content\HotelController::class);

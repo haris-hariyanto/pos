@@ -15,7 +15,7 @@
                 </x-admin.components.alert>
             @endif
 
-            <form action="#" method="POST">
+            <form action="{{ route('admin.settings.home') }}" method="POST">
                 @csrf
                 @method('PUT')
 
@@ -26,7 +26,7 @@
                     <div class="card-body">
 
                         @foreach ($continents as $continent)
-                            <x-admin.forms.input-text :name="$continent->slug" :label="$continent->name" value="" />
+                            <x-admin.forms.input-text name="{{ $continent->slug }}" :label="$continent->name" value="" />
                         @endforeach
 
                     </div>

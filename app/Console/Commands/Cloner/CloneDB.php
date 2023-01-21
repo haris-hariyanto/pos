@@ -373,6 +373,8 @@ class CloneDB extends Command
                 CategoryPlace::create([
                     'place_id' => $placeCategoryClone->place_id,
                     'category_id' => $placeCategoryClone->category_id,
+                    'country' => $placeCategoryClone->country,
+                    'continent' => $placeCategoryClone->continent,
                 ]);
             }
 
