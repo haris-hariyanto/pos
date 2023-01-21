@@ -58,8 +58,6 @@ class Test extends Command
                         'country' => $place->country,
                         'continent' => $place->continent,
                     ]);
-
-                    dd($categoryPlace);
                 }
             }
         }
