@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->integer('category_id');
             $table->integer('place_id');
-            $table->string('country');
-            $table->string('continent');
+            $table->string('country')->nullable();
+            $table->string('continent')->nullable();
         });
     }
 

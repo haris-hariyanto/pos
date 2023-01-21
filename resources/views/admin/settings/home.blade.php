@@ -26,7 +26,7 @@
                     <div class="card-body">
 
                         @foreach ($continents as $continent)
-                            <x-admin.forms.input-text name="{{ $continent->slug }}" :label="$continent->name" value="" />
+                            <x-admin.forms.input-text name="{{ $continent->slug }}" :label="$continent->name" value="{{ !empty($homeCoverImages[$continent->slug]) ? $homeCoverImages[$continent->slug] : config('content.default_cover') }}" />
                         @endforeach
 
                     </div>
