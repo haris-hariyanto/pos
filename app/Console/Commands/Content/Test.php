@@ -52,6 +52,8 @@ class Test extends Command
                         'name' => $category,
                     ]);
 
+                    dd($place->country);
+
                     CategoryPlace::firstOrCreate([
                         'category_id' => $categoryInstance->id,
                         'place_id' => $place->id,
