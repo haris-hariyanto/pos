@@ -194,6 +194,8 @@ class Places extends Command
                             CategoryPlace::firstOrCreate([
                                 'category_id' => $category->id,
                                 'place_id' => $placeInstance->id,
+                                'country' => $placeInstance->country,
+                                'continent' => $placeInstance->continent,
                             ]);
                         } // [END] foreach
                     }
