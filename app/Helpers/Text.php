@@ -42,7 +42,7 @@ class Text
                 return 'IDR ' . number_format($price, 0, '.', ',');
             }   
             else {
-                return 'USD' . number_format($price, 0, '.', ',');
+                return 'USD ' . number_format($price, 0, '.', ',');
             }
         }
         else {

@@ -104,6 +104,7 @@
 
                 const hotelInfoWindow = new google.maps.InfoWindow({
                     content: "",
+                    disableAutoPan: true,
                 });
 
                 hotels.forEach(hotel => {
