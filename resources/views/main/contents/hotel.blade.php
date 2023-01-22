@@ -222,21 +222,13 @@
                                             @if (!empty($hotel['rates_from']) && !empty($hotel['rates_currency']))
                                                 <tr>
                                                     <td>{{ __('Rates from') }}</td>
-                                                    @if ($hotel['rates_currency'] == 'IDR')
-                                                        <td class="fw-bold">{{ $hotel['rates_currency'] }} {{ number_format($hotel['rates_from'], 0, ',', '.') }}</td>
-                                                    @else
-                                                        <td class="fw-bold">{{ number_format($hotel['rates_from'], 0, '.', ',') }} {{ $hotel['rates_currency'] }}</td>
-                                                    @endif
+                                                    <td class="fw-bold">{{ \App\Helpers\Text::price($hotel['rates_from'], $hotel['rates_currency']) }}</td>
                                                 </tr>
                                             @endif
                                             @if (empty($hotel['rates_from']) && !empty($hotel['rates_from_exclusive']) && !empty($hotel['rates_currency']))
                                                 <tr>
                                                     <td>{{ __('Rates from') }}</td>
-                                                    @if ($hotel['rates_currency'] == 'IDR')
-                                                        <td class="fw-bold">{{ $hotel['rates_currency'] }} {{ number_format($hotel['rates_from_exclusive'], 0, ',', '.') }}</td>
-                                                    @else
-                                                        <td class="fw-bold">{{ number_format($hotel['rates_from_exclusive'], 0, '.', ',') }} {{ $hotel['rates_currency'] }}</td>
-                                                    @endif
+                                                    <td class="fw-bold">{{ \App\Helpers\Text::price($hotel['rates_from_exclusive'], $hotel['rates_currency']) }}</td>
                                                 </tr>
                                             @endif
                                         </table>
@@ -256,6 +248,18 @@
                                         @foreach ($paragraphs as $paragraph)
                                             <p>{{ $paragraph }}</p>
                                         @endforeach
+                                    @endif
+
+                                    @if (count($nearbyPlaces) > 0)
+                                        <h2 class="fs-5">{{ __('Nearby Places') }}</h2>
+                                        <ul>
+                                            @foreach ($nearbyPlaces as $nearbyPlace)
+                                                <li>
+                                                    <div><a href="{{ route('place', [$nearbyPlace['place']['slug']]) }}">{{ $nearbyPlace['place']['name'] }}</a> ({{ __('about :distance', ['distance' => number_format($nearbyPlace['m_distance'] / 1000, 1) . ' KM']) }})</div>
+                                                    <div class="text-muted small">{{ $nearbyPlace['place']['address'] }}</div>
+                                                </li>
+                                            @endforeach
+                                        </ul>
                                     @endif
 
                                 </div>

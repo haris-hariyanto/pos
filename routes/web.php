@@ -17,13 +17,29 @@ use App\Http\Controllers;
 Route::get('/', [Controllers\Main\HomeController::class, 'index'])->name('index');
 
 Route::get('/continent/{continent}', [Controllers\Main\Content\ContinentController::class, 'index'])->name('continent');
+Route::get('/continent', function () {
+    return redirect()->route('index');
+});
+
 Route::get('/country/{country}', [Controllers\Main\Content\CountryController::class, 'index'])->name('country');
 Route::get('/country/{country}/cities', [Controllers\Main\Content\CountryController::class, 'cities'])->name('country.cities');
 Route::get('/country/{country}/states', [Controllers\Main\Content\CountryController::class, 'states'])->name('country.states');
 Route::get('/country/{country}/places/{place}', [Controllers\Main\Content\CountryController::class, 'places'])->name('country.places');
+Route::get('/country', function () {
+    return redirect()->route('index');
+});
+
 Route::get('/place/{place}', [Controllers\Main\Content\PlaceController::class, 'index'])->name('place');
+Route::get('/place', function () {
+    return redirect()->route('index');
+});
+
 Route::get('/hotel/{hotel}', [Controllers\Main\Content\HotelController::class, 'index'])->name('hotel');
 Route::get('/hotel/{type}/{location}', [Controllers\Main\Content\LocationController::class, 'index'])->name('hotel.location');
+Route::get('/hotel', function () {
+    return redirect()->route('index');
+});
+
 Route::get('/search', [Controllers\Main\Content\SearchController::class, 'index'])->name('search');
 
 Route::get('/p/{page}', [Controllers\Main\Misc\PageController::class, 'page'])->name('page');
@@ -31,7 +47,12 @@ Route::get('/contact', [Controllers\Main\Misc\ContactController::class, 'contact
 Route::post('/contact', [Controllers\Main\Misc\ContactController::class, 'send']);
 
 Route::get('/sitemaps-index.xml', [Controllers\Main\Misc\SitemapController::class, 'index']);
-Route::get('/sitemap-sample-{index}.xml', [Controllers\Main\Misc\SitemapController::class, 'sitemapSample']);
+Route::get('/sitemap-continents-{index}.xml', [Controllers\Main\Misc\SitemapController::class, 'sitemapContinents'])->name('sitemap.continents');
+Route::get('/sitemap-countries-{index}.xml', [Controllers\Main\Misc\SitemapController::class, 'sitemapCountries'])->name('sitemap.countries');
+Route::get('/sitemap-states-{index}.xml', [Controllers\Main\Misc\SitemapController::class, 'sitemapStates'])->name('sitemap.states');
+Route::get('/sitemap-cities-{index}.xml', [Controllers\Main\Misc\SitemapController::class, 'sitemapCities'])->name('sitemap.cities');
+Route::get('/sitemap-places-{index}.xml', [Controllers\Main\Misc\SitemapController::class, 'sitemapPlaces'])->name('sitemap.places');
+Route::get('/sitemap-hotels-{index}.xml', [Controllers\Main\Misc\SitemapController::class, 'sitemapHotels'])->name('sitemap.hotels');
 
 require __DIR__.'/auth.php';
 

@@ -27,7 +27,7 @@
     <div class="container py-4">
         <iframe 
             src="https://www.google.com/maps/embed/v1/place?key={{ config('services.google_maps.key') }}&q={{ urlencode($country['name']) }}"
-            class="border-0 w-100 tw-h-96"
+            class="border-0 w-100 tw-h-96 rounded shadow-sm"
             frameborder="0"
             referrerpolicy="no-referrer-when-downgrade"
             allowfullscreen>
@@ -81,33 +81,35 @@
         </div>
     </div>
 
-    <div class="container pb-4">
-        <h2 class="fs-3 mb-3">{{ __('Popular Places in :country', ['country' => $country['name']]) }}</h2>
-        <div class="card shadow-sm mb-3">
-            <div class="card-body">
-                <!-- Places list -->
-                <div class="row g-2">
-                    @foreach ($places as $place)
-                        <div class="col-12 col-lg-4">
-                            <div class="mb-2">
-                                <div class="tw-line-clamp-1">
-                                    <a href="{{ route('place', [$place['slug']]) }}">{{ $place['name'] }}</a>
-                                </div>
-                                <div class="text-muted small tw-line-clamp-1">
-                                    {{ $place['address'] }}
+    @if (count($places) > 0)
+        <div class="container pb-4">
+            <h2 class="fs-3 mb-3">{{ __('Popular Places in :country', ['country' => $country['name']]) }}</h2>
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <!-- Places list -->
+                    <div class="row g-2">
+                        @foreach ($places as $place)
+                            <div class="col-12 col-lg-4">
+                                <div class="mb-2">
+                                    <div class="tw-line-clamp-1">
+                                        <a href="{{ route('place', [$place['slug']]) }}">{{ $place['name'] }}</a>
+                                    </div>
+                                    <div class="text-muted small tw-line-clamp-1">
+                                        {{ $place['address'] }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        @endforeach
+                    </div>
+                    <!-- [END] Places list -->
+                    <hr>
+                    @foreach ($categories as $category)
+                        <a href="{{ route('country.places', [$country['slug'], $category['slug']]) }}" class="btn btn-outline-secondary shadow-sm mb-1">{{ __(ucwords(str_replace('_', ' ', $category->name))) }}</a>
                     @endforeach
                 </div>
-                <!-- [END] Places list -->
-                <hr>
-                @foreach ($categories as $category)
-                    <a href="{{ route('country.places', [$country['slug'], $category['slug']]) }}" class="btn btn-outline-secondary shadow-sm mb-1">{{ __(ucwords(str_replace('_', ' ', $category->name))) }}</a>
-                @endforeach
             </div>
         </div>
-    </div>
+    @endif
 
     <div class="container pb-4">
         <h2 class="fs-3 mb-3">{{ __('Best Hotels in :country', ['country' => $country['name']]) }}</h2>

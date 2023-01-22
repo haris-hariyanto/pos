@@ -69,6 +69,8 @@
     "Continents": "Benua",
 
     "Hotels": "Hotel",
+    "Nearby Places": "Tempat-Tempat di Sekitar",
+    "about :distance": "sekitar :distance",
 
     "Register": "Daftar",
     "Username": "Username",
@@ -226,5 +228,7 @@
     "Cover Images": "Gambar Cover",
     "Cover image": "Gambar cover",
     "Cover images has been updated!": "Gambar cover telah diupdate!",
-    "Search Result : :q": "Hasil Pencarian : :q"
+    "Search Result : :q": "Hasil Pencarian : :q",
+    ":count Hotels Found": "Ditemukan :count Hotel",
+    "From location: :distance": "Dari Lokasi: :distance"
 }

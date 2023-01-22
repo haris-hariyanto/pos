@@ -25,8 +25,12 @@ class PlaceController extends Controller
             $modelHotels = HotelPlace::with('hotel')
                 ->where('place_id', $modelPlace->id)
                 ->orderBy('m_distance', 'ASC')
-                ->limit(25)
-                ->get();
+                ->simplePaginate(25);
+            $links = $modelHotels->links('components.main.components.simple-pagination');
+
+            $hotelsFound = HotelPlace::where('place_id', $modelPlace->id)
+                ->count();
+
             $hotels = [];
             foreach ($modelHotels as $modelHotel) {
                 $hotel = $modelHotel->toArray();
@@ -35,6 +39,6 @@ class PlaceController extends Controller
             }
         }
 
-        return view('main.contents.place', compact('place', 'hotels'));
+        return view('main.contents.place', compact('place', 'hotels', 'links', 'hotelsFound'));
     }
 }

@@ -32,18 +32,10 @@
                     <div>
                         <p class="tw-line-clamp-3 mb-2">{{ $hotel['overview'] }}</p>
                         @if (!empty($hotel['rates_from']) && !empty($hotel['rates_currency']))
-                            @if ($hotel['rates_currency'] == 'IDR')
-                                <p class="tw-line-clamp-1 mb-3">{{ __('Rates from') }} : <b>{{ $hotel['rates_currency'] }} {{ number_format($hotel['rates_from'], 0, ',', '.') }}</b></p>
-                            @else
-                                <p class="tw-line-clamp-1 mb-3">{{ __('Rates from') }} : <b>{{ number_format($hotel['rates_from'], 0, '.', ',') }} {{ $hotel['rates_currency'] }}</b></p>
-                            @endif
+                            <p class="tw-line-clamp-1 mb-3">{{ __('Rates from') }} : <b>{{ \App\Helpers\Text::price($hotel['rates_from'], $hotel['rates_currency']) }}</b></p>
                         @endif
                         @if (empty($hotel['rates_from']) && !empty($hotel['rates_from_exclusive']) && !empty($hotel['rates_currency']))
-                            @if ($hotel['rates_currency'] == 'IDR')
-                                <p class="tw-line-clamp-1 mb-3">{{ __('Rates from') }} : <b>{{ $hotel['rates_currency'] }} {{ number_format($hotel['rates_from_exclusive'], 0, ',', '.') }}</b></p>
-                            @else
-                                <p class="tw-line-clamp-1 mb-3">{{ __('Rates from') }} : <b>{{ number_format($hotel['rates_from_exclusive'], 0, '.', ',') }} {{ $hotel['rates_currency'] }}</b></p>
-                            @endif    
+                        <p class="tw-line-clamp-1 mb-3">{{ __('Rates from') }} : <b>{{ \App\Helpers\Text::price($hotel['rates_from_exclusive'], $hotel['rates_currency']) }}</b></p>
                         @endif
                     </div>
                 </div>

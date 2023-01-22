@@ -39,10 +39,10 @@
                             <div class="col-12 col-lg-4">
                                 <div class="mb-2">
                                     <div class="tw-line-clamp-1">
-                                        <a href="{{ route('place', [$place['slug']]) }}">{{ $place['name'] }}</a>
+                                        <a href="{{ route('place', [$place['place']['slug']]) }}">{{ $place['place']['name'] }}</a>
                                     </div>
                                     <div class="text-muted small tw-line-clamp-1">
-                                        {{ $place['address'] }}
+                                        {{ $place['place']['address'] }}
                                     </div>
                                 </div>
                             </div>
@@ -55,5 +55,10 @@
                 @endif
             </div>
         </div>
+        @if (count($places) > 0)
+            <div class="my-2">
+                {!! $links !!}
+            </div>
+        @endif
     </div>
 </x-main.layouts.app>

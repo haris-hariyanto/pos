@@ -19,4 +19,9 @@ class HotelPlace extends Model
     {
         return $this->belongsTo(Hotel::class);
     }
+
+    public function place()
+    {
+        return $this->belongsTo(\App\Models\Location\Place::class);
+    }
 }

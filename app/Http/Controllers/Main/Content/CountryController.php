@@ -55,10 +55,9 @@ class CountryController extends Controller
                 ->orderBy('user_ratings_total', 'DESC')
                 ->get();
             $places = $modelPlaces->toArray();
-
         }
 
-        $categories = Category::orderBy('name', 'ASC')->get();
+        $categories = Category::orderBy('name', 'ASC')->whereIn('name', config('scraper.place_types_to_fetch'))->get();
 
         return view('main.contents.country', compact('country', 'bestHotels', 'cities', 'states', 'places', 'categories'));
     }
@@ -113,20 +112,19 @@ class CountryController extends Controller
             $category = $modelCategory->toArray();
             $category['name'] = __(ucwords(str_replace('_', ' ', $category['name'])));
 
-            $placesInCategory = CategoryPlace::select('place_id')
+            $placesModel = CategoryPlace::with('place')
+                ->whereHas('place', function ($query) {
+                    $query->where('hotels_nearby', '>', 0);
+                })
                 ->where('category_id', $modelCategory->id)
-                ->get()
-                ->pluck('place_id')
-                ->toArray();
+                ->where('country', $modelCountry->name)
+                ->simplePaginate(24);
+            $places = $placesModel->toArray();
+            $places = $places['data'];
 
-            $modelPlaces = $modelCountry
-                ->places()
-                ->whereIn('id', $placesInCategory)
-                ->where('hotels_nearby', '>', 0)
-                ->get();
-            $places = $modelPlaces->toArray();
+            $links = $placesModel->links('components.main.components.simple-pagination');
         }
 
-        return view('main.contents.country-places', compact('country', 'places', 'category'));
+        return view('main.contents.country-places', compact('country', 'places', 'category', 'links'));
     }
 }

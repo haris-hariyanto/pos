@@ -34,4 +34,19 @@ class Text
 
         return $str;
     }
+
+    public static function price($price = 0, $currency = '')
+    {
+        if (!empty($price) && !empty($currency)) {
+            if ($currency == 'IDR') {
+                return 'IDR ' . number_format($price, 0, '.', ',');
+            }   
+            else {
+                return 'USD' . number_format($price, 0, '.', ',');
+            }
+        }
+        else {
+            return '-';
+        }
+    }
 }
