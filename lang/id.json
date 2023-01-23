@@ -230,5 +230,17 @@
     "Cover images has been updated!": "Gambar cover telah diupdate!",
     "Search Result : :q": "Hasil Pencarian : :q",
     ":count Hotels Found": "Ditemukan :count Hotel",
-    "From location: :distance": "Dari Lokasi: :distance"
+    "From location: :distance": "Dari Lokasi: :distance",
+    "Search": "Cari",
+    "Flush Cache": "Hapus Cache",
+    "Website Settings": "Setting Website",
+    "Website Name": "Nama Website",
+    "Website settings has been updated!": "Setting website telah diupdate!",
+    "Home Page Title": "Judul Halaman Awal",
+    "Home Page Brief Paragraph": "Paragraf Pendek Halaman Awal",
+    "Script before </head>": "Script sebelum </head>",
+    "Script before </html>": "Script sebelum </html>",
+    "Pages Settings": "Setting Halaman",
+    "Page Settings": "Setting Halaman",
+    "Page Title": "Judul Halaman"
 }

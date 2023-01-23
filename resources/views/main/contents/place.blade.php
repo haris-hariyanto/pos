@@ -74,7 +74,6 @@
     </div>
 
     @push('scriptsBottom')
-        <script async src="https://maps.googleapis.com/maps/api/js?callback=initMap&libraries=marker&v=beta&key=AIzaSyDVbn93MQkFB5Ehk29tpfvr0Pjz-Vp9bcE"></script>
         <script>
             const mapContainer = document.getElementById('map');
             const hotels = document.querySelectorAll('.hotelData');
@@ -107,6 +106,7 @@
                     disableAutoPan: true,
                 });
 
+                let index = 100;
                 hotels.forEach(hotel => {
                     const pinViewBackground = new google.maps.marker.PinView({
                         background: "#4f46e5",
@@ -122,7 +122,9 @@
                         },
                         map: map,
                         content: pinViewBackground.element,
+                        zIndex: index,
                     });
+                    index--;
 
                     const infoWindowContent = 
                         '<div>' +
@@ -140,5 +142,6 @@
 
             window.initMap = initMap;
         </script>
+        <script async src="https://maps.googleapis.com/maps/api/js?callback=initMap&libraries=marker&v=beta&key=AIzaSyDVbn93MQkFB5Ehk29tpfvr0Pjz-Vp9bcE"></script>
     @endpush
 </x-main.layouts.app>

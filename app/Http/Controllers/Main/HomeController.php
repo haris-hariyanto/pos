@@ -8,14 +8,18 @@ use App\Models\Location\Continent;
 use App\Models\Location\Place;
 use App\Models\Hotel\Hotel;
 use App\Models\MetaData;
+use App\Helpers\CacheSystem;
+use Illuminate\Support\Facades\Cache;
 
 class HomeController extends Controller
 {
     public function index()
     {
-        $isCachedData = false;
-        if ($isCachedData) {
+        $cacheKey = 'homepage';
+        $cacheData = CacheSystem::get($cacheKey);
 
+        if ($cacheData) {
+            extract($cacheData);
         }
         else {
             // Continents and countries
@@ -51,6 +55,9 @@ class HomeController extends Controller
                 $homeCoverImages = $homeCoverImages->value;
                 $homeCoverImages = json_decode($homeCoverImages, true);
             }
+
+            // Generate cache
+            CacheSystem::generate($cacheKey, compact('continents', 'popularPlaces', 'popularHotels', 'homeCoverImages'));
         }
 
         return view('main.index', compact('continents', 'popularPlaces', 'popularHotels', 'homeCoverImages'));

@@ -5,7 +5,7 @@
         <div class="container py-5 px-4">
             <div class="row justify-content-start">
                 <div class="col-12 col-lg-8">
-                    <h1>{{ config('app.name') }}</h1>
+                    <h1>{{ $settings__website_name }}</h1>
                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus ut, sequi accusamus porro nesciunt deleniti corporis quidem nisi dolorum aliquam?</p>
                     <div>
                         <form action="{{ route('search') }}" method="GET">

@@ -8,7 +8,7 @@
 
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
 
-        <title>{!! $pageTitle ?? config('app.name', 'DNM') !!}</title>
+        <title>{!! $pageTitle . ' - ' . config('app.name') ?? config('app.name') !!}</title>
 
         @if($useRecaptcha)
             <script src="https://www.google.com/recaptcha/api.js" async defer></script>
@@ -18,6 +18,8 @@
         @vite(['resources/css/tailwind.css'])
 
         @stack('scripts')
+
+        {!! $settings__header_script !!}
     </head>
     <body>
         @include('main.layouts.navbar')
@@ -27,5 +29,7 @@
         @include('main.layouts.footer')
 
         @stack('scriptsBottom')
+
+        {!! $settings__footer_script !!}
     </body>
 </html>

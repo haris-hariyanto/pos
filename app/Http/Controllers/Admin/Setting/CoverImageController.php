@@ -8,7 +8,7 @@ use App\Models\Location\Continent;
 use App\Models\MetaData;
 use Illuminate\Support\Facades\Validator;
 
-class HomeSettingController extends Controller
+class CoverImageController extends Controller
 {
     public function index()
     {

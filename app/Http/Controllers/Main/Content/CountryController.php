@@ -11,14 +11,17 @@ use App\Models\Location\Place;
 use App\Models\Location\Category;
 use App\Models\Location\CategoryPlace;
 use App\Models\Hotel\Hotel;
+use App\Helpers\CacheSystem;
 
 class CountryController extends Controller
 {
     public function index($country)
     {
-        $isCachedData = false;
-        if ($isCachedData) {
+        $cacheKey = 'country' . $country;
+        $cacheData = CacheSystem::get($cacheKey);
 
+        if ($cacheData) {
+            extract($cacheData);
         }
         else {
             $modelCountry = Country::with('continent')->where('slug', $country)->first();
@@ -55,6 +58,9 @@ class CountryController extends Controller
                 ->orderBy('user_ratings_total', 'DESC')
                 ->get();
             $places = $modelPlaces->toArray();
+
+            // Generate cache
+            CacheSystem::generate($cacheKey, compact('country', 'bestHotels', 'cities', 'states', 'places'));
         }
 
         $categories = Category::orderBy('name', 'ASC')->whereIn('name', config('scraper.place_types_to_fetch'))->get();
@@ -64,9 +70,11 @@ class CountryController extends Controller
 
     public function cities($country)
     {
-        $isCachedData = false;
-        if ($isCachedData) {
+        $cacheKey = 'country' . $country . 'cities';
+        $cacheData = CacheSystem::get($cacheKey);
 
+        if ($cacheData) {
+            extract($cacheData);
         }
         else {
             $modelCountry = Country::with('continent', 'cities')->where('slug', $country)->first();
@@ -74,6 +82,9 @@ class CountryController extends Controller
                 return redirect()->route('index');
             }
             $country = $modelCountry->toArray();
+
+            // Generate cache
+            CacheSystem::generate($cacheKey, compact('country'));
         }
 
         return view('main.contents.country-cities', compact('country'));
@@ -81,9 +92,11 @@ class CountryController extends Controller
 
     public function states($country)
     {
-        $isCachedData = false;
-        if ($isCachedData) {
+        $cacheKey = 'country' . $country . 'states';
+        $cacheData = CacheSystem::get($cacheKey);
 
+        if ($cacheData) {
+            extract($cacheData);
         }
         else {
             $modelCountry = Country::with('continent', 'states')->where('slug', $country)->first();
@@ -91,16 +104,23 @@ class CountryController extends Controller
                 return redirect()->route('index');
             }
             $country = $modelCountry->toArray();
+
+            // Generate cache
+            CacheSystem::generate($cacheData, compact('country'));
         }
 
         return view('main.contents.country-states', compact('country'));
     }
 
-    public function places($country, $category)
+    public function places(Request $request, $country, $category)
     {
-        $isCachedData = false;
-        if ($isCachedData) {
+        $currentPage = $request->query('page', 1);
 
+        $cacheKey = 'country' . $country . 'places' . $category . 'page' . $currentPage;
+        $cacheData = CacheSystem::get($cacheKey);
+
+        if ($cacheData) {
+            extract($cacheData);
         }
         else {
             $modelCountry = Country::with('continent')->where('slug', $country)->first();
@@ -122,7 +142,10 @@ class CountryController extends Controller
             $places = $placesModel->toArray();
             $places = $places['data'];
 
-            $links = $placesModel->links('components.main.components.simple-pagination');
+            $links = $placesModel->links('components.main.components.simple-pagination')->render();
+
+            // Generate cache
+            CacheSystem::generate($cacheKey, compact('country', 'places', 'category', 'links'));
         }
 
         return view('main.contents.country-places', compact('country', 'places', 'category', 'links'));

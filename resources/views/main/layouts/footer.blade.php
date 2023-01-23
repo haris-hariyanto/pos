@@ -21,7 +21,7 @@
                     <a href="{{ route('contact') }}" class="nav-link px-2 footer-link">Contact Us</a>
                 </li>
             </ul>
-            <p class="text-center footer-copyright mb-0">&copy; {{ date('Y') }} <a href="{{ route('index') }}" class="footer-link">{{ config('app.name') }}</a></p>
+            <p class="text-center footer-copyright mb-0">&copy; {{ date('Y') }} <a href="{{ route('index') }}" class="footer-link">{{ $settings__website_name }}</a></p>
         </footer>
     </div>
 </div>

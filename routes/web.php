@@ -75,8 +75,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     })->name('index');
 
     Route::prefix('settings')->name('settings.')->group(function () {
-        Route::get('/home', [Controllers\Admin\Setting\HomeSettingController::class, 'index'])->name('home');
-        Route::put('/home', [Controllers\Admin\Setting\HomeSettingController::class, 'setCoverImages']);
+        Route::get('/cover', [Controllers\Admin\Setting\CoverImageController::class, 'index'])->name('cover');
+        Route::put('/cover', [Controllers\Admin\Setting\CoverImageController::class, 'setCoverImages']);
+
+        Route::get('/cache', [Controllers\Admin\Setting\CacheController::class, 'index'])->name('cache');
+        Route::delete('/cache', [Controllers\Admin\Setting\CacheController::class, 'flush']);
+
+        Route::get('/website', [Controllers\Admin\Setting\WebsiteSettingController::class, 'index'])->name('website');
+        Route::put('/website', [Controllers\Admin\Setting\WebsiteSettingController::class, 'updateSettings']);
     });
 
     Route::resource('hotels', Controllers\Admin\Content\HotelController::class);

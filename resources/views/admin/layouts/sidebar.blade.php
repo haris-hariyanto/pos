@@ -3,7 +3,7 @@
     <!-- Brand logo -->
     <a href="{{ route('admin.index') }}" class="brand-link">
         <img src="{{ asset('assets/admin/images/AdminLTELogo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-        <span class="brand-text font-weight-light">{{ config('app.name', 'DNM') }}</span>
+        <span class="brand-text font-weight-light">{{ $settings__website_name }}</span>
     </a>
     <!-- [END] Brand logo -->
 
@@ -66,9 +66,23 @@
                 <li class="nav-header">{{ strtoupper(__('Settings')) }}</li>
 
                 <li class="nav-item">
-                    <a href="{{ route('admin.settings.home') }}" @class(['nav-link', 'active' => Route::currentRouteName() == 'admin.settings.home'])>
-                        <i class="nav-icon fas fa-home"></i>
-                        <p>{{ __('Home') }}</p>
+                    <a href="{{ route('admin.settings.cover') }}" @class(['nav-link', 'active' => Route::currentRouteName() == 'admin.settings.cover'])>
+                        <i class="nav-icon fas fa-images"></i>
+                        <p>{{ __('Cover Images') }}</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ route('admin.settings.website') }}" @class(['nav-link', 'active' => Route::currentRouteName() == 'admin.settings.website'])>
+                        <i class="nav-icon fas fa-file"></i>
+                        <p>{{ __('Website') }}</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ route('admin.settings.cache') }}" @class(['nav-link', 'active' => Route::currentRouteName() == 'admin.settings.cache'])>
+                        <i class="nav-icon fas fa-bolt"></i>
+                        <p>{{ __('Cache') }}</p>
                     </a>
                 </li>
 

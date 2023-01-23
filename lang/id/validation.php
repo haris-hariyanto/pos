@@ -184,6 +184,9 @@ return [
         'page_description' => 'Meta Description',
         'subject' => 'Subject',
         'message' => 'Pesan',
+        'settings__website_name' => 'Nama Website',
+        'settings__header_script' => 'Script',
+        'settings__footer_script' => 'Script',
     ],
 
 ];

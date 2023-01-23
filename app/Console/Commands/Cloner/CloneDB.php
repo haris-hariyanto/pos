@@ -16,6 +16,7 @@ use App\Models\Location\Place;
 use App\Models\Location\Category;
 use App\Models\Location\CategoryPlace;
 use App\Models\ScrapeHistory;
+use App\Models\MetaData;
 
 class CloneDB extends Command
 {
@@ -439,5 +440,36 @@ class CloneDB extends Command
             $segment++;
         }
         // [END] Clone scrape histories
+
+        // Clone meta data
+        $segment = 1;
+        while (true) {
+            $limit = 1000;
+            $skip = ($segment - 1) * $limit;
+
+            $metaDataModelClone = new MetaData;
+            $metaDataClone = $metaDataModelClone
+                ->setConnection('clone')
+                ->skip($skip)
+                ->take($limit)
+                ->get();
+            
+            if (count($metaDataClone) < 1) {
+                break;
+            }
+
+            foreach ($metaDataClone as $metaData) {
+                MetaData::create([
+                    'key' => $metaData->key,
+                    'value' => $metaData->value,
+                    'additional_data' => $metaData->additional_data,
+                ]);
+            }
+
+            $segment++;
+        }
+        // [END] Clone meta data
+
+        Cache::flush();
     }
 }

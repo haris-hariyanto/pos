@@ -1,5 +1,5 @@
 <x-admin.layouts.app :breadcrumb="$breadcrumb">
-    <x-slot:pageTitle>{{ __('Home Settings') }}</x-slot>
+    <x-slot:pageTitle>{{ __('Website Settings') }}</x-slot>
     <div class="row">
         <div class="col-12 col-lg-6">
 
@@ -15,27 +15,26 @@
                 </x-admin.components.alert>
             @endif
 
-            <form action="{{ route('admin.settings.cover') }}" method="POST">
+            <form action="{{ route('admin.settings.website') }}" method="POST">
                 @csrf
                 @method('PUT')
 
                 <div class="card">
                     <div class="card-header">
-                        <b>{{ __('Cover Images') }}</b>
+                        <b>{{ __('Website Settings') }}</b>
                     </div>
                     <div class="card-body">
 
-                        @foreach ($continents as $continent)
-                            <x-admin.forms.input-text name="{{ $continent->slug }}" :label="$continent->name" value="{{ !empty($homeCoverImages[$continent->slug]) ? $homeCoverImages[$continent->slug] : config('content.default_cover') }}" />
-                        @endforeach
+                        <x-admin.forms.input-text name="settings__website_name" :label="__('Website Name')" :value="$settings['settings__website_name']" />
+                        <x-admin.forms.textarea name="settings__header_script" :label="__('Script before </head>')" rows="5">{{ $settings['settings__header_script'] }}</x-admin.forms.textarea>
+                        <x-admin.forms.textarea name="settings__footer_script" :label="__('Script before </html>')" rows="5">{{ $settings['settings__footer_script'] }}</x-admin.forms.textarea>
 
                     </div>
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
+                        <button class="btn btn-primary" type="submit">{{ __('Save') }}</button>
                     </div>
                 </div>
             </form>
-
         </div>
     </div>
 </x-admin.layouts.app>

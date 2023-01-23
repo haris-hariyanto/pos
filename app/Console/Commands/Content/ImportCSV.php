@@ -14,6 +14,7 @@ use App\Models\Location\State;
 use App\Models\Location\City;
 use App\Models\Source;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Cache;
 
 class ImportCSV extends Command
 {
@@ -47,7 +48,6 @@ class ImportCSV extends Command
             );
         }
         
-
         $source = Source::where('is_saved', 'N')->first();
         if (!$source) {
             return 0;
@@ -171,5 +171,144 @@ class ImportCSV extends Command
         $source->update([
             'is_saved' => 'Y'
         ]);
+
+        $this->saveDetail();
+    }
+
+    private function saveDetail()
+    {
+        $hotels = Hotel::select('chain')->groupBy('chain')->get();
+        $chainFirstID = Chain::orderBy('id', 'DESC')->first();
+        if (!$chainFirstID) {
+            $chainFirstID = 1;
+        }
+        else {
+            $chainFirstID = $chainFirstID->id;
+        }
+        foreach ($hotels as $hotel) {
+            if (!empty($hotel->chain)) {
+                $chainSlug = $chainFirstID . '-' . Str::slug($hotel->chain);
+                $chainFirstID++;
+
+                $chain = Chain::firstOrCreate(
+                    ['name' => $hotel->chain],
+                    ['slug' => $chainSlug]
+                );
+
+                $this->line('[ * ] Chain : ' . $chain->name);
+            }
+        }
+
+        $hotels = Hotel::select('brand')->groupBy('brand')->get();
+        $brandFirstID = Brand::orderBy('id', 'DESC')->first();
+        if (!$brandFirstID) {
+            $brandFirstID = 1;
+        }
+        else {
+            $brandFirstID = $brandFirstID->id;
+        }
+        foreach ($hotels as $hotel) {
+            if (!empty($hotel->brand)) {
+                $brandSlug = $brandFirstID . '-' . Str::slug($hotel->brand);
+                $brandFirstID++;
+
+                $brand = Brand::firstOrCreate(
+                    ['name' => $hotel->brand],
+                    ['slug' => $brandSlug]
+                );
+
+                $this->line('[ * ] Brand : ' . $brand->name);
+            }
+        }
+
+        $hotels = Hotel::select('city', 'state', 'country', 'continent')->groupBy('city', 'country')->get();
+        $cityFirstID = City::orderBy('id', 'DESC')->first();
+        if (!$cityFirstID) {
+            $cityFirstID = 1;
+        }
+        else {
+            $cityFirstID = $cityFirstID->id;
+        }
+        foreach ($hotels as $hotel) {
+            if (!empty($hotel->city) && !empty($hotel->country) && !empty($hotel->continent)) {
+                $citySlug = $cityFirstID . '-' . Str::slug($hotel->city);
+                $cityFirstID++;
+
+                $city = City::firstOrCreate(
+                    ['name' => $hotel->city, 'state' => !empty($hotel->state) ? $hotel->state : null, 'country' => $hotel->country, 'continent' => $hotel->continent],
+                    ['slug' => $citySlug]
+                );
+    
+                $this->line('[ * ] City : ' . $city->name);
+            }
+        }
+
+        $hotels = Hotel::select('state', 'country', 'continent')->groupBy('state', 'country')->get();
+        $stateFirstID = State::orderBy('id', 'DESC')->first();
+        if (!$stateFirstID) {
+            $stateFirstID = 1;
+        }
+        else {
+            $stateFirstID = $stateFirstID->id;
+        }
+        foreach ($hotels as $hotel) {
+            if (!empty($hotel->state) && !empty($hotel->country) && !empty($hotel->continent)) {
+                $stateSlug = $stateFirstID . '-' . Str::slug($hotel->state);
+                $stateFirstID++;
+
+                $state = State::firstOrCreate(
+                    ['name' => $hotel->state, 'country' => $hotel->country, 'continent' => $hotel->continent],
+                    ['slug' => $stateSlug]
+                );
+
+                $this->line('[ * ] State : ' . $state->name);
+            }
+        }
+
+        $hotels = Hotel::select('country', 'country_iso_code', 'continent')->groupBy('country')->get();
+        $countryFirstID = Country::orderBy('id', 'DESC')->first();
+        if (!$countryFirstID) {
+            $countryFirstID = 1;
+        }
+        else {
+            $countryFirstID = $countryFirstID->id;
+        }
+        foreach ($hotels as $hotel) {
+            if (!empty($hotel->country) && !empty($hotel->continent)) {
+                $countrySlug = $countryFirstID . '-' . Str::slug($hotel->country);
+                $countryFirstID++;
+
+                $country = Country::firstOrCreate(
+                    ['name' => $hotel->country, 'continent' => $hotel->continent],
+                    ['slug' => $countrySlug, 'iso_code' => $hotel->country_iso_code],
+                );
+    
+                $this->line('[ * ] Country : ' . $country->name);
+            }
+        }
+
+        $hotels = Hotel::select('continent')->groupBy('continent')->get();
+        $continentFirstID = Continent::orderBy('id', 'DESC')->first();
+        if (!$continentFirstID) {
+            $continentFirstID = 1;
+        }
+        else {
+            $continentFirstID = $continentFirstID->id;
+        }
+        foreach ($hotels as $hotel) {
+            if (!empty($hotel->continent)) {
+                $continentSlug = $continentFirstID . '-' . Str::slug($hotel->continent);
+                $continentFirstID++;
+
+                $continent = Continent::firstOrCreate(
+                    ['name' => $hotel->continent],
+                    ['slug' => $continentSlug]
+                );
+
+                $this->line('[ * ] Continent : ' . $continent->name);
+            }
+        }
+
+        Cache::flush();
     }
 }

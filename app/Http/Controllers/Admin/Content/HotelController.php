@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Hotel\Hotel;
 use App\Models\Hotel\HotelPlace;
+use Illuminate\Support\Facades\Cache;
 
 class HotelController extends Controller
 {
@@ -32,7 +33,9 @@ class HotelController extends Controller
         $queryOrder = $request->query('order', 'asc');
         $querySearch = $request->query('search');
 
-        $hotelsCount = Hotel::count();
+        $hotelsCount = Cache::rememberForever('hotelscount', function () {
+            return Hotel::count();
+        });
 
         $hotels = Hotel::when($querySearch, function ($query) use ($querySearch) {
             $query->where('name', 'like', '%' . $querySearch . '%');
@@ -134,6 +137,8 @@ class HotelController extends Controller
     {
         HotelPlace::where('hotel_id', $hotel->id)->delete();
         $hotel->delete();
+
+        Cache::forget('hotelscount');
 
         return redirect()->back()->with('success', __('Hotel has been deleted!'));
     }

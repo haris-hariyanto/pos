@@ -7,14 +7,19 @@ use Illuminate\Http\Request;
 use App\Models\Location\City;
 use App\Models\Location\State;
 use App\Models\Hotel\Hotel;
+use App\Helpers\CacheSystem;
 
 class LocationController extends Controller
 {
-    public function index($type, $location)
+    public function index(Request $request, $type, $location)
     {
-        $isCachedData = false;
-        if ($isCachedData) {
+        $currentPage = $request->query('page', 1);
 
+        $cacheKey = 'location' . $type . $location . 'page' . $currentPage;
+        $cacheData = CacheSystem::get($cacheKey);
+
+        if ($cacheData) {
+            extract($cacheData);
         }
         else {
             if (!in_array($type, ['city', 'state'])) {
@@ -37,7 +42,7 @@ class LocationController extends Controller
                     $hotel['photos'] = json_decode($hotel['photos']);
                     $hotels[] = $hotel;
                 }
-                $links = $modelHotels->links('components.main.components.simple-pagination');
+                $links = $modelHotels->links('components.main.components.simple-pagination')->render();
             }
 
             if ($type == 'state') {
@@ -56,8 +61,11 @@ class LocationController extends Controller
                     $hotel['photos'] = json_decode($hotel['photos']);
                     $hotels[] = $hotel;
                 }
-                $links = $modelHotels->links('components.main.components.simple-pagination');
+                $links = $modelHotels->links('components.main.components.simple-pagination')->render();
             }
+
+            // Generate cache
+            CacheSystem::generate($cacheKey, compact('type', 'location', 'hotels', 'links'));
         }
 
         return view('main.contents.hotel-location', compact('type', 'location', 'hotels', 'links'));

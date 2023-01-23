@@ -6,14 +6,18 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Hotel\Hotel;
 use App\Models\Hotel\HotelPlace;
+use App\Helpers\Text;
+use App\Helpers\CacheSystem;
 
 class HotelController extends Controller
 {
     public function index($hotel)
     {
-        $isCachedData = false;
-        if ($isCachedData) {
-            
+        $cacheKey = 'hotel' . $hotel;
+        $cacheData = CacheSystem::get($cacheKey);
+
+        if ($cacheData) {
+            extract($cacheData);
         }
         else {
             $modelHotel = Hotel::with('continent', 'country', 'state', 'city')->where('slug', $hotel)->first();
@@ -27,6 +31,9 @@ class HotelController extends Controller
                 ->where('hotel_id', $modelHotel->id)
                 ->get()
                 ->toArray();
+            
+            // Generate cache
+            CacheSystem::generate($cacheKey, compact('hotel', 'nearbyPlaces'));
         }
 
         if (config('app.locale') == 'id') {
@@ -107,20 +114,10 @@ class HotelController extends Controller
         $paragraph2 .= ' ';
 
         if (!empty($hotelData['rates_from']) && !empty($hotelData['rates_currency'])) {
-            if ($hotelData['rates_currency'] == 'IDR') {
-                $paragraph2 .= 'The rates at the ' . $hotelData['name'] . ' start form ' . number_format($hotelData['rates_from'], 0, ',', '.') . ' ' . $hotelData['rates_currency'] . ', making it an affordable option.';
-            }
-            else {
-                $paragraph2 .= 'The rates at the ' . $hotelData['name'] . ' start form ' . number_format($hotelData['rates_from'], 0, '.', ',') . ' ' . $hotelData['rates_currency'] . ', making it an affordable option.';
-            }
+            $paragraph2 .= 'The rates at the ' . $hotelData['name'] . ' start form ' . Text::price($hotelData['rates_from'], $hotelData['rates_currency']) . ', making it an affordable option.';
         }
         elseif (empty($hotelData['rates_from']) && !empty($hotelData['rates_from_exclusive']) && !empty($hotelData['rates_currency'])) {
-            if ($hotelData['rates_currency'] == 'IDR') {
-                $paragraph2 .= 'The rates at the ' . $hotelData['name'] . ' start form ' . number_format($hotelData['rates_from_exclusive'], 0, ',', '.') . ' ' . $hotelData['rates_currency'] . ', making it an affordable option.';
-            }
-            else {
-                $paragraph2 .= 'The rates at the ' . $hotelData['name'] . ' start form ' . number_format($hotelData['rates_from_exclusive'], 0, '.', ',') . ' ' . $hotelData['rates_currency'] . ', making it an affordable option.';
-            }
+            $paragraph2 .= 'The rates at the ' . $hotelData['name'] . ' start form ' . Text::price($hotelData['rates_from_exclusive'], $hotelData['rates_currency']) . ', making it an affordable option.';
         }
 
         if (!empty(trim($paragraph2))) {
@@ -192,20 +189,10 @@ class HotelController extends Controller
         $paragraph2 .= ' ';
 
         if (!empty($hotelData['rates_from']) && !empty($hotelData['rates_currency'])) {
-            if ($hotelData['rates_currency'] == 'IDR') {
-                $paragraph2 .= 'Harga kamar mulai dari ' . number_format($hotelData['rates_from'], 0, ',', '.') . ' ' . $hotelData['rates_currency'] . '.';
-            }
-            else {
-                $paragraph2 .= 'Harga kamar mulai dari ' . number_format($hotelData['rates_from'], 0, '.', ',') . ' ' . $hotelData['rates_currency'] . '.';
-            }
+            $paragraph2 .= 'Harga kamar mulai dari ' . Text::price($hotelData['rates_from'], $hotelData['rates_currency']) . '.';
         }
         elseif (empty($hotelData['rates_from']) && !empty($hotelData['rates_from_exclusive']) && !empty($hotelData['rates_currency'])) {
-            if ($hotelData['rates_currency'] == 'IDR') {
-                $paragraph2 .= 'Harga kamar mulai dari ' . number_format($hotelData['rates_from_exclusive'], 0, ',', '.') . ' ' . $hotelData['rates_currency'] . '.';
-            }
-            else {
-                $paragraph2 .= 'Harga kamar mulai dari ' . number_format($hotelData['rates_from_exclusive'], 0, '.', ',') . ' ' . $hotelData['rates_currency'] . '.';
-            }
+            $paragraph2 .= 'Harga kamar mulai dari ' . Text::price($hotelData['rates_from_exclusive'], $hotelData['rates_currency']) . '.';
         }
 
         if (!empty(trim($paragraph2))) {

@@ -66,7 +66,7 @@
             <!-- Footer -->
             <footer class="main-footer">
                 <strong>
-                    Copyright &copy; {{ date('Y') }} <a href="{{ route('index') }}" target="_blank">{{ config('app.name') }}</a>
+                    Copyright &copy; {{ date('Y') }} <a href="{{ route('index') }}" target="_blank">{{ $settings__website_name }}</a>
                 </strong>
             </footer>
             <!-- [END] Footer -->

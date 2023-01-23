@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-primary fixed-top">
     <div class="container px-4">
 
-        <a href="{{ route('index') }}" class="navbar-brand">{{ config('app.name', 'DNM') }}</a>
+        <a href="{{ route('index') }}" class="navbar-brand">{{ $settings__website_name }}</a>
 
         <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -17,6 +17,18 @@
                     >{{ __('Home') }}</a>
                 </li>
             </ul>
+
+            @if (Route::currentRouteName() != 'index')
+                <div class="mx-3 flex-fill d-none d-md-block">
+                    <form action="{{ route('search') }}" method="GET">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="q" placeholder="{{ __('Enter place or address') }}" value="{{ request()->query('q') }}">
+                            <button class="btn btn-secondary" type="submit">{{ __('Search') }}</button>
+                        </div>
+                    </form>
+                </div>
+            @endif
+
             <ul class="navbar-nav ms-auto">
                 @guest
                     @if (config('app.open_register'))
@@ -67,3 +79,16 @@
 
     </div>
 </nav>
+
+<!-- Search bar mobile -->
+<div class="bg-primary d-block d-md-none">
+    <div class="container">
+        <form action="{{ route('search') }}" method="GET" class="pb-2">
+            <div class="input-group">
+                <input type="text" class="form-control" name="q" placeholder="{{ __('Enter place or address') }}" value="{{ request()->query('q') }}">
+                <button class="btn btn-secondary">{{ __('Search') }}</button>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- [END] Search bar mobile -->
