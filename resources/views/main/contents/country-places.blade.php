@@ -6,6 +6,7 @@
                 '[country_name]' => $country['name'],
                 '[place_category]'=> $category['name'],
                 '[page]' => $currentPage,
+                '[current_url]' => route('country.places', [$country['slug'], $category['slug']]),
             ])
         }}
     </x-slot:pageTitle>
@@ -17,6 +18,7 @@
                 '[country_name]' => $country['name'],
                 '[place_category]'=> $category['name'],
                 '[page]' => $currentPage,
+                '[current_url]' => route('country.places', [$country['slug'], $category['slug']]),
             ])
         !!}
     @endpush
@@ -45,7 +47,17 @@
             </div>
             <!-- [END] Breadcrumb -->
 
-            <h1 class="fs-2 mb-3">{{ __(':place in :country', ['place' => $category['name'], 'country' => $country['name']]) }}</h1>
+            <h1 class="fs-2 mb-3">
+                {{ 
+                    \App\Helpers\Text::placeholder($pagesettings_country_places_heading, [
+                        '[appname]' => $settings__website_name,
+                        '[country_name]' => $country['name'],
+                        '[place_category]'=> $category['name'],
+                        '[page]' => $currentPage,
+                        '[current_url]' => route('country.places', [$country['slug'], $category['slug']]),
+                    ])
+                }}
+            </h1>
 
         </div>
     </div>

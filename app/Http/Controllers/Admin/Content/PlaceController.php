@@ -109,9 +109,15 @@ class PlaceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Place $place)
     {
-        //
+        $breadcrumb = [
+            __('Dashboard') => route('admin.index'),
+            __('Place') => route('admin.places.index'),
+            __('Edit Place') => '',
+        ];
+
+        return view('admin.content.places.edit', compact('place', 'breadcrumb'));
     }
 
     /**
@@ -121,9 +127,17 @@ class PlaceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Place $place)
     {
-        //
+        $validationRules = [
+            'name' => ['required']
+        ];
+
+        $validated = $request->validate($validationRules);
+
+        $place->update($validated);
+
+        return redirect()->back()->with('success', __('Place has been updated!'));
     }
 
     /**

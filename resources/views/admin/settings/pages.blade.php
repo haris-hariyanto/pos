@@ -34,19 +34,27 @@
                             @foreach ($pages as $pageKey => $page)
                                 <div id="setting{{ $pageKey }}" class="tab-pane fade {{ $loop->iteration == 1 ? 'active show' : '' }}" role="tabpanel">
                                     <div class="row">
-                                        <div class="col-12 col-lg-6">
+                                        <div class="col-12">
     
                                             @if (isset($pageExamples[$pageKey]))
                                                 <p>{{ __('Page example')  }} : <a href="{{ $pageExamples[$pageKey] }}" target="_blank">{{ $pageExamples[$pageKey] }}</a></p>
                                             @endif
     
                                             @foreach ($page['fields'] as $field)
+                                                @if ($field == 'heading')
+                                                    <x-admin.forms.input-text :name="'pagesettings_' . $pageKey . '_' . $field" :label="__('Page Title') . ' (<h1>...</h1>)'" value="{{ $pageSettings['pagesettings_' . $pageKey . '_' . $field] }}" />
+                                                @endif
+
                                                 @if ($field == 'page_title')
                                                     <x-admin.forms.input-text :name="'pagesettings_' . $pageKey . '_' . $field" :label="__('Page Title') . ' (<title>...</title>)'" value="{{ $pageSettings['pagesettings_' . $pageKey . '_' . $field] }}" />
                                                 @endif
     
                                                 @if ($field == 'meta_data')
-                                                    <x-admin.forms.textarea :name="'pagesettings_' . $pageKey . '_' . $field" :label="__('Meta Data')" rows="5">{{ $pageSettings['pagesettings_' . $pageKey . '_' . $field] }}</x-admin.forms.textarea>
+                                                    <x-admin.forms.textarea :name="'pagesettings_' . $pageKey . '_' . $field" :label="__('Meta Data')" rows="15">{{ $pageSettings['pagesettings_' . $pageKey . '_' . $field] }}</x-admin.forms.textarea>
+                                                @endif
+
+                                                @if ($field == 'brief_paragraph')
+                                                    <x-admin.forms.textarea :name="'pagesettings_' . $pageKey . '_' . $field" :label="__('Brief Paragraph')" rows="5">{{ $pageSettings['pagesettings_' . $pageKey . '_' . $field] }}</x-admin.forms.textarea>
                                                 @endif
                                             @endforeach
 

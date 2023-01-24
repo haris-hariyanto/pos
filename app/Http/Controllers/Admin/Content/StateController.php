@@ -102,9 +102,15 @@ class StateController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(State $state)
     {
-        //
+        $breadcrumb = [
+            __('Dashboard') => route('admin.index'),
+            __('States') => route('admin.states.index'),
+            __('Edit State') => '',
+        ];
+
+        return view('admin.content.states.edit', compact('state', 'breadcrumb'));
     }
 
     /**
@@ -114,9 +120,20 @@ class StateController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, State $state)
     {
-        //
+        $validationRules = [
+            'name' => ['required']
+        ];
+
+        $validated = $request->validate($validationRules);
+
+        \App\Models\Location\Place::where('country', $state->country)->where('state', $state->name)->update(['state' => $validated['name']]);
+        \App\Models\Location\City::where('country', $state->country)->where('state', $state->name)->update(['state' => $validated['name']]);
+        \App\Models\Hotel\Hotel::where('country', $state->country)->where('state', $state->name)->update(['state' => $validated['name']]);
+        $state->update($validated);
+
+        return redirect()->back()->with('success', __('State has been updated!'));
     }
 
     /**

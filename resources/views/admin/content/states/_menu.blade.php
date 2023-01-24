@@ -3,6 +3,8 @@
     <div class="dropdown-menu">
         <a href="{{ route('hotel.location', ['state', $state->slug]) }}" class="dropdown-item" target="_blank">{{ __('Open Page') }}</a>
 
+        <a href="{{ route('admin.states.edit', ['state' => $state]) }}" class="dropdown-item">{{ __('Edit') }}</a>
+
         <button
             type="button"
             class="dropdown-item"

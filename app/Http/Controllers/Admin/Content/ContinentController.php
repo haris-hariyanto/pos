@@ -110,9 +110,15 @@ class ContinentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Continent $continent)
     {
-        //
+        $breadcrumb = [
+            __('Dashboard') => route('admin.index'),
+            __('Continents') => route('admin.continents.index'),
+            __('Edit Continent') => '',
+        ];
+
+        return view('admin.content.continents.edit', compact('breadcrumb', 'continent'));
     }
 
     /**
@@ -122,9 +128,22 @@ class ContinentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Continent $continent)
     {
-        //
+        $validationRules = [
+            'name' => ['required']
+        ];
+
+        $validated = $request->validate($validationRules);
+
+        \App\Models\Location\Place::where('continent', $continent->name)->update(['continent' => $validated['name']]);
+        \App\Models\Location\City::where('continent', $continent->name)->update(['continent' => $validated['name']]);
+        \App\Models\Location\State::where('continent', $continent->name)->update(['continent' => $validated['name']]);
+        \App\Models\Location\Country::where('continent', $continent->name)->update(['continent' => $validated['name']]);
+        \App\Models\Hotel\Hotel::where('continent', $continent->name)->update(['continent' => $validated['name']]);
+        $continent->update($validated);
+
+        return redirect()->back()->with('success', __('Continent has been updated!'));
     }
 
     /**

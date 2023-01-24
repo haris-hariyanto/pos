@@ -101,9 +101,15 @@ class CountryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Country $country)
     {
-        //
+        $breadcrumb = [
+            __('Dashboard') => route('admin.index'),
+            __('Countries') => route('admin.countries.index'),
+            __('Edit Country') => '',
+        ];
+
+        return view('admin.content.countries.edit', compact('country', 'breadcrumb'));
     }
 
     /**
@@ -113,9 +119,21 @@ class CountryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Country $country)
     {
-        //
+        $validationRules = [
+            'name' => ['required']
+        ];
+
+        $validated = $request->validate($validationRules);
+
+        \App\Models\Location\Place::where('country', $country->name)->where('continent', $country->continent)->update(['country' => $validated['name']]);
+        \App\Models\Location\City::where('country', $country->name)->where('continent', $country->continent)->update(['country' => $validated['name']]);
+        \App\Models\Location\State::where('country', $country->name)->where('continent', $country->continent)->update(['country' => $validated['name']]);
+        \App\Models\Hotel\Hotel::where('country', $country->name)->where('continent', $country->continent)->update(['country' => $validated['name']]);
+        $country->update($validated);
+
+        return redirect()->back()->with('success', __('Country has been updated!'));
     }
 
     /**

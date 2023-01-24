@@ -5,6 +5,8 @@
                 '[appname]' => $settings__website_name,
                 '[place_name]' => $place['name'],
                 '[page]' => $currentPage,
+                '[current_url]' => route('place', [$place['slug']]),
+                '[total_hotels]' => number_format($place['hotels_nearby'], 0, ',', '.'),
             ])
         }}
     </x-slot:pageTitle>
@@ -15,6 +17,8 @@
                 '[appname]' => $settings__website_name,
                 '[place_name]' => $place['name'],
                 '[page]' => $currentPage,
+                '[current_url]' => route('place', [$place['slug']]),
+                '[total_hotels]' => number_format($place['hotels_nearby'], 0, ',', '.'),
             ])
         !!}
     @endpush
@@ -50,7 +54,17 @@
                     </div>
                     <!-- [END] Breadcrumb -->
 
-                    <h1 class="fs-2 mb-3">{{ __('Best Hotels Near :place', ['place' => $place['name']]) }}</h1>
+                    <h1 class="fs-2 mb-3">
+                        {{ 
+                            \App\Helpers\Text::placeholder($pagesettings_place_heading, [
+                                '[appname]' => $settings__website_name,
+                                '[place_name]' => $place['name'],
+                                '[page]' => $currentPage,
+                                '[current_url]' => route('place', [$place['slug']]),
+                                '[total_hotels]' => number_format($place['hotels_nearby'], 0, ',', '.'),
+                            ])
+                        }}
+                    </h1>
                     <p class="lead">{{ $place['address'] }}</p>
                 </div>
             </div>

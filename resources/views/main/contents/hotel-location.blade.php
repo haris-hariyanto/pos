@@ -8,6 +8,7 @@
                 '[city_name]' => $location['name'],
                 '[state_name]' => $location['name'],
                 '[page]' => $currentPage,
+                '[current_url]' => route('hotel.location', [$type, $location['slug']]),
             ])
         }}
     </x-slot:pageTitle>
@@ -20,6 +21,7 @@
                 '[city_name]' => $location['name'],
                 '[state_name]' => $location['name'],
                 '[page]' => $currentPage,
+                '[current_url]' => route('hotel.location', [$type, $location['slug']]),
             ])
         !!}
     @endpush
@@ -55,7 +57,18 @@
                     </div>
                     <!-- [END] Breadcrumb -->
 
-                    <h1 class="fs-2 mb-3">{{ __('Hotels in :location, :country', ['location' => $location['name'], 'country' => $location['country']['name']]) }}</h1>
+                    <h1 class="fs-2 mb-3">
+                        {{
+                            \App\Helpers\Text::placeholder($type == 'city' ? $pagesettings_city_heading : $pagesettings_state_heading, [
+                                '[appname]' => $settings__website_name,
+                                '[country_name]' => $location['country']['name'],
+                                '[city_name]' => $location['name'],
+                                '[state_name]' => $location['name'],
+                                '[page]' => $currentPage,
+                                '[current_url]' => route('hotel.location', [$type, $location['slug']]),
+                            ]) 
+                        }}
+                    </h1>
                 </div>
             </div>
 

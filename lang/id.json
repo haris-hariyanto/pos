@@ -249,5 +249,15 @@
     "Country (Places)": "Negara (Daftar Tempat)",
     "Page example": "Contoh halaman",
     "Item per Page": "Item per Halaman",
-    "Pages settings has been updated!": "Setting halaman telah diupdate!"
+    "Pages settings has been updated!": "Setting halaman telah diupdate!",
+    "Brief Paragraph": "Paragraf Pendek",
+    "Edit Continent": "Edit Benua",
+    "Continent has been updated!": "Benua telah diupdate!",
+    "Delete cache manually if there is no change after updating": "Hapus cache secara manual jika setelah diupdate tidak ada perubahan",
+    "Edit Country": "Edit Negara",
+    "Country has been updated!": "Negara telah diupdate!",
+    "Edit Place": "Edit Tempat",
+    "Place has been updated!": "Tempat telah diupdate!",
+    "Edit State": "Edit State",
+    "State has been updated!": "State telah diupdate!"
 }

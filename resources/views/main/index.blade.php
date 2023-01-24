@@ -1,8 +1,20 @@
 <x-main.layouts.app>
-    <x-slot:pageTitle>{{ \App\Helpers\Text::placeholder($pagesettings_home_page_title, ['[appname]' => $settings__website_name]) }}</x-slot>
+    <x-slot:pageTitle>
+        {{ 
+            \App\Helpers\Text::placeholder($pagesettings_home_page_title, [
+                '[appname]' => $settings__website_name,
+                '[current_url]' => route('index'),
+            ]) 
+        }}
+    </x-slot>
 
     @push('metaData')
-        {!! \App\Helpers\Text::placeholder($pagesettings_home_meta_data, ['[appname]' => $settings__website_name]) !!}
+        {!! 
+            \App\Helpers\Text::placeholder($pagesettings_home_meta_data, [
+                '[appname]' => $settings__website_name,
+                '[current_url]' => route('index'),
+            ]) 
+        !!}
     @endpush
 
     <div class="bg-white shadow-sm">
@@ -10,7 +22,7 @@
             <div class="row justify-content-start">
                 <div class="col-12 col-lg-8">
                     <h1>{{ $settings__website_name }}</h1>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus ut, sequi accusamus porro nesciunt deleniti corporis quidem nisi dolorum aliquam?</p>
+                    <p>{{ \App\Helpers\Text::placeholder($pagesettings_home_brief_paragraph, ['[appname]' => $settings__website_name, '[current_url]' => route('index'),]) }}</p>
                     <div>
                         <form action="{{ route('search') }}" method="GET">
                             <div class="input-group mb-3">

@@ -4,6 +4,7 @@
             \App\Helpers\Text::placeholder($pagesettings_continent_page_title, [
                 '[appname]' => $settings__website_name,
                 '[continent_name]' => $continent['name'],
+                '[current_url]' => route('continent', [$continent['slug']]),
             ])
         }}
     </x-slot:pageTitle>
@@ -13,6 +14,7 @@
             \App\Helpers\Text::placeholder($pagesettings_continent_meta_data, [
                 '[appname]' => $settings__website_name,
                 '[continent_name]' => $continent['name'],
+                '[current_url]' => route('continent', [$continent['slug']]),
             ])
         !!}
     @endpush
@@ -33,7 +35,15 @@
             </div>
             <!-- [END] Breadcrumb -->
             
-            <h1 class="fs-2 mb-3">{{ $continent['name'] }}</h1>
+            <h1 class="fs-2 mb-3">
+                {{
+                    \App\Helpers\Text::placeholder($pagesettings_continent_heading, [
+                        '[appname]' => $settings__website_name,
+                        '[continent_name]' => $continent['name'],
+                        '[current_url]' => route('continent', [$continent['slug']]),
+                    ])
+                }}
+            </h1>
         </div>
     </div>
 

@@ -4,6 +4,12 @@
             \App\Helpers\Text::placeholder($pagesettings_hotel_page_title, [
                 '[appname]' => $settings__website_name,
                 '[hotel_name]' => $hotel['name'],
+                '[current_url]' => route('hotel', [$hotel['slug']]),
+                '[hotel_address]' => $hotel['address_line_1'],
+                '[hotel_city]' => isset($hotel['city']['name']) ? $hotel['city']['name'] : '-',
+                '[hotel_state]' => isset($hotel['state']['name']) ? $hotel['state']['name'] : '-',
+                '[hotel_country]' => isset($hotel['country']['name']) ? $hotel['country']['name'] : '-',
+                '[hotel_image]' => !empty($hotel['photos']) && !empty($hotel['photos'][0]) ? \App\Helpers\Image::removeQueryParameters($hotel['photos'][0]) : false,
             ])
         }}
     </x-slot:pageTitle>
@@ -12,7 +18,13 @@
         {!!
             \App\Helpers\Text::placeholder($pagesettings_hotel_meta_data, [
                 '[appname]' => $settings__website_name,
-                '[hotel_name]' => $hotel['name'], 
+                '[hotel_name]' => $hotel['name'],
+                '[current_url]' => route('hotel', [$hotel['slug']]),
+                '[hotel_address]' => $hotel['address_line_1'],
+                '[hotel_city]' => isset($hotel['city']['name']) ? $hotel['city']['name'] : '-',
+                '[hotel_state]' => isset($hotel['state']['name']) ? $hotel['state']['name'] : '-',
+                '[hotel_country]' => isset($hotel['country']['name']) ? $hotel['country']['name'] : '-',
+                '[hotel_image]' => !empty($hotel['photos']) && !empty($hotel['photos'][0]) ? \App\Helpers\Image::removeQueryParameters($hotel['photos'][0]) : false,
             ])
         !!}
     @endpush
@@ -55,7 +67,20 @@
                     </div>
                     <!-- [END] Breadcrumb -->
 
-                    <h1 class="fs-2 mb-2">{{ $hotel['name'] }}</h1>
+                    <h1 class="fs-2 mb-2">
+                        {{ 
+                            \App\Helpers\Text::placeholder($pagesettings_hotel_heading, [
+                                '[appname]' => $settings__website_name,
+                                '[hotel_name]' => $hotel['name'],
+                                '[current_url]' => route('hotel', [$hotel['slug']]),
+                                '[hotel_address]' => $hotel['address_line_1'],
+                                '[hotel_city]' => isset($hotel['city']['name']) ? $hotel['city']['name'] : '-',
+                                '[hotel_state]' => isset($hotel['state']['name']) ? $hotel['state']['name'] : '-',
+                                '[hotel_country]' => isset($hotel['country']['name']) ? $hotel['country']['name'] : '-',
+                                '[hotel_image]' => !empty($hotel['photos']) && !empty($hotel['photos'][0]) ? \App\Helpers\Image::removeQueryParameters($hotel['photos'][0]) : false,
+                            ])
+                        }}
+                    </h1>
                     <div class="mb-3">
                         @for ($i = 0; $i < $hotel['star_rating']; $i++)
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-star-fill tw-text-orange-400" viewBox="0 0 16 16">
