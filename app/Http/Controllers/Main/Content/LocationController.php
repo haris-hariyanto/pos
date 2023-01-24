@@ -68,6 +68,6 @@ class LocationController extends Controller
             CacheSystem::generate($cacheKey, compact('type', 'location', 'hotels', 'links'));
         }
 
-        return view('main.contents.hotel-location', compact('type', 'location', 'hotels', 'links'));
+        return view('main.contents.hotel-location', compact('type', 'location', 'hotels', 'links', 'currentPage'));
     }
 }

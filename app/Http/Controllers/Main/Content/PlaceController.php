@@ -47,6 +47,6 @@ class PlaceController extends Controller
             CacheSystem::generate($cacheKey, compact('place', 'hotels', 'links', 'hotelsFound'));
         }
 
-        return view('main.contents.place', compact('place', 'hotels', 'links', 'hotelsFound'));
+        return view('main.contents.place', compact('place', 'hotels', 'links', 'hotelsFound', 'currentPage'));
     }
 }

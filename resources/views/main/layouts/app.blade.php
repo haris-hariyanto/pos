@@ -8,7 +8,7 @@
 
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
 
-        <title>{!! $pageTitle . ' - ' . config('app.name') ?? config('app.name') !!}</title>
+        <title>{!! $pageTitle . ' - ' . $settings__website_name ?? $settings__website_name !!}</title>
 
         @if($useRecaptcha)
             <script src="https://www.google.com/recaptcha/api.js" async defer></script>

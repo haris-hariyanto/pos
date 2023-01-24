@@ -1,5 +1,9 @@
 <x-main.layouts.app>
-    <x-slot:pageTitle>{{ __('Register') }}</x-slot>
+    <x-slot:pageTitle>{{ \App\Helpers\Text::placeholder($pagesettings_home_page_title, ['[appname]' => $settings__website_name]) }}</x-slot>
+
+    @push('metaData')
+        {!! \App\Helpers\Text::placeholder($pagesettings_home_meta_data, ['[appname]' => $settings__website_name]) !!}
+    @endpush
 
     <div class="bg-white shadow-sm">
         <div class="container py-5 px-4">

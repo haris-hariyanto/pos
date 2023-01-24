@@ -1,5 +1,23 @@
 <x-main.layouts.app>
-    <x-slot:pageTitle>{{ __('Best Hotels Near :place', ['place' => $place['name']]) }}</x-slot:pageTitle>
+    <x-slot:pageTitle>
+        {{ 
+            \App\Helpers\Text::placeholder($pagesettings_place_page_title, [
+                '[appname]' => $settings__website_name,
+                '[place_name]' => $place['name'],
+                '[page]' => $currentPage,
+            ])
+        }}
+    </x-slot:pageTitle>
+
+    @push('metaData')
+        {!!
+            \App\Helpers\Text::placeholder($pagesettings_place_meta_data, [
+                '[appname]' => $settings__website_name,
+                '[place_name]' => $place['name'],
+                '[page]' => $currentPage,
+            ])
+        !!}
+    @endpush
 
     <div class="bg-white shadow-sm">
         <div class="container py-2 px-4">

@@ -83,6 +83,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
 
         Route::get('/website', [Controllers\Admin\Setting\WebsiteSettingController::class, 'index'])->name('website');
         Route::put('/website', [Controllers\Admin\Setting\WebsiteSettingController::class, 'updateSettings']);
+
+        Route::get('/pages', [Controllers\Admin\Setting\PageSettingConttoller::class, 'index'])->name('pages');
+        Route::put('/pages', [Controllers\Admin\Setting\PageSettingConttoller::class, 'save']);
     });
 
     Route::resource('hotels', Controllers\Admin\Content\HotelController::class);

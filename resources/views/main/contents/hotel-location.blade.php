@@ -1,5 +1,28 @@
 <x-main.layouts.app>
     <x-slot:pageTitle>{{ __('Hotels in :location, :country', ['location' => $location['name'], 'country' => $location['country']['name']]) }}</x-slot:pageTitle>
+    <x-slot:pageTitle>
+        {{ 
+            \App\Helpers\Text::placeholder($type == 'city' ? $pagesettings_city_page_title : $pagesettings_state_page_title, [
+                '[appname]' => $settings__website_name,
+                '[country_name]' => $location['country']['name'],
+                '[city_name]' => $location['name'],
+                '[state_name]' => $location['name'],
+                '[page]' => $currentPage,
+            ])
+        }}
+    </x-slot:pageTitle>
+
+    @push('metaData')
+        {!!
+            \App\Helpers\Text::placeholder($type == 'city' ? $pagesettings_city_meta_data : $pagesettings_state_meta_data, [
+                '[appname]' => $settings__website_name,
+                '[country_name]' => $location['country']['name'],
+                '[city_name]' => $location['name'],
+                '[state_name]' => $location['name'],
+                '[page]' => $currentPage,
+            ])
+        !!}
+    @endpush
 
     <div class="bg-white shadow-sm">
         <div class="container py-2 px-4">

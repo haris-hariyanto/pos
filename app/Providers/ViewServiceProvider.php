@@ -16,10 +16,20 @@ class ViewServiceProvider extends ServiceProvider
     {
         View::composer('*', function ($view) {
             $websiteSettings = Cache::get('websitesettings');
-            if ($websiteSettings) {
+            if (!empty($websiteSettings)) {
                 $settings = json_decode($websiteSettings, true);
+                if (empty($settings)) {
+                    $createCache = true;
+                }
+                else {
+                    $createCache = false;
+                }
             }
             else {
+                $createCache = true;
+            }
+
+            if ($createCache) {
                 $settings = MetaData::where('key', 'like', 'settings__%')->get();
                 $settings = $settings->mapWithKeys(function ($item) {
                     return [$item->key => $item->value];
@@ -27,6 +37,50 @@ class ViewServiceProvider extends ServiceProvider
 
                 $settingsCache = json_encode($settings);
                 Cache::forever('websitesettings', $settingsCache);
+            }
+
+            foreach ($settings as $settingKey => $settingValue) {
+                $view->with($settingKey, $settingValue);
+            }
+        });
+
+        View::composer(['main.index', 'main.*'], function ($view) {
+            /*
+            $currentView = $view->name();
+            
+            $cacheKeyMapping = [
+                'main.index' => 'pagesettings_home_',
+                'main.contents.hotel' => 'pagesettings_hotel_',
+                'main.contents.place' => 'pagesettings_place_',
+                'main.contents.continent' => 'pagesettings_continent_',
+                'main.contents.country' => 'pagesettings_country_',
+                'main.contents.country-states' => 'pagesettings_country_states_',
+                'main.contents.country-cities' => 'pagesettings_country_cities_',
+                'main.contents.country-places' => 'pagesettings_country_places_',
+            ];
+            */
+            $pageSettings = Cache::get('pagesettings');
+            if (!empty($pageSettings)) {
+                $settings = json_decode($pageSettings, true);
+                if (empty($settings)) {
+                    $createCache = true;
+                }
+                else {
+                    $createCache = false;
+                }
+            }
+            else {
+                $createCache = true;
+            }
+
+            if ($createCache) {
+                $settings = MetaData::where('key', 'like', 'pagesettings_%')->get();
+                $settings = $settings->mapWithKeys(function ($item) {
+                    return [$item->key => $item->value];
+                })->toArray();
+
+                $settingsCache = json_encode($settings);
+                Cache::forever('pagesettings', $settingsCache);
             }
 
             foreach ($settings as $settingKey => $settingValue) {

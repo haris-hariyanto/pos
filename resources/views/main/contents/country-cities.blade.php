@@ -1,5 +1,21 @@
 <x-main.layouts.app>
-    <x-slot:pageTitle>{{ __('Cities in :country', ['country' => $country['name']]) }}</x-slot:pageTitle>
+    <x-slot:pageTitle>
+        {{ 
+            \App\Helpers\Text::placeholder($pagesettings_country_cities_page_title, [
+                '[appname]' => $settings__website_name,
+                '[country_name]' => $country['name'],
+            ])
+        }}
+    </x-slot:pageTitle>
+
+    @push('metaData')
+        {!!
+            \App\Helpers\Text::placeholder($pagesettings_country_cities_meta_data, [
+                '[appname]' => $settings__website_name,
+                '[country_name]' => $country['name'],
+            ])
+        !!}
+    @endpush
 
     <div class="bg-white shadow-sm">
         <div class="container py-2 px-4">

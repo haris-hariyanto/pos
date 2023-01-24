@@ -1,5 +1,21 @@
 <x-main.layouts.app>
-    <x-slot:pageTitle>{{ $hotel['name'] }}</x-slot:pageTitle>
+    <x-slot:pageTitle>
+        {{ 
+            \App\Helpers\Text::placeholder($pagesettings_hotel_page_title, [
+                '[appname]' => $settings__website_name,
+                '[hotel_name]' => $hotel['name'],
+            ])
+        }}
+    </x-slot:pageTitle>
+
+    @push('metaData')
+        {!!
+            \App\Helpers\Text::placeholder($pagesettings_hotel_meta_data, [
+                '[appname]' => $settings__website_name,
+                '[hotel_name]' => $hotel['name'], 
+            ])
+        !!}
+    @endpush
 
     <div class="bg-white shadow-sm">
         <div class="container py-2 px-4">

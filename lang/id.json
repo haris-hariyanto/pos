@@ -242,5 +242,12 @@
     "Script before </html>": "Script sebelum </html>",
     "Pages Settings": "Setting Halaman",
     "Page Settings": "Setting Halaman",
-    "Page Title": "Judul Halaman"
+    "Page Title": "Judul Halaman",
+    "Place": "Tempat",
+    "Country (States)": "Negara (Daftar State)",
+    "Country (Cities)": "Negara (Daftar Kota)",
+    "Country (Places)": "Negara (Daftar Tempat)",
+    "Page example": "Contoh halaman",
+    "Item per Page": "Item per Halaman",
+    "Pages settings has been updated!": "Setting halaman telah diupdate!"
 }

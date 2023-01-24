@@ -148,6 +148,6 @@ class CountryController extends Controller
             CacheSystem::generate($cacheKey, compact('country', 'places', 'category', 'links'));
         }
 
-        return view('main.contents.country-places', compact('country', 'places', 'category', 'links'));
+        return view('main.contents.country-places', compact('country', 'places', 'category', 'links', 'currentPage'));
     }
 }

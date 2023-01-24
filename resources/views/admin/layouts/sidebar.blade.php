@@ -80,6 +80,13 @@
                 </li>
 
                 <li class="nav-item">
+                    <a href="{{ route('admin.settings.pages') }}" @class(['nav-link', 'active' => Route::currentRouteName() == 'admin.settings.pages'])>
+                        <i class="nav-icon fas fa-file-alt"></i>
+                        <p>{{ __('Pages Settings') }}</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <a href="{{ route('admin.settings.cache') }}" @class(['nav-link', 'active' => Route::currentRouteName() == 'admin.settings.cache'])>
                         <i class="nav-icon fas fa-bolt"></i>
                         <p>{{ __('Cache') }}</p>
