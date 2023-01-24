@@ -15,6 +15,8 @@
                 '[current_url]' => route('index'),
             ]) 
         !!}
+
+        <link rel="canonical" href="{{ route('index') }}">
     @endpush
 
     <div class="bg-white shadow-sm">

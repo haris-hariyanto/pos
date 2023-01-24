@@ -30,6 +30,7 @@ class WebsiteSettingController extends Controller
             'settings__website_name' => ['required'],
             'settings__header_script' => ['nullable'],
             'settings__footer_script' => ['nullable'],
+            'settings__agoda_suffix' => ['nullable'],
         ]);
 
         foreach ($validated as $settingName => $settingValue) {

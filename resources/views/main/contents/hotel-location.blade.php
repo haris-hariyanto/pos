@@ -24,6 +24,12 @@
                 '[current_url]' => route('hotel.location', [$type, $location['slug']]),
             ])
         !!}
+
+        @if ($currentPage == 1)
+            <link rel="canonical" href="{{ route('hotel.location', [$type, $location['slug']]) }}">
+        @else
+            <link rel="canonical" href="{{ route('hotel.location', [$type, $location['slug'], 'page' => $currentPage]) }}">
+        @endif
     @endpush
 
     <div class="bg-white shadow-sm">

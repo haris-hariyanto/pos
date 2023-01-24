@@ -27,6 +27,10 @@
                 '[hotel_image]' => !empty($hotel['photos']) && !empty($hotel['photos'][0]) ? \App\Helpers\Image::removeQueryParameters($hotel['photos'][0]) : false,
             ])
         !!}
+
+        <link rel="canonical" href="{{ route('hotel', $hotel['slug']) }}">
+
+        {!! $structuredData->render() !!}
     @endpush
 
     <div class="bg-white shadow-sm">
@@ -278,7 +282,7 @@
 
                                     <div class="d-grid d-lg-block mb-2">
                                         <!-- Booking link -->
-                                        <a href="{{ $hotel['url'] }}" class="btn btn-secondary px-5">{{ __('Book via :platform', ['platform' => 'Agoda']) }}</a>
+                                        <a href="{{ $hotel['url'] . $settings__agoda_suffix }}" class="btn btn-secondary px-5">{{ __('Book via :platform', ['platform' => 'Agoda']) }}</a>
                                         <!-- [END] Booking link -->
                                     </div>
 

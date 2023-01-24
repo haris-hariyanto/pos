@@ -21,6 +21,12 @@
                 '[current_url]' => route('country.places', [$country['slug'], $category['slug']]),
             ])
         !!}
+
+        @if ($currentPage == 1)
+            <link rel="canonical" href="{{ route('country.places', [$country['slug'], $category['slug']]) }}">
+        @else
+            <link rel="canonical" href="{{ route('country.places', [$country['slug'], $category['slug'], 'page' => $currentPage]) }}">
+        @endif
     @endpush
 
     <div class="bg-white shadow-sm">

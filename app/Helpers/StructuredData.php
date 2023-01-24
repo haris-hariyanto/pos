@@ -44,6 +44,86 @@ class StructuredData
 
     /**
      * $data = [
+     *  'name' => '', // Required
+     *  'description' => '', // Optional
+     *  'photo' => '', // Optional
+     *  'price' => '', // Optional
+     *  'star' => '', // Optional
+     *  'country' => '', // Optional
+     *  'city' => '', // Optional
+     *  'state' => '', // Optional
+     *  'postalCode' => '', // Optional
+     *  'address' => '', // Optional
+     *  'numberReviews' => '', // Optional
+     *  'ratingAverage' => '', // Optional
+     * ]
+     */
+    public function hotel($data = [])
+    {
+        $result = [];
+        $result['@context'] = 'https://schema.org';
+        $result['@type'] = 'Hotel';
+        $result['name'] = $data['name'];
+
+        if (!empty($data['numberReviews']) && !empty($data['ratingAverage'])) {
+            $result['aggregateRating'] = [
+                '@type' => 'AggregateRating',
+                'ratingValue' => $data['ratingAverage'],
+                'ratingCount' => $data['numberReviews'],
+                'bestRating' => 10,
+            ];
+        }
+        
+        if (!empty($data['description'])) {
+            $result['description'] = $data['description'];
+        }
+
+        if (!empty($data['photo'])) {
+            $result['photo'] = $data['photo'];
+            $result['image'] = $data['photo'];
+        }
+
+        if (!empty($data['price'])) {
+            $result['priceRange'] = $data['price'];
+        }
+
+        if (!empty($data['star'])) {
+            $result['starRating'] = [
+                '@type' => 'Rating',
+                'ratingValue' => $data['star'],
+            ];
+        }
+
+        if (!empty($data['country']) || !empty($data['city']) || !empty($data['state']) || !empty($data['postalCode']) || !empty($data['address'])) {
+            $result['address'] = [];
+            $result['address']['@type'] = 'PostalAddress';
+            
+            if (!empty($data['country'])) {
+                $result['address']['addressCountry'] = $data['country'];
+            }
+
+            if (!empty($data['city'])) {
+                $result['address']['addressLocality'] = $data['city'];
+            }
+
+            if (!empty($data['state'])) {
+                $result['address']['addressRegion'] = $data['state'];
+            }
+
+            if (!empty($data['postalCode'])) {
+                $result['address']['postalCode'] = $data['postalCode'];
+            }
+
+            if (!empty($data['address'])) {
+                $result['address']['streetAddress'] = $data['address'];
+            }
+        }
+
+        $this->structuredData[] = $result;
+    }
+
+    /**
+     * $data = [
      *  'questions' => [
      *      ['question' => '', 'answer' => ''],
      *      ['question' => '', 'answer' => ''],

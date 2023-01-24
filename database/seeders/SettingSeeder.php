@@ -170,6 +170,7 @@ class SettingSeeder extends Seeder
             ['key' => 'settings__website_name', 'value' => config('app.name')],
             ['key' => 'settings__header_script', 'value' => ''],
             ['key' => 'settings__footer_script', 'value' => ''],
+            ['key' => 'settings__agoda_suffix', 'value' => ''],
             
             ['key' => 'pagesettings_home_page_title', 'value' => $pagesettings_home_page_title],
             ['key' => 'pagesettings_home_meta_data', 'value' => $pagesettings_home_meta_data],

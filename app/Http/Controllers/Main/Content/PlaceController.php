@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Location\Place;
 use App\Models\Hotel\HotelPlace;
 use App\Helpers\CacheSystem;
+use App\Helpers\StructuredData;
 
 class PlaceController extends Controller
 {
@@ -47,6 +48,12 @@ class PlaceController extends Controller
             CacheSystem::generate($cacheKey, compact('place', 'hotels', 'links', 'hotelsFound'));
         }
 
-        return view('main.contents.place', compact('place', 'hotels', 'links', 'hotelsFound', 'currentPage'));
+        $structuredData = new StructuredData();
+        $structuredData->breadcrumb([
+            __('Home') => route('index'),
+            $place['name'] => ''
+        ]);
+
+        return view('main.contents.place', compact('place', 'hotels', 'links', 'hotelsFound', 'currentPage', 'structuredData'));
     }
 }

@@ -9,7 +9,7 @@
 
     <div class="container py-4">
         <div class="row g-2">
-            @foreach ($results as $result)
+            @forelse ($results as $result)
                 <div class="col-12 col-lg-4">
                     <div class="card shadow-sm">
                         <div class="card-body">
@@ -21,7 +21,15 @@
                         </div>
                     </div>
                 </div>
-            @endforeach
+            @empty
+                <div class="col-12">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <p class="mb-0">{{ __('No place available.') }}</p>
+                        </div>
+                    </div>
+                </div>
+            @endforelse
         </div>
         <div class="my-2">
             {{ $results->links('components.main.components.simple-pagination') }}

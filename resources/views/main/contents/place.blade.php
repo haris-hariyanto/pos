@@ -21,6 +21,14 @@
                 '[total_hotels]' => number_format($place['hotels_nearby'], 0, ',', '.'),
             ])
         !!}
+
+        @if ($currentPage == 1)
+            <link rel="canonical" href="{{ route('place', [$place['slug']]) }}">
+        @else
+            <link rel="canonical" href="{{ route('place', [$place['slug'], 'page' => $currentPage]) }}">
+        @endif
+
+        {!! $structuredData->render() !!}
     @endpush
 
     <div class="bg-white shadow-sm">
@@ -174,6 +182,6 @@
 
             window.initMap = initMap;
         </script>
-        <script async src="https://maps.googleapis.com/maps/api/js?callback=initMap&libraries=marker&v=beta&key=AIzaSyDVbn93MQkFB5Ehk29tpfvr0Pjz-Vp9bcE"></script>
+        <script async src="https://maps.googleapis.com/maps/api/js?callback=initMap&libraries=marker&v=beta&key={{ config('services.google_maps.key_js') }}"></script>
     @endpush
 </x-main.layouts.app>

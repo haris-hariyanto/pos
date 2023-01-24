@@ -17,6 +17,8 @@
                 '[current_url]' => route('country.cities', [$country['slug']]),
             ])
         !!}
+
+        <link rel="canonical" href="{{ route('country.cities', [$country['slug']]) }}">
     @endpush
 
     <div class="bg-white shadow-sm">

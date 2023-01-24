@@ -8,6 +8,7 @@ use App\Models\Hotel\Hotel;
 use App\Models\Hotel\HotelPlace;
 use App\Helpers\Text;
 use App\Helpers\CacheSystem;
+use App\Helpers\StructuredData;
 
 class HotelController extends Controller
 {
@@ -43,7 +44,36 @@ class HotelController extends Controller
             $paragraphs = $this->generateArticleEN($hotel);
         }
 
-        return view('main.contents.hotel', compact('hotel', 'paragraphs', 'nearbyPlaces'));
+        $structuredData = new StructuredData();
+        $structuredData->breadcrumb([
+            __('Home') => route('index'),
+            $hotel['name'] => ''
+        ]);
+
+        $price = null;
+        if (!empty($hotel['rates_from']) && !empty($hotel['rates_currency'])) {
+            $price = Text::price($hotel['rates_from'], $hotel['rates_currency']);
+        }
+        elseif (empty($hotel['rates_from']) && !empty($hotel['rates_from_exclusive']) && !empty($hotel['rates_currency'])) {
+            $price = Text::price($hotel['rates_from_exclusive'], $hotel['rates_currency']);
+        }
+
+        $structuredData->hotel([
+            'name' => $hotel['name'],
+            'description' => $hotel['overview'],
+            'photo' => !empty($hotel['photos']) && !empty($hotel['photos'][0]) ? $hotel['photos'][0] : null,
+            'price' => $price,
+            'star' => $hotel['star_rating'],
+            'country' => !empty($hotel['country']) && !empty($hotel['country']['name']) ? $hotel['country']['name'] : null,
+            'city' => !empty($hotel['city']) && !empty($hotel['city']['name']) ? $hotel['city']['name'] : null,
+            'state' => !empty($hotel['state']) && !empty($hotel['state']['name']) ? $hotel['state']['name'] : null,
+            'postalCode' => $hotel['zipcode'],
+            'address' => $hotel['address_line_1'],
+            'numberReviews' => $hotel['number_of_reviews'],
+            'ratingAverage' => $hotel['rating_average'],
+        ]);
+
+        return view('main.contents.hotel', compact('hotel', 'paragraphs', 'nearbyPlaces', 'structuredData'));
     }
 
     private function generateArticleEN($hotelData)

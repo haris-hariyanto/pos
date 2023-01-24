@@ -28,6 +28,7 @@
                         <x-admin.forms.input-text name="settings__website_name" :label="__('Website Name')" :value="$settings['settings__website_name']" />
                         <x-admin.forms.textarea name="settings__header_script" :label="__('Script before </head>')" rows="5">{{ $settings['settings__header_script'] }}</x-admin.forms.textarea>
                         <x-admin.forms.textarea name="settings__footer_script" :label="__('Script before </html>')" rows="5">{{ $settings['settings__footer_script'] }}</x-admin.forms.textarea>
+                        <x-admin.forms.input-text name="settings__agoda_suffix" :label="__('Link Suffix') . ' (https://www.agoda.com/partners/partnersearch.aspx?hid=1[SUFFIX])'" :value="$settings['settings__agoda_suffix']" />
 
                     </div>
                     <div class="card-footer">
