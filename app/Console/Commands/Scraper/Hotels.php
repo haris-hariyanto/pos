@@ -140,6 +140,7 @@ class Hotels extends Command
                 ->whereNotNull('star_rating')
                 ->get();
 
+            /*
             $resultCount = 0;
             foreach ($findHotels as $findHotel) {
                 if (!HotelPlace::where('hotel_id', $findHotel->id)->where('place_id', $place->id)->exists()) {
@@ -156,10 +157,11 @@ class Hotels extends Command
                     $resultCount++;
                 }
             }
+            */
 
             $place->update([
                 'is_hotels_scraped' => 'Y',
-                'hotels_nearby' => $resultCount,
+                'hotels_nearby' => count($findHotels),
             ]);
 
             $this->line('--------------------');
