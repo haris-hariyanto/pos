@@ -29,7 +29,7 @@ class Hotels extends Command
      *
      * @return int
      */
-    public function handle()
+    public function _handle()
     {
         $loop = true;
         while ($loop) {
@@ -98,6 +98,72 @@ class Hotels extends Command
 
             $this->line('--------------------');
         } // [END] for
+    }
+
+    public function handle()
+    {
+        $loop = true;
+        while ($loop) {
+            $limit = $this->ask('Limit tempat untuk pencarian hotel', 10);
+            if (is_numeric($limit)) {
+                $loop = false;
+            }
+        }
+
+        for ($i = 1; $i <= $limit; $i++) {
+            $place = Place::where('is_hotels_scraped', 'N')
+                ->orderBy('user_ratings_total', 'DESC')
+                ->first();
+            
+            if (!$place) {
+                return;
+            }
+
+            $place->update([
+                'is_hotels_scraped' => 'PROCESS',
+            ]);
+
+            $this->info('[ * ] Scraping hotel di sekitar ' . $place->name);
+
+            $latitude = explode('.', $place['latitude']);
+            $longitude = explode('.', $place['longitude']);
+
+            $findHotels = Hotel::select('id', 'name', 'latitude', 'longitude')
+                ->where('latitude', 'like', $latitude[0] . '.' . substr($latitude[1], 0, 1) . '%')
+                ->where('longitude', 'like', $longitude[0] . '.' . substr($longitude[1], 0, 1) . '%')
+                ->where('overview', '<>', '')
+                ->where('number_of_reviews', '>', 0)
+                ->where(function ($query) {
+                    $query->whereNotNull('rates_from')
+                        ->orWhereNotNull('rates_from_exclusive');
+                })
+                ->whereNotNull('star_rating')
+                ->get();
+
+            $resultCount = 0;
+            foreach ($findHotels as $findHotel) {
+                if (!HotelPlace::where('hotel_id', $findHotel->id)->where('place_id', $place->id)->exists()) {
+                    $distanceKM = $this->distance($place->latitude, $place->longitude, $findHotel->latitude, $findHotel->longitude, 'K');
+
+                    HotelPlace::create([
+                        'hotel_id' => $findHotel->id,
+                        'place_id' => $place->id,
+                        'm_distance' => round($distanceKM * 1000, 0),
+                    ]);
+
+                    $this->info('[ * ] Hotel ' . $resultCount . ' - ' . $findHotel->name);
+
+                    $resultCount++;
+                }
+            }
+
+            $place->update([
+                'is_hotels_scraped' => 'Y',
+                'hotels_nearby' => $resultCount,
+            ]);
+
+            $this->line('--------------------');
+        }
     }
 
     private function distance($lat1, $lon1, $lat2, $lon2, $unit) {
