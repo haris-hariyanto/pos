@@ -131,7 +131,7 @@ class SitemapController extends Controller
         $skip = ($index - 1) * $limit;
 
         $places = Place::select('slug')
-            ->where('hotels_nearby', '>', 0)
+            // ->where('hotels_nearby', '>', 0)
             ->skip($skip)
             ->take($limit)
             ->get();

@@ -33,11 +33,11 @@ class PlaceController extends Controller
         $querySearch = $request->query('search');
 
         $placesCount = Place::where('type', 'PLACE')
-            ->where('hotels_nearby', '>', 0)
+            // ->where('hotels_nearby', '>', 0)
             ->count();
 
         $places = Place::where('type', 'PLACE')
-            ->where('hotels_nearby', '>', 0)
+            // ->where('hotels_nearby', '>', 0)
             ->when($querySearch, function ($query) use ($querySearch) {
                 $query->where('name', 'like', '%' . $querySearch . '%');
             });
@@ -64,7 +64,7 @@ class PlaceController extends Controller
                     'name' => $place->name,
                     'country' => $place->country,
                     'continent' => $place->continent,
-                    'hotels_nearby' => $place->hotels_nearby,
+                    // 'hotels_nearby' => $place->hotels_nearby,
                     'menu' => view('admin.content.places._menu', ['place' => $place])->render(),
                 ];
             }),

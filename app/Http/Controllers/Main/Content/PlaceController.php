@@ -74,10 +74,10 @@ class PlaceController extends Controller
 
             $hotels = collect($hotels)->sortBy('m_distance')->toArray();
 
-            $hotelsFound = $place['hotels_nearby'];
+            // $hotelsFound = $place['hotels_nearby'];
 
             // Generate cache
-            CacheSystem::generate($cacheKey, compact('place', 'hotels', 'links', 'hotelsFound'));
+            CacheSystem::generate($cacheKey, compact('place', 'hotels', 'links'));
         }
 
         $structuredData = new StructuredData();
@@ -86,7 +86,7 @@ class PlaceController extends Controller
             $place['name'] => ''
         ]);
 
-        return view('main.contents.place', compact('place', 'hotels', 'links', 'hotelsFound', 'currentPage', 'structuredData'));
+        return view('main.contents.place', compact('place', 'hotels', 'links', 'currentPage', 'structuredData'));
     }
 
     private function distance($lat1, $lon1, $lat2, $lon2, $unit) {

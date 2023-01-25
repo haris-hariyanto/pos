@@ -42,7 +42,7 @@ return [
             '[appname]' => 'Nama website',
             '[current_url]' => 'URL halaman',
             '[place_name]' => 'Nama tempat',
-            '[total_hotels]' => 'Jumlah hotel yang ditemukan',
+            // '[total_hotels]' => 'Jumlah hotel yang ditemukan',
             '[page]' => 'Nomor halaman',
         ],
     ],

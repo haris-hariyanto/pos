@@ -36,7 +36,8 @@ class PageSettingConttoller extends Controller
                 $pageExamples[$pageKey] = route('hotel', [$hotelInstance->slug]);
             }
 
-            $placeInstance = Place::where('hotels_nearby', '>', 0)->first();
+            // $placeInstance = Place::where('hotels_nearby', '>', 0)->first();
+            $placeInstance = Place::where('id', '>', 0)->first();
 
             if ($pageKey == 'place' && $placeInstance) {
                 $pageExamples[$pageKey] = route('place', [$placeInstance->slug]);

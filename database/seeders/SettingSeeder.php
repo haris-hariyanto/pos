@@ -35,9 +35,9 @@ class SettingSeeder extends Seeder
             ]);
             $pagesettings_hotel_heading = '[hotel_name]';
 
-            $pagesettings_place_page_title = '[total_hotels]+ Hotel Dekat [place_name]';
+            $pagesettings_place_page_title = '[Hotel Terbaik Dekat [place_name]';
             $pagesettings_place_meta_data = view('stubs.metadata', [
-                'description' => 'Daftar rekomendasi hotel terbaik dekat [place_name]. Ditemukan [total_hotels] hotel, dari penginapan mewah hingga opsi yang lebih terjangkau.',
+                'description' => 'Daftar rekomendasi hotel terbaik dekat [place_name]. Pilihan hotel dari penginapan mewah hingga opsi yang lebih terjangkau.',
                 'title' => $pagesettings_place_page_title,
             ]);
             $pagesettings_place_heading = $pagesettings_place_page_title;
@@ -109,9 +109,9 @@ class SettingSeeder extends Seeder
             ]);
             $pagesettings_hotel_heading = '[hotel_name]';
 
-            $pagesettings_place_page_title = '[total_hotels]+ Hotels Near [place_name]';
+            $pagesettings_place_page_title = 'Best Hotels Near [place_name]';
             $pagesettings_place_meta_data = view('stubs.metadata', [
-                'description' => 'Discover the top hotels near the [place_name]. Over [total_hotels] hotels, from luxury accommodations to budget-friendly options.',
+                'description' => 'Discover the top hotels near the [place_name]. Choose from luxury accommodations to budget-friendly options.',
                 'title' => $pagesettings_place_page_title,
             ]);
             $pagesettings_place_heading = $pagesettings_place_page_title;

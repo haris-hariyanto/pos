@@ -6,7 +6,6 @@
                 '[place_name]' => $place['name'],
                 '[page]' => $currentPage,
                 '[current_url]' => route('place', [$place['slug']]),
-                '[total_hotels]' => number_format($place['hotels_nearby'], 0, ',', '.'),
             ])
         }}
     </x-slot:pageTitle>
@@ -18,7 +17,6 @@
                 '[place_name]' => $place['name'],
                 '[page]' => $currentPage,
                 '[current_url]' => route('place', [$place['slug']]),
-                '[total_hotels]' => number_format($place['hotels_nearby'], 0, ',', '.'),
             ])
         !!}
 
@@ -69,7 +67,6 @@
                                 '[place_name]' => $place['name'],
                                 '[page]' => $currentPage,
                                 '[current_url]' => route('place', [$place['slug']]),
-                                '[total_hotels]' => number_format($place['hotels_nearby'], 0, ',', '.'),
                             ])
                         }}
                     </h1>
@@ -91,7 +88,6 @@
         <div class="container pb-4">
             <div class="row justify-content-center">
                 <div class="col-12 col-lg-10">
-                    <p class="alert alert-primary shadow-sm">{{ __(':count Hotels Found', ['count' => $hotelsFound]) }}</p>
                     @foreach ($hotels as $hotel)
                         <div id="hotel{{ $loop->iteration }}" class="tw-absolute -tw-mt-14"></div>
                         <div class="hotelData" 

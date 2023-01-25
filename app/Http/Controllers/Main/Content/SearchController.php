@@ -19,8 +19,8 @@ class SearchController extends Controller
         $querySearch = preg_replace('/\s+/', ' ', $querySearch);
         $querySearch = explode(' ', $querySearch);
 
-        $results = Place::where('hotels_nearby', '>', 0)
-            ->where(function ($query) use ($querySearch) {
+        // $results = Place::where('hotels_nearby', '>', 0)
+        $results = Place::where(function ($query) use ($querySearch) {
                 $query->where(function ($subQuery) use ($querySearch) {
                     foreach ($querySearch as $querySearchPart) {
                         $subQuery->where('name', 'like', '%' . $querySearchPart . '%');
@@ -31,7 +31,8 @@ class SearchController extends Controller
                     }
                 })->orWhere('country', 'like', '%' . implode(' ', $querySearch) . '%');
             })
-            ->orderBy('hotels_nearby', 'DESC')
+            // ->orderBy('hotels_nearby', 'DESC')
+            ->orderBy('user_ratings_total', 'DESC')
             ->simplePaginate(24)
             ->withQueryString();
 

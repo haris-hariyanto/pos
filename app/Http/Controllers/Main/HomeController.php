@@ -42,7 +42,8 @@ class HomeController extends Controller
             }
 
             // Popular places
-            $modelPopularPlaces = Place::orderBy('user_ratings_total', 'DESC')->where('hotels_nearby', '>', 0)->take(12)->get();
+            // $modelPopularPlaces = Place::orderBy('user_ratings_total', 'DESC')->where('hotels_nearby', '>', 0)->take(12)->get();
+            $modelPopularPlaces = Place::orderBy('user_ratings_total', 'DESC')->take(12)->get();
             $popularPlaces = $modelPopularPlaces->toArray();
 
             // Popular hotels
