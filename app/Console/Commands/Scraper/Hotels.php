@@ -110,8 +110,13 @@ class Hotels extends Command
             }
         }
 
+        $id = $this->ask('ID');
+        $id = explode(',', $id);
+
         for ($i = 1; $i <= $limit; $i++) {
             $place = Place::where('is_hotels_scraped', 'N')
+                ->where('id', '>=', $id[0])
+                ->where('id', '<=', $id[1])
                 ->orderBy('user_ratings_total', 'DESC')
                 ->first();
             

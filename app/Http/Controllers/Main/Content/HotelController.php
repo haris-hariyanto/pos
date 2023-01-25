@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Hotel\Hotel;
 use App\Models\Hotel\HotelPlace;
 use App\Helpers\Text;
+use App\Models\Location\Place;
 use App\Helpers\CacheSystem;
 use App\Helpers\StructuredData;
 
@@ -28,10 +29,30 @@ class HotelController extends Controller
             $hotel = $modelHotel->toArray();
             $hotel['photos'] = json_decode($hotel['photos']);
 
+            $latitude = explode('.', $hotel['latitude']);
+            $longitude = explode('.', $hotel['longitude']);
+
+            $nearbyPlacesModel = Place::where('latitude', 'like', $latitude[0] . '.' . substr($latitude[1], 0, 1) . '%')
+                ->where('longitude', 'like', $longitude[0] . '.' . substr($longitude[1], 0, 1) . '%')
+                ->get();
+            $nearbyPlaces = [];
+            foreach ($nearbyPlacesModel as $nearbyPlaceModel) {
+                $nearbyPlacesData = [];
+                $nearbyPlacesData['place'] = $nearbyPlaceModel->toArray();
+
+                $distanceKM = $this->distance($nearbyPlaceModel->latitude, $nearbyPlaceModel->longitude, $hotel['latitude'], $hotel['longitude'], 'K');
+                $nearbyPlacesData['m_distance'] = round($distanceKM * 1000, 0);
+
+                $nearbyPlaces[] = $nearbyPlacesData;
+            }
+            // dd($nearbyPlacesModel);
+
+            /*
             $nearbyPlaces = HotelPlace::with('place')
                 ->where('hotel_id', $modelHotel->id)
                 ->get()
                 ->toArray();
+            */
             
             // Generate cache
             CacheSystem::generate($cacheKey, compact('hotel', 'nearbyPlaces'));
@@ -230,5 +251,23 @@ class HotelController extends Controller
         }
 
         return $results;
+    }
+
+    private function distance($lat1, $lon1, $lat2, $lon2, $unit) {
+
+        $theta = $lon1 - $lon2;
+        $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
+        $dist = acos($dist);
+        $dist = rad2deg($dist);
+        $miles = $dist * 60 * 1.1515;
+        $unit = strtoupper($unit);
+      
+        if ($unit == "K") {
+          return ($miles * 1.609344);
+        } else if ($unit == "N") {
+            return ($miles * 0.8684);
+          } else {
+              return $miles;
+            }
     }
 }

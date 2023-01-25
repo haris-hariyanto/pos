@@ -126,7 +126,7 @@
 
                 const map = new google.maps.Map(mapContainer, {
                     center: center,
-                    zoom: 15,
+                    zoom: 13,
                     mapId: 'DEMO_MAP_ID',
                 });
 
@@ -139,6 +139,7 @@
                     position: center,
                     map: map,
                     content: centerPin.element,
+                    zIndex: 1000,
                 });
 
                 const hotelInfoWindow = new google.maps.InfoWindow({
