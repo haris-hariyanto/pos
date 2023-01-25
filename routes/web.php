@@ -71,7 +71,8 @@ Route::prefix('settings')->name('account.account-settings.')->middleware(['auth'
 
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
     Route::get('/', function () {
-        return view('admin.index');
+        // return view('admin.index');
+        return redirect()->route('admin.hotels.index');
     })->name('index');
 
     Route::prefix('settings')->name('settings.')->group(function () {

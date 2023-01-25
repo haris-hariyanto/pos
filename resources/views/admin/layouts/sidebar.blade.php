@@ -12,12 +12,14 @@
         <!-- Sidebar menu -->
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <!--
                 <li class="nav-item">
                     <a href="{{ route('admin.index') }}" @class(['nav-link', 'active' => Route::currentRouteName() == 'admin.index'])>
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>{{ __('Dashboard') }}</p>
                     </a>
                 </li>
+                -->
 
                 <li class="nav-header">{{ strtoupper(__('Contents')) }}</li>
 
