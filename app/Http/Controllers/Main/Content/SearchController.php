@@ -29,7 +29,7 @@ class SearchController extends Controller
                     foreach ($querySearch as $querySearchPart) {
                         $subQuery->where('address', 'like', '%' . $querySearchPart . '%');
                     }
-                })->orWhere('country', 'like', '%' . $querySearchPart . '%');
+                })->orWhere('country', 'like', '%' . implode(' ', $querySearch) . '%');
             })
             ->orderBy('hotels_nearby', 'DESC')
             ->simplePaginate(24)
