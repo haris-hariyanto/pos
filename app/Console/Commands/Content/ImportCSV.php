@@ -69,7 +69,12 @@ class ImportCSV extends Command
             $firstID++;
         }
 
+        $firstRecord = true;
         foreach ($records as $record) {
+            if ($firstRecord) {
+                $firstRecord = false;
+                continue;
+            }
             // Skip if data incomplete
             if (!isset($record[40])) {
                 continue;
