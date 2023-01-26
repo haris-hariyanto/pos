@@ -17,6 +17,7 @@ use App\Models\Location\Category;
 use App\Models\Location\CategoryPlace;
 use App\Models\ScrapeHistory;
 use App\Models\MetaData;
+use Illuminate\Support\Facades\Cache;
 
 class CloneDB extends Command
 {
@@ -384,6 +385,7 @@ class CloneDB extends Command
         // [END] Clone category place
 
         // Clone hotel place
+        /*
         $segment = 1;
         while (true) {
             $limit = 1000;
@@ -411,6 +413,7 @@ class CloneDB extends Command
 
             $segment++;
         }
+        */
         // [END] Clone hotel place
 
         // Clone scrape histories
