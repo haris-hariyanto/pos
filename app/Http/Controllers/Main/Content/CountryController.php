@@ -52,7 +52,7 @@ class CountryController extends Controller
 
             $modelPlaces = Place::where('country', $modelCountry->name)->where('continent', $modelCountry->continent)
                 ->where('type', 'PLACE')
-                ->where('is_hotels_scraped', 'Y')
+                // ->where('is_hotels_scraped', 'Y')
                 // ->where('hotels_nearby', '>', 0)
                 ->take(15)
                 ->orderBy('user_ratings_total', 'DESC')
@@ -132,7 +132,11 @@ class CountryController extends Controller
             $category = $modelCategory->toArray();
             $category['name'] = __(ucwords(str_replace('_', ' ', $category['name'])));
 
-            $placesModel = Place::where('category_id', $modelCategory->id)
+            $placesModel = CategoryPlace::with('place')
+                // ->whereHas('place', function ($query) {
+                //     $query->where('hotels_nearby', '>', 0);
+                // })
+                ->where('category_id', $modelCategory->id)
                 ->where('country', $modelCountry->name)
                 ->simplePaginate(24);
             $places = $placesModel->toArray();
