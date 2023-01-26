@@ -33,7 +33,7 @@ class ChangeCountry extends Command
         $places = Place::where('address', 'like', '%' . $countryName)->get();
 
         if (count($places) > 0) {
-            $this->line('[ * ] Ditemukan ' . count($place) . ' tempat');
+            $this->line('[ * ] Ditemukan ' . count($places) . ' tempat');
 
             $changeToCountry = $this->ask('Negara baru');
             $changeToContinent = $this->ask('Benua baru');
