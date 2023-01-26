@@ -5,6 +5,7 @@ namespace App\Console\Commands\Content;
 use Illuminate\Console\Command;
 use App\Models\Location\Place;
 use App\Models\Location\Country;
+use App\Models\Location\CategoryPlace;
 
 class ChangeCountry extends Command
 {
@@ -44,6 +45,10 @@ class ChangeCountry extends Command
                 foreach ($places as $place) {
                     $this->line('[ * ] Mengubah negara : ' . $place->name);
                     $place->update([
+                        'country' => $country->name,
+                        'continent' => $country->continent,
+                    ]);
+                    CategoryPlace::where('place_id', $place->id)->update([
                         'country' => $country->name,
                         'continent' => $country->continent,
                     ]);
