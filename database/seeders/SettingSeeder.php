@@ -35,7 +35,7 @@ class SettingSeeder extends Seeder
             ]);
             $pagesettings_hotel_heading = '[hotel_name]';
 
-            $pagesettings_place_page_title = '[Hotel Terbaik Dekat [place_name]';
+            $pagesettings_place_page_title = 'Hotel Terbaik Dekat [place_name]';
             $pagesettings_place_meta_data = view('stubs.metadata', [
                 'description' => 'Daftar rekomendasi hotel terbaik dekat [place_name]. Pilihan hotel dari penginapan mewah hingga opsi yang lebih terjangkau.',
                 'title' => $pagesettings_place_page_title,
