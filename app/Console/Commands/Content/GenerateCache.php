@@ -69,7 +69,7 @@ class GenerateCache extends Command
             }
         }
 
-        $places = Place::where('hotels_nearby', '>', 0)->get();
+        $places = Place::get();
         foreach ($places as $place) {
             $route = route('place', [$place->slug]);
             $this->info('[ * ] Membuat cache : ' . $route);
