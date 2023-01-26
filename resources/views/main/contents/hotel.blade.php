@@ -300,11 +300,7 @@
                                         <ul>
                                             @foreach ($nearbyPlaces as $nearbyPlace)
                                                 <li>
-                                                    @if ($nearbyPlace['place']['hotels_nearby'] > 0)
-                                                        <div><a href="{{ route('place', [$nearbyPlace['place']['slug']]) }}">{{ $nearbyPlace['place']['name'] }}</a> ({{ __('about :distance', ['distance' => number_format($nearbyPlace['m_distance'] / 1000, 1) . ' KM']) }})</div>
-                                                    @else
-                                                        <div>{{ $nearbyPlace['place']['name'] }} ({{ __('about :distance', ['distance' => number_format($nearbyPlace['m_distance'] / 1000, 1) . ' KM']) }})</div>
-                                                    @endif
+                                                    <div><a href="{{ route('place', [$nearbyPlace['place']['slug']]) }}">{{ $nearbyPlace['place']['name'] }}</a> ({{ __('about :distance', ['distance' => number_format($nearbyPlace['m_distance'] / 1000, 1) . ' KM']) }})</div>
                                                     <div class="text-muted small">{{ $nearbyPlace['place']['address'] }}</div>
                                                 </li>
                                             @endforeach

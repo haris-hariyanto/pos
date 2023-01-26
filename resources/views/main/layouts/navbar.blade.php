@@ -80,15 +80,17 @@
     </div>
 </nav>
 
-<!-- Search bar mobile -->
-<div class="bg-primary d-block d-md-none">
-    <div class="container">
-        <form action="{{ route('search') }}" method="GET" class="pb-2">
-            <div class="input-group">
-                <input type="text" class="form-control" name="q" placeholder="{{ __('Enter place or address') }}" value="{{ request()->query('q') }}">
-                <button class="btn btn-secondary">{{ __('Search') }}</button>
-            </div>
-        </form>
+@if (Route::currentRouteName() != 'index')
+    <!-- Search bar mobile -->
+    <div class="bg-primary d-block d-md-none">
+        <div class="container">
+            <form action="{{ route('search') }}" method="GET" class="pb-2">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="q" placeholder="{{ __('Enter place or address') }}" value="{{ request()->query('q') }}">
+                    <button class="btn btn-secondary">{{ __('Search') }}</button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
-<!-- [END] Search bar mobile -->
+    <!-- [END] Search bar mobile -->
+@endif

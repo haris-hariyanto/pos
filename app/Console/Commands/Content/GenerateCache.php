@@ -50,7 +50,6 @@ class GenerateCache extends Command
             $response = app()->handle($request);
         }
 
-        /*
         $countries = Country::get();
         $categories = Category::orderBy('name', 'ASC')->whereIn('name', config('scraper.place_types_to_fetch'))->get();
         foreach ($countries as $country) {
@@ -69,7 +68,6 @@ class GenerateCache extends Command
                 $response = app()->handle($request);
             }
         }
-        */
 
         $places = Place::where('hotels_nearby', '>', 0)->get();
         foreach ($places as $place) {

@@ -16,7 +16,6 @@
                             <div class="mb-1">
                                 <a href="{{ route('place', [$result['slug']]) }}" class="fw-bold tw-line-clamp-1">{{ $result['name'] }}</a>
                             </div>
-                            <div class="mb-1">{{ __(':count Hotels', ['count' => $result['hotels_nearby']]) }}</div>
                             <div class="small text-muted tw-line-clamp-1">{{ $result['address'] }}</div>
                         </div>
                     </div>
