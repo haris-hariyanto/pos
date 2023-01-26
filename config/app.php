@@ -84,7 +84,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'id',
     'og_locale' => 'id_ID',
 
     /*
