@@ -45,7 +45,7 @@ class ChangeCountry extends Command
                     $this->line('[ * ] Mengubah negara : ' . $place->name);
                     $place->update([
                         'country' => $country->name,
-                        'continent' => $country->name,
+                        'continent' => $country->continent,
                     ]);
                 }
             }
