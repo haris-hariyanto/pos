@@ -24,7 +24,7 @@ if (config('app.locale') == 'id') {
     
     Route::get('/negara/{country}', [Controllers\Main\Content\CountryController::class, 'index'])->name('country');
     Route::get('/negara/{country}/kota', [Controllers\Main\Content\CountryController::class, 'cities'])->name('country.cities');
-    Route::get('/negara/{country}/state', [Controllers\Main\Content\CountryController::class, 'states'])->name('country.states');
+    Route::get('/negara/{country}/provinsi', [Controllers\Main\Content\CountryController::class, 'states'])->name('country.states');
     Route::get('/negara/{country}/tempat/{place}', [Controllers\Main\Content\CountryController::class, 'places'])->name('country.places');
     Route::get('/negara', function () {
         return redirect()->route('index');
