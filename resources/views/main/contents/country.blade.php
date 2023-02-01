@@ -73,7 +73,7 @@
                             @foreach ($cities as $city)
                                 <div class="col-6 col-md-4 col-lg-3">
                                     <div class="mb-2 tw-line-clamp-1">
-                                        <a href="{{ route('hotel.location', ['city', $city['slug']]) }}">{{ $city['name'] }}</a>
+                                        <a href="{{ route('hotel.location', [config('content.location_term_city'), $city['slug']]) }}">{{ $city['name'] }}</a>
                                     </div>
                                 </div>
                             @endforeach
@@ -94,7 +94,7 @@
                             @foreach ($states as $state)
                                 <div class="col-6 col-md-4 col-lg-3">
                                     <div class="mb-2 tw-line-clamp-1">
-                                        <a href="{{ route('hotel.location', ['state', $state['slug']]) }}">{{ $state['name'] }}</a>
+                                        <a href="{{ route('hotel.location', [config('content.location_term_state'), $state['slug']]) }}">{{ $state['name'] }}</a>
                                     </div>
                                 </div>
                             @endforeach

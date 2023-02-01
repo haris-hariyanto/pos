@@ -22,11 +22,11 @@ class LocationController extends Controller
             extract($cacheData);
         }
         else {
-            if (!in_array($type, ['city', 'state'])) {
+            if (!in_array($type, ['city', 'state', config('content.location_term_city'), config('content.location_term_state')])) {
                 return redirect()->route('index');
             }
             
-            if ($type == 'city') {
+            if ($type == config('content.location_term_city')) {
                 $modelCity = City::with('continent', 'country')->where('slug', $location)->first();
                 if (!$modelCity) {
                     return redirect()->route('index');
@@ -45,7 +45,7 @@ class LocationController extends Controller
                 $links = $modelHotels->links('components.main.components.simple-pagination')->render();
             }
 
-            if ($type == 'state') {
+            if ($type == config('content.location_term_state')) {
                 $modelState = State::with('continent', 'country')->where('slug', $location)->first();
                 if (!$modelState) {
                     return redirect()->route('index');

@@ -101,7 +101,7 @@ class SitemapController extends Controller
         $urls = [];
         foreach ($states as $state) {
             $urls[] = [
-                'loc' => route('hotel.location', ['state', $state->slug]),
+                'loc' => route('hotel.location', [config('content.location_term_state'), $state->slug]),
             ];
         }
 
@@ -118,7 +118,7 @@ class SitemapController extends Controller
         $urls = [];
         foreach ($cities as $city) {
             $urls[] = [
-                'loc' => route('hotel.location', ['city', $city->slug]),
+                'loc' => route('hotel.location', [config('content.location_term_city'), $city->slug]),
             ];
         }
 

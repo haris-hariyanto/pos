@@ -1,7 +1,7 @@
 <div class="dropdown">
     <button class="btn btn-dark btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">{{ __('Menu') }}</button>
     <div class="dropdown-menu">
-        <a href="{{ route('hotel.location', ['state', $state->slug]) }}" class="dropdown-item" target="_blank">{{ __('Open Page') }}</a>
+        <a href="{{ route('hotel.location', [config('content.location_term_state'), $state->slug]) }}" class="dropdown-item" target="_blank">{{ __('Open Page') }}</a>
 
         <a href="{{ route('admin.states.edit', ['state' => $state]) }}" class="dropdown-item">{{ __('Edit') }}</a>
 

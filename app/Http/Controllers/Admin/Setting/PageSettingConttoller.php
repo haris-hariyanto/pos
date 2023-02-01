@@ -72,13 +72,13 @@ class PageSettingConttoller extends Controller
             $cityInstance = City::where('name', 'Jakarta')->orWhere('name', 'Bangkok')->orderBy('id', 'asc')->first();
 
             if ($pageKey == 'city' && $cityInstance) {
-                $pageExamples[$pageKey] = route('hotel.location', ['city', $cityInstance->slug]);
+                $pageExamples[$pageKey] = route('hotel.location', [config('content.location_term_city'), $cityInstance->slug]);
             }
 
             $stateInstance = State::orderBy('id', 'asc')->first();
 
             if ($pageKey == 'state' && $stateInstance) {
-                $pageExamples[$pageKey] = route('hotel.location', ['state', $stateInstance->slug]);
+                $pageExamples[$pageKey] = route('hotel.location', [config('content.location_term_state'), $stateInstance->slug]);
             }
         }
 

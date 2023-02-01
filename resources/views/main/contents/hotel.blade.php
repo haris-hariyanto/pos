@@ -57,12 +57,12 @@
                                 @endif
                                 @if (!empty($hotel['state']))
                                     <li class="breadcrumb-item">
-                                        <a href="{{ route('hotel.location', ['state', $hotel['state']['slug']]) }}">{{ $hotel['state']['name'] }}</a>
+                                        <a href="{{ route('hotel.location', [config('content.location_term_state'), $hotel['state']['slug']]) }}">{{ $hotel['state']['name'] }}</a>
                                     </li>
                                 @endif
                                 @if (!empty($hotel['city']))
                                     <li class="breadcrumb-item">
-                                        <a href="{{ route('hotel.location', ['city', $hotel['city']['slug']]) }}">{{ $hotel['city']['name'] }}</a>
+                                        <a href="{{ route('hotel.location', [config('content.location_term_city'), $hotel['city']['slug']]) }}">{{ $hotel['city']['name'] }}</a>
                                     </li>
                                 @endif
                                 <li class="breadcrumb-item active tw-line-clamp-1" aria-current="page">{{ $hotel['name'] }}</li>
@@ -208,7 +208,7 @@
                                                 <tr>
                                                     <td>{{ __('City') }}</td>
                                                     <td class="fw-bold">
-                                                        <a href="{{ route('hotel.location', ['city', $hotel['city']['slug']]) }}">{{ $hotel['city']['name'] }}</a>
+                                                        <a href="{{ route('hotel.location', [config('content.location_term_city'), $hotel['city']['slug']]) }}">{{ $hotel['city']['name'] }}</a>
                                                     </td>
                                                 </tr>
                                             @endif
@@ -216,7 +216,7 @@
                                                 <tr>
                                                     <td>{{ __('State / Province') }}</td>
                                                     <td class="fw-bold">
-                                                        <a href="{{ route('hotel.location', ['state', $hotel['state']['slug']]) }}">{{ $hotel['state']['name'] }}</a>
+                                                        <a href="{{ route('hotel.location', [config('content.location_term_state'), $hotel['state']['slug']]) }}">{{ $hotel['state']['name'] }}</a>
                                                     </td>
                                                 </tr>
                                             @endif
