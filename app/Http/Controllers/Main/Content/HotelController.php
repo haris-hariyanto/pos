@@ -28,6 +28,12 @@ class HotelController extends Controller
             }
             $hotel = $modelHotel->toArray();
             $hotel['photos'] = json_decode($hotel['photos']);
+            if ($modelHotel->is_reviews_scraped == 'Y') {
+                $hotel['reviews'] = json_decode($hotel['reviews'], true);
+            }
+            else {
+                $hotel['reviews'] = [];
+            }
 
             $latitude = explode('.', $hotel['latitude']);
             $longitude = explode('.', $hotel['longitude']);

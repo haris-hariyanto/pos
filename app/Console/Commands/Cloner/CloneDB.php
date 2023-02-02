@@ -462,11 +462,13 @@ class CloneDB extends Command
             }
 
             foreach ($metaDataClone as $metaData) {
-                MetaData::create([
-                    'key' => $metaData->key,
-                    'value' => $metaData->value,
-                    'additional_data' => $metaData->additional_data,
-                ]);
+                MetaData::updateOrCreate(
+                    ['key' => $metaData->key],
+                    [
+                        'value' => $metaData->value,
+                        'additional_data' => $metaData->additional_data,
+                    ]
+                );
             }
 
             $segment++;

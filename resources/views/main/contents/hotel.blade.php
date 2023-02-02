@@ -309,6 +309,14 @@
 
                                 </div>
                             </div>
+
+                            @if ($hotel['is_reviews_scraped'] == 'Y' && count($hotel['reviews']) > 0)
+                                <h2 class="fs-5 my-3">{{ __('Reviews for :hotel', ['hotel' => $hotel['name']]) }}</h2>
+
+                                @foreach ($hotel['reviews'] as $review)
+                                    <x-main.components.contents.review :review="$review" />
+                                @endforeach
+                            @endif
                         </div>
                         <div class="col-12 col-lg-4">
                             <!-- Map -->

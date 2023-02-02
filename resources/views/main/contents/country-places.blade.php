@@ -74,16 +74,18 @@
                 @if (count($places) > 0)
                     <div class="row">
                         @foreach ($places as $place)
-                            <div class="col-12 col-lg-4">
-                                <div class="mb-2">
-                                    <div class="tw-line-clamp-1">
-                                        <a href="{{ route('place', [$place['place']['slug']]) }}">{{ $place['place']['name'] }}</a>
-                                    </div>
-                                    <div class="text-muted small tw-line-clamp-1">
-                                        {{ $place['place']['address'] }}
+                            @if (!empty($place['place']))
+                                <div class="col-12 col-lg-4">
+                                    <div class="mb-2">
+                                        <div class="tw-line-clamp-1">
+                                            <a href="{{ route('place', [$place['place']['slug']]) }}">{{ $place['place']['name'] }}</a>
+                                        </div>
+                                        <div class="text-muted small tw-line-clamp-1">
+                                            {{ $place['place']['address'] }}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            @endif
                         @endforeach
                     </div>
                 @else

@@ -14,6 +14,7 @@ class CacheSystem
 
     public static function get($key)
     {
+        return false;
         $cacheData = Cache::get($key);
         if ($cacheData) {
             return json_decode($cacheData, true);

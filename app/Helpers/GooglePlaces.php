@@ -14,6 +14,65 @@ class GooglePlaces
         $this->key = config('scraper.places_api');
     }
 
+    public function findID($name, $latitude, $longitude)
+    {
+        $params = [];
+        $params['key'] = $this->key;
+        $params['input'] = $name;
+        $params['inputtype'] = 'textquery';
+        $params['locationbias'] = 'circle:100@' . $latitude . ',' . $longitude;
+
+        $response = Http::get($this->endpoint . 'findplacefromtext/json', $params);
+
+        $response = $response->body();
+        $response = json_decode($response, true);
+
+        if ($response['status'] == 'OK') {
+            return [
+                'success' => true,
+                'id' => $response['candidates'][0]['place_id'],
+            ];
+        }
+        else {
+            return [
+                'success' => false,
+                'description' => $response['error_message'],
+            ];
+        }
+    }
+
+    public function reviews($placeID)
+    {
+        $params = [];
+        $params['place_id'] = $placeID;
+        $params['key'] = $this->key;
+        $params['fields'] = 'reviews';
+        if (config('app.locale') == 'id') {
+            $params['language'] = 'id-ID';
+        }
+        else {
+            $params['language'] = 'en';
+        }
+
+        $response = Http::get($this->endpoint . 'details/json', $params);
+
+        $response = $response->body();
+        $response = json_decode($response, true);
+
+        if ($response['status'] == 'OK') {
+            return [
+                'success' => true,
+                'reviews' => $response['result']['reviews'],
+            ];
+        }
+        else {
+            return [
+                'success' => false,
+                'description' => $response['error_message'],
+            ];
+        }
+    }
+
     public function search($type, $location, $maxPage = 2, $isoCode = false)
     {
         $currentPage = 1;
