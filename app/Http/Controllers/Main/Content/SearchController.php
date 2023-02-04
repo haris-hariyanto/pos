@@ -38,10 +38,25 @@ class SearchController extends Controller
         $querySearch = preg_replace('/\s+/', ' ', $querySearch);
         $querySearch = explode(' ', $querySearch);
 
+        $queryStar = $request->query('star');
+
         $results = Hotel::where(function ($query) use ($querySearch) {
                 $query->where(function ($subQuery) use ($querySearch) {
                     foreach ($querySearch as $querySearchPart) {
                         $subQuery->where('name', 'like', '%' . $querySearchPart . '%');
+                    }
+                });
+            })
+            ->when($queryStar, function ($query, $queryStar) {
+                $queryStar = explode(',', $queryStar);
+                $query->where(function ($subQuery) use ($queryStar) {
+                    foreach ($queryStar as $star) {
+                        if ($star == 'unrated') {
+                            $subQuery->orWhereNull('star_rating');
+                        }
+                        else {
+                            $subQuery->orWhere('star_rating', 'like', $star . '%');
+                        }
                     }
                 });
             })
@@ -54,6 +69,14 @@ class SearchController extends Controller
             $result = $result->toArray();
             $result['photos'] = json_decode($result['photos'], true);
             $resultsArray[] = $result;
+        }
+
+        if ($request->expectsJson()) {
+            $resultsHTML = view('main.contents.json-search-hotels', compact('results', 'resultsArray'))->render();
+            return [
+                'results' => $resultsHTML,
+                'success' => true,
+            ];
         }
         
         return view('main.contents.search-hotels', compact('query', 'results', 'resultsArray'));
