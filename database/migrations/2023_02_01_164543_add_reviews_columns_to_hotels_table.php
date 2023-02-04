@@ -15,7 +15,6 @@ return new class extends Migration
     {
         Schema::table('hotels', function (Blueprint $table) {
             $table->enum('is_reviews_scraped', ['Y', 'N', 'PROCESS'])->default('N');
-            $table->text('reviews')->nullable();
         });
     }
 
@@ -28,7 +27,6 @@ return new class extends Migration
     {
         Schema::table('hotels', function (Blueprint $table) {
             $table->dropColumn('is_reviews_scraped');
-            $table->dropColumn('reviews');
         });
     }
 };

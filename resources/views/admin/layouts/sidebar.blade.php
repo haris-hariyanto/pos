@@ -31,6 +31,13 @@
                 </li>
 
                 <li class="nav-item">
+                    <a href="{{ route('admin.reviews.index') }}" @class(['nav-link', 'active' => Route::currentRouteName() == 'admin.reviews.index'])>
+                        <i class="nav-icon fas fa-comments"></i>
+                        <p>{{ __('Reviews') }}</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <a href="{{ route('admin.places.index') }}" @class(['nav-link', 'active' => Route::currentRouteName() == 'admin.places.index'])>
                         <i class="nav-icon fas fa-map-marker-alt"></i>
                         <p>{{ __('Places') }}</p>

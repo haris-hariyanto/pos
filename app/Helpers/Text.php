@@ -58,4 +58,56 @@ class Text
         }
         return $str;
     }
+
+    public static function readableTime($time)
+    {
+        $date = date('d', $time);
+        $year = date('Y', $time);
+        $month = date('m', $time);
+
+        $monthText = __('January');
+        switch ($month) {
+            case '01':
+                $monthText = __('January');
+                break;
+            case '02':
+                $monthText = __('February');
+                break;
+            case '03':
+                $monthText = __('March');
+                break;
+            case '04':
+                $monthText = __('April');
+                break;
+            case '05':
+                $monthText = __('May');
+                break;
+            case '06':
+                $monthText = __('June');
+                break;
+            case '07':
+                $monthText = __('July');
+                break;
+            case '08':
+                $monthText = __('August');
+                break;
+            case '09':
+                $monthText = __('September');
+                break;
+            case '10':
+                $monthText = __('October');
+                break;
+            case '11':
+                $monthText = __('November');
+                break;
+            case '12':
+                $monthText = __('December');
+                break;
+            default:
+                $monthText = __('January');
+                break;
+        }
+
+        return $date . ' ' . $monthText . ' ' . $year . ', ' . date('H:i', $time);
+    }
 }

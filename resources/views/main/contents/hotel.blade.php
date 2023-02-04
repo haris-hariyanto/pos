@@ -1,4 +1,4 @@
-<x-main.layouts.app>
+<x-main.layouts.app  :use-recaptcha="true">
     <x-slot:pageTitle>
         {{ 
             \App\Helpers\Text::placeholder($pagesettings_hotel_page_title, [

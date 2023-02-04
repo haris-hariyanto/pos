@@ -1,4 +1,4 @@
-@props(['hotel', 'placeAndDistance' => false])
+@props(['hotel', 'placeAndDistance' => false, 'showAddress' => false])
 
 <div class="card shadow-sm mb-2">
     <div class="card-body">
@@ -26,16 +26,31 @@
                     <h2 class="tw-text-xl tw-font-semibold mb-1">
                         <a href="{{ route('hotel', [$hotel['slug']]) }}">{{ $hotel['name'] }}</a>
                     </h2>
+
                     @if (!empty($placeAndDistance))
                         <div class="small text-muted mb-1">{{ __(':distance from :place', ['distance' => number_format($placeAndDistance['distance'] / 1000, 1) . ' KM', 'place' => $placeAndDistance['place']]) }}</div>
                     @endif
+
+                    @if ($showAddress && !empty($hotel['city']) && !empty($hotel['country']))
+                        <div class="fw-bold my-2 d-flex align-items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                                <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                            </svg>
+                            <div class="ms-1">{{ $hotel['city'] }}, {{ $hotel['country'] }}</div>
+                        </div>
+                    @endif
+
                     <div>
-                        <p class="tw-line-clamp-3 mb-2">{{ $hotel['overview'] }}</p>
+                        @if (!empty(trim($hotel['overview'])))
+                            <p class="tw-line-clamp-3 mb-2">{{ $hotel['overview'] }}</p>
+                        @endif
+
                         @if (!empty($hotel['rates_from']) && !empty($hotel['rates_currency']))
                             <p class="tw-line-clamp-1 mb-3">{{ __('Rates from') }} : <b>{{ \App\Helpers\Text::price($hotel['rates_from'], $hotel['rates_currency']) }}</b></p>
                         @endif
+
                         @if (empty($hotel['rates_from']) && !empty($hotel['rates_from_exclusive']) && !empty($hotel['rates_currency']))
-                        <p class="tw-line-clamp-1 mb-3">{{ __('Rates from') }} : <b>{{ \App\Helpers\Text::price($hotel['rates_from_exclusive'], $hotel['rates_currency']) }}</b></p>
+                            <p class="tw-line-clamp-1 mb-3">{{ __('Rates from') }} : <b>{{ \App\Helpers\Text::price($hotel['rates_from_exclusive'], $hotel['rates_currency']) }}</b></p>
                         @endif
                     </div>
                 </div>

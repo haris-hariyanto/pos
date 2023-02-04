@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Hotel\Hotel;
 use App\Models\Hotel\HotelPlace;
 use App\Helpers\Text;
+use App\Helpers\Image;
 use App\Models\Location\Place;
 use App\Helpers\CacheSystem;
 use App\Helpers\StructuredData;
@@ -22,18 +23,12 @@ class HotelController extends Controller
             extract($cacheData);
         }
         else {
-            $modelHotel = Hotel::with('continent', 'country', 'state', 'city')->where('slug', $hotel)->first();
+            $modelHotel = Hotel::with('continent', 'country', 'state', 'city', 'reviews')->where('slug', $hotel)->first();
             if (!$modelHotel) {
                 return redirect()->route('index');
             }
             $hotel = $modelHotel->toArray();
             $hotel['photos'] = json_decode($hotel['photos']);
-            if ($modelHotel->is_reviews_scraped == 'Y') {
-                $hotel['reviews'] = json_decode($hotel['reviews'], true);
-            }
-            else {
-                $hotel['reviews'] = [];
-            }
 
             $latitude = explode('.', $hotel['latitude']);
             $longitude = explode('.', $hotel['longitude']);
@@ -88,7 +83,7 @@ class HotelController extends Controller
         $structuredData->hotel([
             'name' => $hotel['name'],
             'description' => $hotel['overview'],
-            'photo' => !empty($hotel['photos']) && !empty($hotel['photos'][0]) ? $hotel['photos'][0] : null,
+            'photo' => !empty($hotel['photos']) && !empty($hotel['photos'][0]) ? Image::removeQueryParameters($hotel['photos'][0]) : null,
             'price' => $price,
             'star' => $hotel['star_rating'],
             'country' => !empty($hotel['country']) && !empty($hotel['country']['name']) ? $hotel['country']['name'] : null,
@@ -96,8 +91,7 @@ class HotelController extends Controller
             'state' => !empty($hotel['state']) && !empty($hotel['state']['name']) ? $hotel['state']['name'] : null,
             'postalCode' => $hotel['zipcode'],
             'address' => $hotel['address_line_1'],
-            'numberReviews' => $hotel['number_of_reviews'],
-            'ratingAverage' => $hotel['rating_average'],
+            'reviews' => $hotel['reviews'],
         ]);
 
         return view('main.contents.hotel', compact('hotel', 'paragraphs', 'nearbyPlaces', 'structuredData'));

@@ -12,6 +12,11 @@ class Hotel extends Model
 
     protected $guarded = [];
 
+    public function reviews()
+    {
+        return $this->hasMany(\App\Models\Hotel\Review::class);
+    }
+
     public function chain()
     {
         return $this->belongsTo(Chain::class, 'chain', 'name')->withDefault([

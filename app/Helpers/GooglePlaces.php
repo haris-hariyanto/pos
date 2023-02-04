@@ -36,7 +36,7 @@ class GooglePlaces
         else {
             return [
                 'success' => false,
-                'description' => $response['error_message'],
+                'description' => $response['status'],
             ];
         }
     }
@@ -60,15 +60,23 @@ class GooglePlaces
         $response = json_decode($response, true);
 
         if ($response['status'] == 'OK') {
-            return [
-                'success' => true,
-                'reviews' => $response['result']['reviews'],
-            ];
+            if (!empty($response['result']['reviews'])) {
+                return [
+                    'success' => true,
+                    'reviews' => $response['result']['reviews'],
+                ];
+            }
+            else {
+                return [
+                    'success' => false,
+                    'description' => 'No reviews',
+                ];                
+            }
         }
         else {
             return [
                 'success' => false,
-                'description' => $response['error_message'],
+                'description' => $response['status'],
             ];
         }
     }

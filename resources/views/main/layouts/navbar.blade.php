@@ -22,8 +22,12 @@
                 <div class="mx-3 flex-fill d-none d-md-block">
                     <form action="{{ route('search') }}" method="GET">
                         <div class="input-group">
-                            <input type="text" class="form-control" name="q" placeholder="{{ __('Enter place or address') }}" value="{{ request()->query('q') }}">
-                            <button class="btn btn-secondary" type="submit">{{ __('Search') }}</button>
+                            <select name="mode" class="form-select" style="flex: 0 1 fit-content;">
+                                <option value="findHotels" @selected(Route::currentRouteName() == 'search.hotels')>{{ __('Find Hotels') }}</option>
+                                <option value="findPlaces" @selected(Route::currentRouteName() == 'search.places')>{{ __('Find Places') }}</option>
+                            </select>
+                            <input type="text" class="form-control flex-fill" name="q" placeholder="{{ __('Enter an address or property') }}" value="{{ request()->query('q') }}">
+                            <button class="btn btn-secondary px-5" type="submit">{{ __('Search') }}</button>
                         </div>
                     </form>
                 </div>
@@ -84,9 +88,13 @@
     <!-- Search bar mobile -->
     <div class="bg-primary d-block d-md-none">
         <div class="container">
-            <form action="{{ route('search') }}" method="GET" class="pb-2">
+            <form action="{{ route('search') }}" method="GET" class="pb-2 pt-1">
                 <div class="input-group">
-                    <input type="text" class="form-control" name="q" placeholder="{{ __('Enter place or address') }}" value="{{ request()->query('q') }}">
+                    <select name="mode" class="form-select" style="flex: 0 1 fit-content;">
+                        <option value="findHotels" @selected(Route::currentRouteName() == 'search.hotels')>{{ __('Find Hotels') }}</option>
+                        <option value="findPlaces" @selected(Route::currentRouteName() == 'search.places')>{{ __('Find Places') }}</option>
+                    </select>
+                    <input type="text" class="form-control" name="q" placeholder="{{ __('Enter an address or property') }}" value="{{ request()->query('q') }}">
                     <button class="btn btn-secondary">{{ __('Search') }}</button>
                 </div>
             </form>

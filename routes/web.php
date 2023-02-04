@@ -40,8 +40,9 @@ if (config('app.locale') == 'id') {
     Route::get('/hotel', function () {
         return redirect()->route('index');
     });
-    
-    Route::get('/search', [Controllers\Main\Content\SearchController::class, 'index'])->name('search');
+
+    Route::get('/cari-tempat', [Controllers\Main\Content\SearchController::class, 'searchPlaces'])->name('search.places');
+    Route::get('/cari-hotel', [Controllers\Main\Content\SearchController::class, 'searchHotels'])->name('search.hotels');
 }
 else {
     Route::get('/continent/{continent}', [Controllers\Main\Content\ContinentController::class, 'index'])->name('continent');
@@ -67,9 +68,12 @@ else {
     Route::get('/hotel', function () {
         return redirect()->route('index');
     });
-    
-    Route::get('/search', [Controllers\Main\Content\SearchController::class, 'index'])->name('search');
+
+    Route::get('/search-places', [Controllers\Main\Content\SearchController::class, 'searchPlaces'])->name('search.places');
+    Route::get('/search-hotels', [Controllers\Main\Content\SearchController::class, 'searchHotels'])->name('search.hotels');
 }
+
+Route::get('/search', [Controllers\Main\Content\SearchController::class, 'index'])->name('search');
 
 Route::get('/p/{page}', [Controllers\Main\Misc\PageController::class, 'page'])->name('page');
 Route::get('/contact', [Controllers\Main\Misc\ContactController::class, 'contact'])->name('contact');
@@ -84,67 +88,4 @@ Route::get('/sitemap-places-{index}.xml', [Controllers\Main\Misc\SitemapControll
 Route::get('/sitemap-hotels-{index}.xml', [Controllers\Main\Misc\SitemapController::class, 'sitemapHotels'])->name('sitemap.hotels');
 
 require __DIR__.'/auth.php';
-
-Route::prefix('settings')->name('account.account-settings.')->middleware(['auth'])->group(function () {
-    Route::get('/', [Controllers\Main\Account\AccountSettingsController::class, 'index'])->name('index');
-
-    Route::get('/username', [Controllers\Main\Account\UsernameController::class, 'edit'])->name('username.edit');
-    Route::put('/username', [Controllers\Main\Account\UsernameController::class, 'update'])->name('username.update');
-
-    Route::get('/email', [Controllers\Main\Account\EmailController::class, 'edit'])->name('email.edit');
-    Route::put('/email', [Controllers\Main\Account\EmailController::class, 'update'])->name('email.update');
-
-    Route::get('/password', [Controllers\Main\Account\PasswordController::class, 'edit'])->name('password.edit');
-    Route::put('/password', [Controllers\Main\Account\PasswordController::class, 'update'])->name('password.update');
-});
-
-Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
-    Route::get('/', function () {
-        // return view('admin.index');
-        return redirect()->route('admin.hotels.index');
-    })->name('index');
-
-    Route::prefix('settings')->name('settings.')->group(function () {
-        Route::get('/cover', [Controllers\Admin\Setting\CoverImageController::class, 'index'])->name('cover');
-        Route::put('/cover', [Controllers\Admin\Setting\CoverImageController::class, 'setCoverImages']);
-
-        Route::get('/cache', [Controllers\Admin\Setting\CacheController::class, 'index'])->name('cache');
-        Route::delete('/cache', [Controllers\Admin\Setting\CacheController::class, 'flush']);
-
-        Route::get('/website', [Controllers\Admin\Setting\WebsiteSettingController::class, 'index'])->name('website');
-        Route::put('/website', [Controllers\Admin\Setting\WebsiteSettingController::class, 'updateSettings']);
-
-        Route::get('/pages', [Controllers\Admin\Setting\PageSettingConttoller::class, 'index'])->name('pages');
-        Route::put('/pages', [Controllers\Admin\Setting\PageSettingConttoller::class, 'save']);
-    });
-
-    Route::resource('hotels', Controllers\Admin\Content\HotelController::class);
-    Route::get('/hotels-index.json', [Controllers\Admin\Content\HotelController::class, 'indexData'])->name('hotels.index.data');
-
-    Route::resource('places', Controllers\Admin\Content\PlaceController::class);
-    Route::get('/places-index.json', [Controllers\Admin\Content\PlaceController::class, 'indexData'])->name('places.index.data');
-
-    Route::resource('cities', Controllers\Admin\Content\CityController::class);
-    Route::get('/cities-index.json', [Controllers\Admin\Content\CityController::class, 'indexData'])->name('cities.index.data');
-
-    Route::resource('states', Controllers\Admin\Content\StateController::class);
-    Route::get('/states-index.json', [Controllers\Admin\Content\StateController::class, 'indexData'])->name('states.index.data');
-
-    Route::resource('countries', Controllers\Admin\Content\CountryController::class);
-    Route::get('/countries-index.json', [Controllers\Admin\Content\CountryController::class, 'indexData'])->name('countries.index.data');
-
-    Route::resource('continents', Controllers\Admin\Content\ContinentController::class);
-    Route::get('/continents-index.json', [Controllers\Admin\Content\ContinentController::class, 'indexData'])->name('continents.index.data');
-
-    Route::resource('users', Controllers\Admin\UserController::class);
-    Route::get('/users-index.json', [Controllers\Admin\UserController::class, 'indexData'])->name('users.index.data');
-    Route::get('/users/{user}/password', [Controllers\Admin\UserController::class, 'editPassword'])->name('users.password.edit');
-    Route::put('/users/{user}/password', [Controllers\Admin\UserController::class, 'updatePassword'])->name('users.password.update');
-
-    Route::resource('pages', Controllers\Admin\PageController::class);
-    Route::get('/pages-index.json', [Controllers\Admin\PageController::class, 'indexData'])->name('pages.index.data');
-
-    Route::resource('contacts', Controllers\Admin\ContactController::class)->only(['index', 'show', 'destroy']);
-    Route::get('/contacts-index.json', [Controllers\Admin\ContactController::class, 'indexData'])->name('contacts.index.data');
-    Route::put('/contacts/{contact}/toggle-status', [Controllers\Admin\ContactController::class, 'toggleStatus'])->name('contacts.toggle-status');
-});
+require __DIR__.'/admin.php';

@@ -30,7 +30,7 @@ class CountryController extends Controller
             }
             $country = $modelCountry->toArray();
 
-            $modelBestHotels = Hotel::where('country', $modelCountry->name)->where('continent', $modelCountry->continent)->orderBy('number_of_reviews')->take(12)->get();
+            $modelBestHotels = Hotel::where('country', $modelCountry->name)->where('continent', $modelCountry->continent)->orderBy('number_of_reviews', 'DESC')->take(12)->get();
             $bestHotels = [];
             foreach ($modelBestHotels as $modelBestHotel) {
                 $images = json_decode($modelBestHotel->photos, true);

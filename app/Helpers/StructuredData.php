@@ -56,21 +56,48 @@ class StructuredData
      *  'address' => '', // Optional
      *  'numberReviews' => '', // Optional
      *  'ratingAverage' => '', // Optional
+     *  'reviews' => '', // Optional
      * ]
      */
     public function hotel($data = [])
     {
         $result = [];
         $result['@context'] = 'https://schema.org';
-        $result['@type'] = 'Hotel';
+        // $result['@type'] = 'Hotel';
+        $result['@type'] = 'LocalBusiness';
         $result['name'] = $data['name'];
 
-        if (!empty($data['numberReviews']) && !empty($data['ratingAverage'])) {
+        if (!empty($data['reviews'])) {
+            $result['review'] = [];
+
+            $numberOfReviews = 0;
+            $totalRating = 0;
+
+            foreach ($data['reviews'] as $review) {
+                $result['review'][] = [
+                    '@type' => 'Review',
+                    'reviewRating' => [
+                        '@type' => 'Rating',
+                        'ratingValue' => $review['rating'],
+                        'bestRating' => 5,
+                    ],
+                    'author' => [
+                        '@type' => 'Person',
+                        'name' => $review['name'],
+                    ],
+                    'datePublished' => date(DATE_W3C, $review['time']),
+                    'description' => $review['review'],
+                ];
+
+                $numberOfReviews++;
+                $totalRating += $review['rating'];
+            } // [END] foreach
+
             $result['aggregateRating'] = [
                 '@type' => 'AggregateRating',
-                'ratingValue' => $data['ratingAverage'],
-                'ratingCount' => $data['numberReviews'],
-                'bestRating' => 10,
+                'ratingValue' => number_format($totalRating / $numberOfReviews, 1),
+                'ratingCount' => $numberOfReviews,
+                'bestRating' => 5,
             ];
         }
         

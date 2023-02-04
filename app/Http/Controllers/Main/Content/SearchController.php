@@ -5,10 +5,61 @@ namespace App\Http\Controllers\Main\Content;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Location\Place;
+use App\Models\Hotel\Hotel;
 
 class SearchController extends Controller
 {
     public function index(Request $request)
+    {
+        $searchMode = $request->query('mode', 'findPlaces');
+        $searchQuery = $request->query('q');
+
+        if (!empty($searchQuery)) {
+            if ($searchMode == 'findHotels') {
+                return redirect()->route('search.hotels', ['q' => $searchQuery]);
+            }
+            else {
+                return redirect()->route('search.places', ['q' => $searchQuery]);
+            }
+        }
+        else {
+            return redirect()->route('index');
+        }
+    }
+
+    public function searchHotels(Request $request)
+    {
+        $query = $request->query('q');
+        if (!$query) {
+            return redirect()->route('index');
+        }
+
+        $querySearch = $query;
+        $querySearch = preg_replace('/\s+/', ' ', $querySearch);
+        $querySearch = explode(' ', $querySearch);
+
+        $results = Hotel::where(function ($query) use ($querySearch) {
+                $query->where(function ($subQuery) use ($querySearch) {
+                    foreach ($querySearch as $querySearchPart) {
+                        $subQuery->where('name', 'like', '%' . $querySearchPart . '%');
+                    }
+                });
+            })
+            ->orderBy('number_of_reviews', 'DESC')
+            ->simplePaginate(25)
+            ->withQueryString();
+        
+        $resultsArray = [];
+        foreach ($results as $result) {
+            $result = $result->toArray();
+            $result['photos'] = json_decode($result['photos'], true);
+            $resultsArray[] = $result;
+        }
+        
+        return view('main.contents.search-hotels', compact('query', 'results', 'resultsArray'));
+    }
+
+    public function searchPlaces(Request $request)
     {
         $query = $request->query('q');
         if (!$query) {
@@ -36,6 +87,6 @@ class SearchController extends Controller
             ->simplePaginate(24)
             ->withQueryString();
 
-        return view('main.contents.search', compact('query', 'results'));
+        return view('main.contents.search-places', compact('query', 'results'));
     }
 }

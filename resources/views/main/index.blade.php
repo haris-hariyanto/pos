@@ -21,17 +21,44 @@
 
     <div class="bg-white shadow-sm">
         <div class="container py-5 px-4">
-            <div class="row justify-content-start">
-                <div class="col-12 col-lg-8">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-9">
                     <h1>{{ $settings__website_name }}</h1>
                     <p>{{ \App\Helpers\Text::placeholder($pagesettings_home_brief_paragraph, ['[appname]' => $settings__website_name, '[current_url]' => route('index'),]) }}</p>
                     <div>
-                        <form action="{{ route('search') }}" method="GET">
+                        <!-- Search bar for big screen -->
+                        <form action="{{ route('search') }}" method="GET" class="d-none d-lg-block">
+                            <input type="hidden" name="mode" x-model="mode">
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="{{ __('Enter place or address') }}" name="q">
-                                <button class="btn btn-primary" type="submit">{{ __('Search') }}</button>
+                                <select name="mode" class="form-select" style="flex: 0 1 fit-content;">
+                                    <option value="findHotels">{{ __('Find Hotels') }}</option>
+                                    <option value="findPlaces">{{ __('Find Places') }}</option>
+                                </select>
+                                <input type="text" class="form-control" placeholder="{{ __('Enter an address or property') }}" name="q">
+                                <button class="btn btn-primary px-5" type="submit">{{ __('Search') }}</button>
                             </div>
                         </form>
+                        <!-- [END] Search bar for big screen -->
+
+                        <!-- Search bar for small screen -->
+                        <form action="{{ route('search') }}" method="GET" class="d-block d-lg-none">
+                            <input type="hidden" name="mode" x-model="mode">
+
+                            <div class="mb-2">
+                                <div class="input-group">
+                                    <select name="mode" class="form-select" style="flex: 0 1 fit-content;">
+                                        <option value="findHotels">{{ __('Find Hotels') }}</option>
+                                        <option value="findPlaces">{{ __('Find Places') }}</option>
+                                    </select>
+                                    <input type="text" class="form-control" placeholder="{{ __('Enter an address or property') }}" name="q">
+                                </div>
+                            </div>
+
+                            <div class="d-grid">
+                                <button class="btn btn-primary px-5" type="submit">{{ __('Search') }}</button>
+                            </div>
+                        </form>
+                        <!-- [END] Search bar form small screen -->
                     </div>
                 </div>
             </div>

@@ -29,6 +29,25 @@
         @include('main.layouts.footer')
 
         @stack('scriptsBottom')
+        <script>
+            const images = document.querySelectorAll('img');
+            images.forEach(image => {
+                image.addEventListener('error', () => {
+                    image.src = '{{ asset('assets/main/images/no-image.png') }}';
+                });
+            });
+
+            document.addEventListener('alpine:init', () => {
+                Alpine.data('searchForm', () => ({
+                    mode: 'findHotels',
+                    changeMode(mode) {
+                        if (mode == 'findHotels' || mode == 'findPlaces') {
+                            this.mode = mode;
+                        }
+                    }
+                }));
+            });
+        </script>
 
         {!! $settings__footer_script !!}
     </body>
