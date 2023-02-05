@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Location\Place;
 use App\Models\Hotel\Hotel;
+use Illuminate\Support\Facades\DB;
 
 class SearchController extends Controller
 {
@@ -39,6 +40,9 @@ class SearchController extends Controller
         $querySearch = explode(' ', $querySearch);
 
         $queryStar = $request->query('star');
+        $queryMinPrice = $request->query('min-price', null);
+        $queryMaxPrice = $request->query('max-price', null);
+        $querySortBy = $request->query('sort-by', 'recommended');
 
         $results = Hotel::where(function ($query) use ($querySearch) {
                 $query->where(function ($subQuery) use ($querySearch) {
@@ -60,7 +64,28 @@ class SearchController extends Controller
                     }
                 });
             })
-            ->orderBy('number_of_reviews', 'DESC')
+            ->when($queryMinPrice, function ($query, $queryMinPrice) {
+                if (is_numeric($queryMinPrice)) {
+                    $query->whereRaw('CAST(COALESCE(rates_from, rates_from_exclusive) AS INT) >= ' . $queryMinPrice);
+                }
+            })
+            ->when($queryMaxPrice, function ($query, $queryMaxPrice) {
+                if (is_numeric($queryMaxPrice)) {
+                    $query->whereRaw('CAST(COALESCE(rates_from, rates_from_exclusive) AS INT) <= ' . $queryMaxPrice);
+                }
+            })
+            ->when($querySortBy == 'recommended', function ($query) {
+                $query->orderBy('number_of_reviews', 'DESC');
+            })
+            ->when($querySortBy == 'lowest-price', function ($query) {
+                $query->orderByRaw('CAST(COALESCE(rates_from, rates_from_exclusive) AS INT) ASC');
+            })
+            ->when($querySortBy == 'highest-price', function ($query) {
+                $query->orderByRaw('CAST(COALESCE(rates_from, rates_from_exclusive) AS INT) DESC');
+            })
+            ->when($queryMinPrice || $queryMaxPrice || $querySortBy == 'lowest-price' || $querySortBy == 'highest-price', function ($query) {
+                $query->whereRaw('COALESCE(rates_from, rates_from_exclusive) IS NOT NULL');
+            })
             ->simplePaginate(25)
             ->withQueryString();
         

@@ -39,26 +39,22 @@
 
                             <hr>
 
-                            <div class="mb-3">
+                            <div>
                                 <div class="fw-bold mb-1">{{ __('Price Range') }}</div>
                                 <div class="row g-2">
                                     <div class="col-6">
                                         <div class="small text-muted mb-1">{{ __('Min') }}</div>
                                         <div>
-                                            <input type="text" class="form-control">
+                                            <input type="text" class="form-control" x-model="dataFilterMinPrice" @keyup.debounce.1000ms="changeFilter()">
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <div class="small text-muted mb-1 text-end">{{ __('Max') }}</div>
                                         <div>
-                                            <input type="text" class="form-control">
+                                            <input type="text" class="form-control" x-model="dataFilterMaxPrice" @keyup.debounce.1000ms="changeFilter()">
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="d-grid">
-                                <button type="submit" class="btn btn-secondary">{{ __('Apply') }}</button>
                             </div>
                         </div>
                     </div>
@@ -66,6 +62,27 @@
 
                 </div>
                 <div class="col-12 col-lg-9">
+                    <!-- Sort -->
+                    <div class="mb-2">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle shadow-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                {{ __('Sort') }} : <span x-text="currentSortModeText"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="#" class="dropdown-item" data-sort-by="recommended" @click="changeSortMode('recommended')">{{ __('Recommended') }}</a>
+                                </li>
+                                <li>
+                                    <a href="#" class="dropdown-item" data-sort-by="lowest-price" @click="changeSortMode('lowest-price')">{{ __('Lowest Price') }}</a>
+                                </li>
+                                <li>
+                                    <a href="#" class="dropdown-item" data-sort-by="highest-price" @click="changeSortMode('highest-price')">{{ __('Highest Price') }}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- [END] Sort -->
+
                     <div x-ref="mainResults">
                         @foreach ($resultsArray as $result)
                             <x-main.components.contents.hotel :hotel="$result" :show-address="true" />
@@ -97,6 +114,8 @@
                 Alpine.data('listing', () => ({
                     countRequest: 0,
                     dataFilterStar: [],
+                    dataFilterMinPrice: '',
+                    dataFilterMaxPrice: '',
                     changeFilter() {
                         this.countRequest++;
                         this.results = '';
@@ -115,6 +134,9 @@
                             url: baseURL,
                             params: {
                                 star: this.dataFilterStar.join(','),
+                                'min-price': this.dataFilterMinPrice,
+                                'max-price': this.dataFilterMaxPrice,
+                                'sort-by': this.currentSortMode,
                             },
                         })
                             .then(response => {
@@ -131,6 +153,18 @@
                     },
                     results: '',
                     isLoading: false,
+
+                    currentSortMode: 'recommended',
+                    get currentSortModeText()
+                    {
+                        const sortMode = document.querySelectorAll('[data-sort-by="' + this.currentSortMode + '"]');
+                        return sortMode[0].innerHTML;
+                    },
+                    changeSortMode(sortMode)
+                    {
+                        this.currentSortMode = sortMode;
+                        this.changeFilter();
+                    }
                 }));
             });
         </script>
