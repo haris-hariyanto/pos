@@ -53,10 +53,7 @@ class PlaceController extends Controller
                 ->where('longitude', 'like', $longitude[0] . '.' . substr($longitude[1], 0, 1) . '%')
                 ->where('overview', '<>', '')
                 ->where('number_of_reviews', '>', 0)
-                ->where(function ($query) {
-                    $query->whereNotNull('rates_from')
-                        ->orWhereNotNull('rates_from_exclusive');
-                })
+                ->whereNotNull('price')
                 ->whereNotNull('star_rating')
                 ->simplePaginate(25);
             $links = $modelHotels->links('components.main.components.simple-pagination')->render();

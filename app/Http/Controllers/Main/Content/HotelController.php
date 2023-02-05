@@ -73,11 +73,8 @@ class HotelController extends Controller
         ]);
 
         $price = null;
-        if (!empty($hotel['rates_from']) && !empty($hotel['rates_currency'])) {
-            $price = Text::price($hotel['rates_from'], $hotel['rates_currency']);
-        }
-        elseif (empty($hotel['rates_from']) && !empty($hotel['rates_from_exclusive']) && !empty($hotel['rates_currency'])) {
-            $price = Text::price($hotel['rates_from_exclusive'], $hotel['rates_currency']);
+        if (!empty($hotel['price']) && !empty($hotel['rates_currency'])) {
+            $price = Text::price($hotel['price'], $hotel['rates_currency']);
         }
 
         $structuredData->hotel([
@@ -164,11 +161,8 @@ class HotelController extends Controller
 
         $paragraph2 .= ' ';
 
-        if (!empty($hotelData['rates_from']) && !empty($hotelData['rates_currency'])) {
-            $paragraph2 .= 'The rates at the ' . $hotelData['name'] . ' start form ' . Text::price($hotelData['rates_from'], $hotelData['rates_currency']) . ', making it an affordable option.';
-        }
-        elseif (empty($hotelData['rates_from']) && !empty($hotelData['rates_from_exclusive']) && !empty($hotelData['rates_currency'])) {
-            $paragraph2 .= 'The rates at the ' . $hotelData['name'] . ' start form ' . Text::price($hotelData['rates_from_exclusive'], $hotelData['rates_currency']) . ', making it an affordable option.';
+        if (!empty($hotelData['price']) && !empty($hotelData['rates_currency'])) {
+            $paragraph2 .= 'The rates at the ' . $hotelData['name'] . ' start form ' . Text::price($hotelData['price'], $hotelData['rates_currency']) . ', making it an affordable option.';
         }
 
         if (!empty(trim($paragraph2))) {
@@ -239,11 +233,8 @@ class HotelController extends Controller
 
         $paragraph2 .= ' ';
 
-        if (!empty($hotelData['rates_from']) && !empty($hotelData['rates_currency'])) {
-            $paragraph2 .= 'Harga kamar mulai dari ' . Text::price($hotelData['rates_from'], $hotelData['rates_currency']) . '.';
-        }
-        elseif (empty($hotelData['rates_from']) && !empty($hotelData['rates_from_exclusive']) && !empty($hotelData['rates_currency'])) {
-            $paragraph2 .= 'Harga kamar mulai dari ' . Text::price($hotelData['rates_from_exclusive'], $hotelData['rates_currency']) . '.';
+        if (!empty($hotelData['price']) && !empty($hotelData['rates_currency'])) {
+            $paragraph2 .= 'Harga kamar mulai dari ' . Text::price($hotelData['price'], $hotelData['rates_currency']) . '.';
         }
 
         if (!empty(trim($paragraph2))) {

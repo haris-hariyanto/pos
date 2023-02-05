@@ -50,12 +50,8 @@
                             <p class="tw-line-clamp-3 mb-2">{{ $hotel['overview'] }}</p>
                         @endif
 
-                        @if (!empty($hotel['rates_from']) && !empty($hotel['rates_currency']))
-                            <p class="tw-line-clamp-1 mb-3">{{ __('Rates from') }} : <b>{{ \App\Helpers\Text::price($hotel['rates_from'], $hotel['rates_currency']) }}</b></p>
-                        @endif
-
-                        @if (empty($hotel['rates_from']) && !empty($hotel['rates_from_exclusive']) && !empty($hotel['rates_currency']))
-                            <p class="tw-line-clamp-1 mb-3">{{ __('Rates from') }} : <b>{{ \App\Helpers\Text::price($hotel['rates_from_exclusive'], $hotel['rates_currency']) }}</b></p>
+                        @if (!empty($hotel['price']) && !empty($hotel['rates_currency']))
+                            <p class="tw-line-clamp-1 mb-3">{{ __('Rates from') }} : <b>{{ \App\Helpers\Text::price($hotel['price'], $hotel['rates_currency']) }}</b></p>
                         @endif
                     </div>
                 </div>

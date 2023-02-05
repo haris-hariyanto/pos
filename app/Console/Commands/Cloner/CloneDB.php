@@ -61,6 +61,15 @@ class CloneDB extends Command
 
             foreach ($hotelsClone as $hotelClone) {
                 $this->line('[ * ] Hotel ID ' . $hotelClone->id . ' : ' . $hotelClone->name);
+
+                $hotelPrice = false;
+                if (!empty($hotelClone->rates_from)) {
+                    $hotelPrice = $hotelClone->rates_from;
+                }
+                elseif (!empty($hotelClone->rates_from_exclusive)) {
+                    $hotelPrice = $hotelClone->rates_from_exclusive;
+                }
+
                 Hotel::create([
                     'slug' => $hotelClone->slug,
                     'chain' => $hotelClone->chain,
@@ -94,7 +103,8 @@ class CloneDB extends Command
                     'rates_from_exclusive' => $hotelClone->rates_from_exclusive,
                     'accommodation_type' => $hotelClone->ratesaccommodation_type_currency,
                     'photos' => $hotelClone->photos,
-                    'additional_data' => $hotelClone->additional_data
+                    'additional_data' => $hotelClone->additional_data,
+                    'price' => !empty($hotelPrice) ? $hotelPrice : null,
                 ]);
             }
             

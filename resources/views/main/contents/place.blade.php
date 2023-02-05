@@ -96,7 +96,7 @@
                             data-name="{{ $hotel['hotel']['name'] }}"
                             data-number="{{ $loop->iteration }}"
                             data-distance="{{ __('From location: :distance', ['distance' => number_format($hotel['m_distance'] / 1000, 1) . ' KM']) }}"
-                            data-rates="{{ __('Rates from') . ': ' . \App\Helpers\Text::price($hotel['hotel']['rates_from'], $hotel['hotel']['rates_currency']) }}"
+                            data-rates="{{ __('Rates from') . ': ' . \App\Helpers\Text::price($hotel['hotel']['price'], $hotel['hotel']['rates_currency']) }}"
                         >
                             <x-main.components.contents.hotel :hotel="$hotel['hotel']" :place-and-distance="['place' => $place['name'], 'distance' => $hotel['m_distance']]" />
                         </div>

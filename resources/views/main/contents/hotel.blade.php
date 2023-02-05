@@ -264,16 +264,10 @@
                                                     <td class="fw-bold">{{ $hotel['check_out'] }}</td>
                                                 </tr>
                                             @endif
-                                            @if (!empty($hotel['rates_from']) && !empty($hotel['rates_currency']))
+                                            @if (!empty($hotel['price']) && !empty($hotel['rates_currency']))
                                                 <tr>
                                                     <td>{{ __('Rates from') }}</td>
-                                                    <td class="fw-bold">{{ \App\Helpers\Text::price($hotel['rates_from'], $hotel['rates_currency']) }}</td>
-                                                </tr>
-                                            @endif
-                                            @if (empty($hotel['rates_from']) && !empty($hotel['rates_from_exclusive']) && !empty($hotel['rates_currency']))
-                                                <tr>
-                                                    <td>{{ __('Rates from') }}</td>
-                                                    <td class="fw-bold">{{ \App\Helpers\Text::price($hotel['rates_from_exclusive'], $hotel['rates_currency']) }}</td>
+                                                    <td class="fw-bold">{{ \App\Helpers\Text::price($hotel['price'], $hotel['rates_currency']) }}</td>
                                                 </tr>
                                             @endif
                                         </table>

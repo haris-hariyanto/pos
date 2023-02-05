@@ -66,25 +66,25 @@ class SearchController extends Controller
             })
             ->when($queryMinPrice, function ($query, $queryMinPrice) {
                 if (is_numeric($queryMinPrice)) {
-                    $query->whereRaw('CAST(COALESCE(rates_from, rates_from_exclusive) AS INT) >= ' . $queryMinPrice);
+                    $query->where('price', '>=', $queryMinPrice);
                 }
             })
             ->when($queryMaxPrice, function ($query, $queryMaxPrice) {
                 if (is_numeric($queryMaxPrice)) {
-                    $query->whereRaw('CAST(COALESCE(rates_from, rates_from_exclusive) AS INT) <= ' . $queryMaxPrice);
+                    $query->where('price', '<=', $queryMaxPrice);
                 }
             })
             ->when($querySortBy == 'recommended', function ($query) {
                 $query->orderBy('number_of_reviews', 'DESC');
             })
             ->when($querySortBy == 'lowest-price', function ($query) {
-                $query->orderByRaw('CAST(COALESCE(rates_from, rates_from_exclusive) AS INT) ASC');
+                $query->orderBy('price', 'ASC');
             })
             ->when($querySortBy == 'highest-price', function ($query) {
-                $query->orderByRaw('CAST(COALESCE(rates_from, rates_from_exclusive) AS INT) DESC');
+                $query->orderBy('price', 'DESC');
             })
             ->when($queryMinPrice || $queryMaxPrice || $querySortBy == 'lowest-price' || $querySortBy == 'highest-price', function ($query) {
-                $query->whereRaw('COALESCE(rates_from, rates_from_exclusive) IS NOT NULL');
+                $query->whereNotNull('price');
             })
             ->simplePaginate(25)
             ->withQueryString();

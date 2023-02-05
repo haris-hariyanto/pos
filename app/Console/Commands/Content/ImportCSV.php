@@ -130,6 +130,14 @@ class ImportCSV extends Command
                 $photoToSave[] = $photo;
             }
 
+            $hotelPrice = false;
+            if (!empty($ratesFrom)) {
+                $hotelPrice = $ratesFrom;
+            }
+            elseif (!empty($ratesFromExclusive)) {
+                $hotelPrice = $ratesFromExclusive;
+            }
+
             $hotel = Hotel::create([
                 'slug' => $hotelSlug,
                 'chain' => !empty($chainID) ? $chainName : null,
@@ -163,6 +171,7 @@ class ImportCSV extends Command
                 'rates_from_exclusive' => !empty($ratesFromExclusive) ? $ratesFromExclusive : null,
                 'accommodation_type' => !empty($accommodationType) ? $accommodationType : null,
                 'photos' => json_encode($photoToSave),
+                'price' => !empty($hotelPrice) ? $hotelPrice : null,
             ]);
             $firstID = $hotel->id;
             $firstID++;
