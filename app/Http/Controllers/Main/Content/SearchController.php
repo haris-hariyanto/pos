@@ -59,7 +59,9 @@ class SearchController extends Controller
                             $subQuery->orWhereNull('star_rating');
                         }
                         else {
-                            $subQuery->orWhere('star_rating', 'like', $star . '%');
+                            if (!empty($star)) {
+                                $subQuery->orWhere('star_rating', 'like', $star . '%');
+                            }
                         }
                     }
                 });

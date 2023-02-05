@@ -140,7 +140,7 @@
             document.addEventListener('alpine:init', () => {
                 Alpine.data('listing', () => ({
                     countRequest: 0,
-                    dataFilterStar: [],
+                    dataFilterStar: {{ Js::from(explode(',', request()->query('star', null))) }},
                     dataFilterMinPrice: '',
                     dataFilterMaxPrice: '',
                     changeFilter() {
