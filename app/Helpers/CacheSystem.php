@@ -14,6 +14,7 @@ class CacheSystem
 
     public static function get($key)
     {
+        // return false;
         $cacheData = Cache::get($key);
         if ($cacheData) {
             return json_decode($cacheData, true);
@@ -21,5 +22,10 @@ class CacheSystem
         else {
             return false;
         }
+    }
+
+    public static function forget($key)
+    {
+        Cache::forget($key);
     }
 }

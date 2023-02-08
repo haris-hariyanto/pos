@@ -15,6 +15,7 @@ use App\Models\Location\Place;
 use App\Models\Location\Category;
 use App\Models\Location\CategoryPlace;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Cache;
 
 class Test extends Command
 {
@@ -39,6 +40,7 @@ class Test extends Command
      */
     public function handle()
     {
+        /*
         $places = Place::get();
         foreach ($places as $place) {
             $additionalData = $place->additional_data;
@@ -65,5 +67,6 @@ class Test extends Command
                 }
             }
         }
+        */
     }
 }

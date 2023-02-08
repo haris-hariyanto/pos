@@ -38,6 +38,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
 
     Route::resource('hotels', Controllers\Admin\Content\HotelController::class);
     Route::get('/hotels-index.json', [Controllers\Admin\Content\HotelController::class, 'indexData'])->name('hotels.index.data');
+    Route::post('/hotels/{hotel}/update-photos', [Controllers\Admin\Content\HotelController::class, 'updatePhotos'])->name('hotels.update-cover');
 
     Route::resource('places', Controllers\Admin\Content\PlaceController::class);
     Route::get('/places-index.json', [Controllers\Admin\Content\PlaceController::class, 'indexData'])->name('places.index.data');

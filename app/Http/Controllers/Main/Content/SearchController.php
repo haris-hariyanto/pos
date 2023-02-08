@@ -67,12 +67,12 @@ class SearchController extends Controller
                 });
             })
             ->when($queryMinPrice, function ($query, $queryMinPrice) {
-                if (is_numeric($queryMinPrice)) {
+                if (is_numeric($queryMinPrice) && !empty($queryMinPrice)) {
                     $query->where('price', '>=', $queryMinPrice);
                 }
             })
             ->when($queryMaxPrice, function ($query, $queryMaxPrice) {
-                if (is_numeric($queryMaxPrice)) {
+                if (is_numeric($queryMaxPrice) && !empty($queryMaxPrice)) {
                     $query->where('price', '<=', $queryMaxPrice);
                 }
             })

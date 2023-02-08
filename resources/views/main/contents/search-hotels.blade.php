@@ -111,9 +111,15 @@
                     <!-- [END] Sort -->
 
                     <div x-ref="mainResults">
-                        @foreach ($resultsArray as $result)
+                        @forelse ($resultsArray as $result)
                             <x-main.components.contents.hotel :hotel="$result" :show-address="true" />
-                        @endforeach
+                        @empty
+                            <div class="card shadow-sm">
+                                <div class="card-body">
+                                    <p class="mb-0">{{ __('No hotels available.') }}</p>
+                                </div>
+                            </div>
+                        @endforelse
                         <div class="my-2">
                             {{ $results->links('components.main.components.simple-pagination') }}
                         </div>
@@ -141,8 +147,8 @@
                 Alpine.data('listing', () => ({
                     countRequest: 0,
                     dataFilterStar: {{ Js::from(explode(',', request()->query('star', null))) }},
-                    dataFilterMinPrice: '',
-                    dataFilterMaxPrice: '',
+                    dataFilterMinPrice: {!! request()->query('min-price', "''") !!},
+                    dataFilterMaxPrice: {!! request()->query('max-price', "''") !!},
                     changeFilter() {
                         this.countRequest++;
                         this.results = '';
