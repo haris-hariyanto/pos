@@ -234,9 +234,11 @@ class HotelController extends Controller
             $validated['star_rating'] = null;
         }
 
+        $this->deleteCache($hotel); // Cache old data
+
         $hotel->update($validated);
 
-        $this->deleteCache($hotel);
+        $this->deleteCache($hotel); // Cache new data
 
         return redirect()->back()->with('success', __('Hotel has been updated!'));
     }
@@ -262,9 +264,11 @@ class HotelController extends Controller
 
             $photos = json_encode($photos);
 
+            $this->deleteCache($hotel); // Cache old data
+
             $hotel->update(['photos' => $photos]);
 
-            $this->deleteCache($hotel);
+            $this->deleteCache($hotel); // Cache new data
 
             return redirect()->back()->with('success', __('Hotel has been updated!'));
         }
@@ -289,9 +293,11 @@ class HotelController extends Controller
 
             $photos = json_encode($photos);
 
+            $this->deleteCache($hotel); // Cache old data
+
             $hotel->update(['photos' => $photos]);
 
-            $this->deleteCache($hotel);
+            $this->deleteCache($hotel); // Cache new data
 
             return redirect()->back()->with('success', __('Hotel has been updated!'));
 
@@ -314,6 +320,46 @@ class HotelController extends Controller
         if ($country) {
             $key = 'country' . $country->slug;
             CacheSystem::forget($key);
+        }
+
+        // State page
+        if (!empty($hotel->state)) {
+            $state = State::where('name', $hotel->state)
+                ->where('country', $hotel->country)
+                ->first();
+            if ($state) {
+                $totalHotels = Hotel::select('id')
+                    ->where('state', $state->name)
+                    ->where('country', $state->country)
+                    ->count();
+                $totalPages = ceil($totalHotels / config('content.hotels_pagination_items_per_page'));
+                for ($i = 1; $i <= $totalPages; $i++) {
+                    $key = 'location' . config('content.location_term_state') . $state->slug . 'page' . $i;
+                    CacheSystem::forget($key);
+                    $key = 'locationstate' . $state->slug . 'page' . $i;
+                    CacheSystem::forget($key);
+                }
+            }
+        }
+
+        // City page
+        if (!empty($hotel->city)) {
+            $city = City::where('name', $hotel->city)
+                ->where('country', $hotel->country)
+                ->first();
+            if ($city) {
+                $totalHotels = Hotel::select('id')
+                    ->where('city', $city->name)
+                    ->where('country', $city->country)
+                    ->count();
+                $totalPages = ceil($totalHotels / config('content.hotels_pagination_items_per_page'));
+                for ($i = 1; $i <= $totalPages; $i++) {
+                    $key = 'location' . config('content.location_term_city') . $city->slug . 'page' . $i;
+                    CacheSystem::forget($key);
+                    $key = 'locationcity' . $city->slug . 'page' . $i;
+                    CacheSystem::forget($key);
+                }
+            }
         }
     }
 

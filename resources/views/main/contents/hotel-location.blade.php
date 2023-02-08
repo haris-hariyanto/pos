@@ -85,9 +85,15 @@
         <div class="container py-4">
             <div class="row justify-content-center">
                 <div class="col-12 col-lg-10">
-                    @foreach ($hotels as $hotel)
+                    @forelse ($hotels as $hotel)
                         <x-main.components.contents.hotel :hotel="$hotel" />
-                    @endforeach
+                    @empty
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <p class="mb-0">{{ __('No hotels available.') }}</p>
+                            </div>
+                        </div>
+                    @endforelse
                 </div>
                 <div class="col-12 col-lg-10">
                     {!! $links !!}

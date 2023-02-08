@@ -35,7 +35,7 @@ class LocationController extends Controller
                 $modelHotels = Hotel::where('city', $modelCity->name)
                     ->where('country', $modelCity->country)
                     ->orderBy('number_of_reviews', 'DESC')
-                    ->simplePaginate(25);
+                    ->simplePaginate(config('content.hotels_pagination_items_per_page'));
                 $hotels = [];
                 foreach ($modelHotels as $modelHotel) {
                     $hotel = $modelHotel->toArray();
@@ -54,7 +54,7 @@ class LocationController extends Controller
                 $modelHotels = Hotel::where('state', $modelState->name)
                     ->where('country', $modelState->country)
                     ->orderBy('number_of_reviews', 'DESC')
-                    ->simplePaginate(25);
+                    ->simplePaginate(config('content.hotels_pagination_items_per_page'));
                 $hotels = [];
                 foreach ($modelHotels as $modelHotel) {
                     $hotel = $modelHotel->toArray();
