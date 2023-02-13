@@ -39,7 +39,7 @@ class HotelController extends Controller
         $queryLimit = $request->query('limit', 10);
         $queryOffset = $request->query('offset', 0);
         $querySort = $request->query('sort', 'id');
-        $queryOrder = $request->query('order', 'asc');
+        $queryOrder = $request->query('order', 'desc');
         $querySearch = $request->query('search');
 
         $hotelsCount = Cache::rememberForever('hotelscount', function () {
@@ -88,7 +88,18 @@ class HotelController extends Controller
      */
     public function create()
     {
-        //
+        $breadcrumb = [
+            __('Dashboard') => route('admin.index'),
+            __('Hotels') => route('admin.hotels.index'),
+            __('Add Hotel') => '',
+        ];
+
+        $countries = Country::get();
+        $countries = $countries->mapWithKeys(function ($country) {
+            return [$country->name => $country->name];
+        });
+
+        return view('admin.content.hotels.create', compact('breadcrumb', 'countries'));
     }
 
     /**
@@ -99,7 +110,124 @@ class HotelController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => ['required', 'max:255'],
+            'formerly_name' => ['nullable', 'max:255'],
+            'translated_name' => ['nullable', 'max:255'],
+            'star_rating' => ['nullable', 'in:1,1.5,2,2.5,3,3.5,4,4.5,5,unrated'],
+            'url' => ['required', 'url'],
+            'price' => ['nullable', 'numeric'],
+            'rates_currency' => ['required_with:price'],
+            'overview' => ['nullable', 'max:2048'],
+            'brand' => ['nullable', 'max:255'],
+            'chain' => ['nullable', 'max:255'],
+            'address_line_1' => ['nullable', 'max:1024'],
+            'address_line_2' => ['nullable', 'max:1024'],
+            'zipcode' => ['nullable', 'max:32'],
+            'country' => ['required', 'exists:countries,name'],
+            'city' => ['required_without:state'],
+            'state' => ['required_without:city'],
+            'longitude' => ['required'],
+            'latitude' => ['required'],
+            'check_in' => ['nullable', 'max:16'],
+            'check_out' => ['nullable', 'max:16'],
+            'number_of_rooms' => ['nullable', 'numeric', 'min:1'],
+            'number_of_floors' => ['nullable', 'numeric', 'min:1'],
+            'year_opened' => ['nullable', 'numeric'],
+            'year_renovated' => ['nullable', 'numeric'],
+        ]);
+
+        $country = Country::where('name', $validated['country'])->first();
+        if ($country) {
+            $validated['continent'] = $country->continent;
+            $validated['country'] = $country->name;
+            $validated['country_iso_code'] = $country->iso_code;
+
+            if (!empty($validated['city'])) {
+                // Tambahkan city ke database jika belum ada
+                $city = City::where('name', $validated['city'])
+                    ->where('country', $validated['country'])
+                    ->first();
+                if (!$city) {
+                    $lastCityID = City::select('id')->orderBy('id', 'DESC')->first();
+                    if ($lastCityID) {
+                        $lastCityID = $lastCityID->id;
+                        $lastCityID++;
+                    }
+                    else {
+                        $lastCityID = 1;
+                    }
+
+                    City::create([
+                        'slug' => $lastCityID . '-' . Str::slug($validated['city']),
+                        'name' => $validated['city'],
+                        'state' => !empty($validated['state']) ? $validated['state'] : null,
+                        'country' => $validated['country'],
+                        'continent' => $validated['continent'],
+                    ]);
+
+                    // Hapus cache
+                    Cache::forget('country' . $country->slug . 'cities');
+                }
+            }
+            else {
+                $validated['city'] = '';
+            } // [END] if
+
+            if (!empty($validated['state'])) {
+                // Tambahkan state ke database jika belum ada
+                $state = State::where('name', $validated['state'])
+                    ->where('country', $validated['country'])
+                    ->first();
+                if (!$state) {
+                    $lastStateID = State::select('id')->orderBy('id', 'DESC')->first();
+                    if ($lastStateID) {
+                        $lastStateID = $lastStateID->id;
+                        $lastStateID++;
+                    }
+                    else {
+                        $lastStateID = 1;
+                    }
+
+                    State::create([
+                        'slug' => $lastStateID . '-' . Str::slug($validated['state']),
+                        'name' => $validated['state'],
+                        'country' => $validated['country'],
+                        'continent' => $validated['continent'],
+                    ]);
+
+                    // Hapus cache
+                    Cache::forget('country' . $country->slug . 'states');
+                }
+            }
+            else {
+                $validated['state'] = '';
+            } // [END] if
+        }
+
+        if (empty($validated['star_rating']) || $validated['star_rating'] == 'unrated') {
+            $validated['star_rating'] = null;
+        }
+
+        $validated['photos'] = '[]';
+
+        $lastHotelID = Hotel::orderBy('id', 'DESC')->first();
+        if ($lastHotelID) {
+            $lastHotelID = $lastHotelID->id;
+            $lastHotelID++;
+        }
+        else {
+            $lastHotelID = 1;
+        }
+
+        $slug = $lastHotelID . '-' . Str::slug($validated['name']);
+        $validated['slug'] = $slug;
+
+        $hotel = Hotel::create($validated);
+
+        $this->deleteCache($hotel);
+
+        return redirect()->route('admin.hotels.add-photo', [$hotel]);
     }
 
     /**
@@ -111,6 +239,16 @@ class HotelController extends Controller
     public function show($id)
     {
         //
+    }
+
+    public function changePhoto(Hotel $hotel) {
+        $breadcrumb = [
+            __('Dashboard') => route('admin.index'),
+            __('Hotels') => route('admin.hotels.index'),
+            __('Add Photos') => '',
+        ];
+
+        return view('admin.content.hotels.create-photo', compact('breadcrumb', 'hotel'));
     }
 
     /**
@@ -203,6 +341,9 @@ class HotelController extends Controller
                         'continent' => $validated['continent'],
                     ]);
                 }
+            }
+            else {
+                $validated['city'] = '';
             } // [END] if
 
             if (!empty($validated['state'])) {
@@ -227,6 +368,9 @@ class HotelController extends Controller
                         'continent' => $validated['continent'],
                     ]);
                 }
+            }
+            else {
+                $validated['state'] = '';
             } // [END] if
         }
 
@@ -245,6 +389,7 @@ class HotelController extends Controller
 
     public function updatePhotos(Request $request, Hotel $hotel) {
         $photosType = $request->photosType;
+        $inputSource = $request->input('source', 'edit');
         
         if ($photosType == 'hotlink') {
 
@@ -270,7 +415,13 @@ class HotelController extends Controller
 
             $this->deleteCache($hotel); // Cache new data
 
-            return redirect()->back()->with('success', __('Hotel has been updated!'));
+            if ($inputSource == 'create') {
+                return redirect()->route('admin.hotels.index')->with('success', __('Hotel has been added!'));
+            }
+            else {
+                return redirect()->back()->with('success', __('Hotel has been updated!'));
+            }
+
         }
         elseif ($photosType == 'upload') {
 
@@ -287,7 +438,12 @@ class HotelController extends Controller
                     $photos[] = $fullURL;
                 }
                 else {
-                    $photos[] = $hotelPhotos[$i];
+                    if (!empty($hotelPhotos[$i])) {
+                        $photos[] = $hotelPhotos[$i];
+                    }
+                    else {
+                        $photos[] = '';
+                    }
                 }
             }
 
@@ -299,7 +455,12 @@ class HotelController extends Controller
 
             $this->deleteCache($hotel); // Cache new data
 
-            return redirect()->back()->with('success', __('Hotel has been updated!'));
+            if ($inputSource == 'create') {
+                return redirect()->route('admin.hotels.index')->with('success', __('Hotel has been added!'));
+            }
+            else {
+                return redirect()->back()->with('success', __('Hotel has been updated!'));
+            }
 
         }
         else {

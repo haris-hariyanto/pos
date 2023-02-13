@@ -306,5 +306,20 @@
     "Choose file": "Pilih file",
     "Accommodation Type": "Jenis Akomodasi",
     "Hotel has been updated!": "Hotel telah diupdate!",
-    "Location": "Lokasi"
+    "Location": "Lokasi",
+    "Add Hotel": "Tambah Hotel",
+    "Add Photos": "Tambah Foto",
+    "Hotel has been added!": "Hotel telah ditambahkan!",
+    "Your comment is awaiting moderation. This is a preview; your comment will be visible after it has been approved.": "Komentar dari Anda sedang menunggu moderasi. Ini adalah pratinjau; komentar Anda akan terlihat setelah disetujui.",
+    "Approve": "Setujui",
+    "Unapprove": "Tolak",
+    "Reply": "Balas",
+    "Send Reply": "Kirim Balasan",
+    "Approve and Send Reply": "Setujui dan Balas",
+    "Reply has been created!": "Balasan telah dibuat!",
+    "Replies": "Balasan",
+    "Comments": "Komentar",
+    "Reviews Settings": "Setting Ulasan",
+    "Allow new reviews": "Izinkan review baru",
+    "Reviews settings has been updated!": "Setting ulasan telah diupdate!"
 }

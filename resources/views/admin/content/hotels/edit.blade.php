@@ -32,7 +32,7 @@
     
                         <x-admin.forms.input-text name="name" :label="__('Name')" :value="old('name', $hotel)" />
     
-                        <div class="row align-items-end">
+                        <div class="row g-0">
                             <div class="col-6">
                                 <x-admin.forms.input-text name="formerly_name" :label="__('Formerly Name')" :value="old('formerly_name', $hotel->formerly_name)" />
                             </div>
@@ -101,7 +101,7 @@
 
                         <x-admin.forms.select :label="__('Country')" :options="$countries" name="country" :selected="$hotel->country" />
                         <x-admin.forms.input-text name="state" :label="__('State')" :value="old('state', $hotel->state)" />
-                        <x-admin.forms.input-text name="city" :label="__('City')" :value="old('state', $hotel->city)" />
+                        <x-admin.forms.input-text name="city" :label="__('City')" :value="old('city', $hotel->city)" />
 
                         <hr>
 
@@ -161,7 +161,6 @@
 
             <form action="{{ route('admin.hotels.update-cover', [$hotel['slug']]) }}" method="POST" enctype="multipart/form-data">
                 @csrf
-
 
                 <div class="card" x-data="photos">
                     <div class="card-header font-weight-bold">{{ __('Photos') }}</div>

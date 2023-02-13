@@ -32,6 +32,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
         Route::get('/website', [Controllers\Admin\Setting\WebsiteSettingController::class, 'index'])->name('website');
         Route::put('/website', [Controllers\Admin\Setting\WebsiteSettingController::class, 'updateSettings']);
 
+        Route::get('/reviews', [Controllers\Admin\Setting\ReviewSettingController::class, 'index'])->name('reviews');
+        Route::put('/reviews', [Controllers\Admin\Setting\ReviewSettingController::class, 'save']);
+
         Route::get('/pages', [Controllers\Admin\Setting\PageSettingConttoller::class, 'index'])->name('pages');
         Route::put('/pages', [Controllers\Admin\Setting\PageSettingConttoller::class, 'save']);
     });
@@ -39,6 +42,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::resource('hotels', Controllers\Admin\Content\HotelController::class);
     Route::get('/hotels-index.json', [Controllers\Admin\Content\HotelController::class, 'indexData'])->name('hotels.index.data');
     Route::post('/hotels/{hotel}/update-photos', [Controllers\Admin\Content\HotelController::class, 'updatePhotos'])->name('hotels.update-cover');
+    Route::get('/hotels/{hotel}/add-photos', [Controllers\Admin\Content\HotelController::class, 'changePhoto'])->name('hotels.add-photo');
 
     Route::resource('places', Controllers\Admin\Content\PlaceController::class);
     Route::get('/places-index.json', [Controllers\Admin\Content\PlaceController::class, 'indexData'])->name('places.index.data');
@@ -57,6 +61,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
 
     Route::resource('reviews', Controllers\Admin\Content\ReviewController::class);
     Route::get('/reviews-index.json', [Controllers\Admin\Content\ReviewController::class, 'indexData'])->name('reviews.index.data');
+    Route::put('/reviews/{review}/approve', [Controllers\Admin\Content\ReviewController::class, 'approve'])->name('reviews.approve');
+    Route::put('/reviews/{review}/unapprove', [Controllers\Admin\Content\ReviewController::class, 'unapprove'])->name('reviews.unapprove');
+    Route::post('/reviews/{review}/reply', [Controllers\Admin\Content\ReviewController::class, 'reply'])->name('reviews.reply');
 
     Route::resource('users', Controllers\Admin\UserController::class);
     Route::get('/users-index.json', [Controllers\Admin\UserController::class, 'indexData'])->name('users.index.data');

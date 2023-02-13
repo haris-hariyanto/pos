@@ -235,6 +235,9 @@ return [
         'state' => 'Provinsi / Negara Bagian',
         'longitude' => 'Longitude',
         'latitude' => 'Latitude',
+        'review' => 'Review',
+        'rating' => 'Rating',
+        'reply' => 'Balasan',
     ],
 
 ];

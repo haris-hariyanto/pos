@@ -6,7 +6,7 @@ class Image
 {
     public static function removeQueryParameters($imageLink)
     {
-        if (config('app.env') === 'local') {
+        if (false && config('app.env') === 'local') {
             return $imageLink;
         }
         else {

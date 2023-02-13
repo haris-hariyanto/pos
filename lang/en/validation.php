@@ -235,6 +235,9 @@ return [
         'state' => 'State',
         'longitude' => 'Longitude',
         'latitude' => 'Latitude',
+        'review' => 'Review',
+        'rating' => 'Rating',
+        'reply' => 'Reply',
     ],
 
 ];

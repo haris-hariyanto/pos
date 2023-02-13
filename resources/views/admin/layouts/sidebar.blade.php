@@ -33,7 +33,11 @@
                 <li class="nav-item">
                     <a href="{{ route('admin.reviews.index') }}" @class(['nav-link', 'active' => Route::currentRouteName() == 'admin.reviews.index'])>
                         <i class="nav-icon fas fa-comments"></i>
-                        <p>{{ __('Reviews') }}</p>
+                        @if ($newReviews > 0)
+                            <p>{{ __('Reviews') }} <span class="badge badge-info right" id="newReviewsBadge">{{ $newReviews }}</span></p>
+                        @else
+                            <p>{{ __('Reviews') }}</p>
+                        @endif
                     </a>
                 </li>
 
@@ -87,6 +91,15 @@
                         <p>{{ __('Website') }}</p>
                     </a>
                 </li>
+
+                <!--
+                <li class="nav-item">
+                    <a href="{{ route('admin.settings.reviews') }}" @class(['nav-link', 'active' => Route::currentRouteName() == 'admin.settings.reviews'])>
+                        <i class="nav-icon fas fa-comments"></i>
+                        <p>{{ __('Reviews Settings') }}</p>
+                    </a>
+                </li>
+                -->
 
                 <li class="nav-item">
                     <a href="{{ route('admin.settings.pages') }}" @class(['nav-link', 'active' => Route::currentRouteName() == 'admin.settings.pages'])>

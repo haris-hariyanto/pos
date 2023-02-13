@@ -14,8 +14,10 @@ use App\Helpers\StructuredData;
 
 class HotelController extends Controller
 {
-    public function index($hotel)
+    public function index(Request $request, $hotel)
     {
+        $preview = $request->query('unapproved');
+
         $cacheKey = 'hotel' . $hotel;
         $cacheData = CacheSystem::get($cacheKey);
 
@@ -87,7 +89,52 @@ class HotelController extends Controller
             'reviews' => $hotel['reviews'],
         ]);
 
-        return view('main.contents.hotel', compact('hotel', 'paragraphs', 'nearbyPlaces', 'structuredData'));
+        $reviewsAndReplies = $this->recursiveReviews($hotel['reviews'], 0, 0, $preview);
+
+        return view('main.contents.hotel', compact('hotel', 'paragraphs', 'nearbyPlaces', 'structuredData', 'reviewsAndReplies'));
+    }
+
+    private function recursiveReviews($reviews, $parent = 0, $depth = 0, $preview)
+    {
+        if ($depth > 0) {
+            $paddingLeft = 20;
+        }
+        else {
+            $paddingLeft = 0;
+        }
+
+        $result = [];
+        foreach ($reviews as $review) {
+            if ($review['parent_id'] == $parent && ($review['is_accepted'] == 'Y' || $review['id'] == $preview)) {
+                $haveReplies = $this->checkHaveReplies($reviews, $review['id']);
+                if ($haveReplies) {
+                    $html = '<div id="review' . $review['id'] . '" style="padding-left: ' . $paddingLeft . 'px;">';
+                    $html .= view('components.main.components.contents.review', compact('review', 'depth'))->render();
+                    $html .= '<div class="border-start border-2">';
+                    $html .= $this->recursiveReviews($reviews, $review['id'], $depth + 1, $preview);
+                    $html .= '</div>';
+                    $html .= '</div>';
+                    $result[] = $html;
+                }
+                else {
+                    $html = '<div id="review' . $review['id'] . '" style="padding-left: ' . $paddingLeft . 'px;">';
+                    $html .= view('components.main.components.contents.review', compact('review', 'depth'))->render();
+                    $html .= '</div>';
+                    $result[] = $html;
+                }
+            }            
+        }
+        $result = implode('', $result);
+        return $result;
+    }
+
+    private function checkHaveReplies($reviews, $searchID) {
+        foreach ($reviews as $review) {
+            if ($review['parent_id'] == $searchID) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private function generateArticleEN($hotelData)

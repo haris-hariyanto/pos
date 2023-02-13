@@ -13,6 +13,10 @@
         </x-admin.components.alert>
     @endif
 
+    <div class="d-flex justify-content-end mb-3">
+        <a href="{{ route('admin.hotels.create') }}" class="btn btn-primary">{{ __('Add Hotel') }}</a>
+    </div>
+
     <div x-data="modalDelete">
         <div class="card">
             <div class="card-body">

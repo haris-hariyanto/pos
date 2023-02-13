@@ -13,10 +13,11 @@ class PlaceController extends Controller
 {
     public function index(Request $request, $place)
     {
+        // Cache untuk halaman tempat di non-aktifkan agar detail hotel bisa tetap terupdate
         $currentPage = $request->query('page', 1);
 
         $cacheKey = 'place' . $place . 'page' . $currentPage;
-        $cacheData = CacheSystem::get($cacheKey);
+        $cacheData = false; // CacheSystem::get($cacheKey);
 
         if ($cacheData) {
             extract($cacheData);
@@ -27,24 +28,6 @@ class PlaceController extends Controller
                 return redirect()->route('index');
             }
             $place = $modelPlace->toArray();
-
-            /*
-            $modelHotels = HotelPlace::with('hotel')
-                ->where('place_id', $modelPlace->id)
-                ->orderBy('m_distance', 'ASC')
-                ->simplePaginate(25);
-            $links = $modelHotels->links('components.main.components.simple-pagination')->render();
-
-            $hotelsFound = HotelPlace::where('place_id', $modelPlace->id)
-                ->count();
-
-            $hotels = [];
-            foreach ($modelHotels as $modelHotel) {
-                $hotel = $modelHotel->toArray();
-                $hotel['hotel']['photos'] = json_decode($hotel['hotel']['photos']);
-                $hotels[] = $hotel;
-            }
-            */
 
             $latitude = explode('.', $place['latitude']);
             $longitude = explode('.', $place['longitude']);

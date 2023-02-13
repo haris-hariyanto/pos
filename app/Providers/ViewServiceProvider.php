@@ -8,6 +8,7 @@ use App\View\Composers\AdminComposer;
 use App\View\Composers\MemberComposer;
 use Illuminate\Support\Facades\Cache;
 use App\Models\MetaData;
+use App\Models\Hotel\Review;
 
 class ViewServiceProvider extends ServiceProvider
 {
@@ -42,6 +43,11 @@ class ViewServiceProvider extends ServiceProvider
             foreach ($settings as $settingKey => $settingValue) {
                 $view->with($settingKey, $settingValue);
             }
+        });
+
+        View::composer('admin.*', function ($view) {
+            $newReviews = Review::where('is_accepted', 'N')->count();
+            $view->with('newReviews', $newReviews);
         });
 
         View::composer(['main.index', 'main.*'], function ($view) {

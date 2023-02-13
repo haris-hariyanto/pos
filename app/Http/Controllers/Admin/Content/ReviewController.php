@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Hotel\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Validator;
 
 class ReviewController extends Controller
 {
@@ -31,15 +32,24 @@ class ReviewController extends Controller
         $querySort = $request->query('sort', 'id');
         $queryOrder = $request->query('order', 'desc');
         $querySearch = $request->query('search');
+        $queryType = $request->query('type', 'all');
 
         $reviewsCount = Review::count();
 
         $reviews = Review::with('hotel')
-        ->when($querySearch, function ($query) use ($querySearch) {
-            $query->where('review', 'like', '%' . $querySearch . '%');
-        });
+            ->when($querySearch, function ($query) use ($querySearch) {
+                $query->where('review', 'like', '%' . $querySearch . '%');
+            })
+            ->when($queryType, function ($query) use ($queryType) {
+                if ($queryType == 'reviews') {
+                    $query->where('parent_id', 0);
+                }
+                if ($queryType == 'replies') {
+                    $query->where('parent_id', '<>', 0);
+                }
+            });
 
-        if ($querySearch) {
+        if ($querySearch || $queryType) {
             $reviewsCountFiltered = $reviews->count();
         }
         else {
@@ -59,9 +69,10 @@ class ReviewController extends Controller
                     'id' => $review->id,
                     'name' => $review->name,
                     'time' => \App\Helpers\Text::readableTime($review->time),
-                    'rating' => $review->rating . '/5',
+                    'rating' => $review->rating ? $review->rating . '/5' : null,
                     'hotel' => '<a href="' . route('hotel', [$review->hotel->slug]) . '" target="_blank">' . $review->hotel->name . '</a>',
                     'review' => $review->review,
+                    'is_accepted_raw' => $review->is_accepted,
                     'menu' => view('admin.content.reviews._menu', ['review' => $review])->render(),
                 ];
             }),
@@ -98,6 +109,40 @@ class ReviewController extends Controller
     public function show(Review $review)
     {
         //
+    }
+
+    public function reply(Request $request, Review $review)
+    {
+        $validator = Validator::make($request->all(), [
+            'reply' => ['required', 'max:4096'],
+        ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+
+            return redirect()->back()->with('error', $errors->first('reply'));
+        }
+
+        Cache::forget('hotel' . $review->hotel->slug);
+
+        $validated = $validator->validated();
+
+        Review::create([
+            'hotel_id' => $review->hotel_id,
+            'name' => $request->user()->username,
+            'time' => time(),
+            'rating' => null,
+            'review' => $validated['reply'],
+            'is_accepted' => 'Y',
+            'source' => 'reply',
+            'parent_id' => $review->id,
+        ]);
+
+        $review->update([
+            'is_accepted' => 'Y',
+        ]);
+
+        return redirect()->back()->with('success', __('Reply has been created!'));
     }
 
     /**
@@ -152,5 +197,39 @@ class ReviewController extends Controller
         $review->delete();
 
         return redirect()->back()->with('success', __('Review has been deleted!'));
+    }
+
+    public function approve(Request $request, Review $review)
+    {
+        Cache::forget('hotel' . $review->hotel->slug);
+        
+        $review->update([
+            'is_accepted' => 'Y',
+        ]);
+
+        $newReviews = Review::where('is_accepted', 'N')->count();
+
+        return [
+            'success' => true,
+            'reviewID' => $review->id,
+            'new' => $newReviews,
+        ];
+    }
+
+    public function unapprove(Request $request, Review $review)
+    {
+        Cache::forget('hotel' . $review->hotel->slug);
+        
+        $review->update([
+            'is_accepted' => 'N',
+        ]);
+
+        $newReviews = Review::where('is_accepted', 'N')->count();
+
+        return [
+            'success' => true,
+            'reviewID' => $review->id,
+            'new' => $newReviews,
+        ];
     }
 }
