@@ -367,7 +367,11 @@
                                             <div class="card-body">
                                                 <x-main.forms.textarea name="reply" :label="__('Reply')" rows="2"></x-main.forms.textarea>
                                                 <x-main.forms.input-text name="name" :label="__('Your name')" />
-                                                <button class="btn btn-primary" type="button" class="g-recaptcha" data-sitekey="{{ config('services.grecaptcha.site_key') }}" data-callback="renderCaptcha">{{ __('Send Reply') }}</button>
+                                                <div class="mb-3">
+                                                    {{-- <div class="g-recaptcha" data-sitekey="{{ config('services.grecaptcha.site_key') }}" data-size="invisible"></div> --}}
+                                                    <div id="captchaContainer"></div>
+                                                </div>
+                                                <button class="btn btn-primary" type="submit">{{ __('Send Reply') }}</button>
                                             </div>
                                         </div>
                                     </div>
@@ -427,11 +431,6 @@
 
     @push('scriptsBottom')
         <script>
-            function renderCaptcha()
-            {
-                alert('OK');
-            }
-            
             document.addEventListener('alpine:init', () => {
                 Alpine.data('comments', () => ({
                     reply(e) {
@@ -445,7 +444,9 @@
                         const replyPlaceholder = document.querySelectorAll('div[data-reply-placeholder="' + id + '"]');
                         if (replyPlaceholder.length > 0) {
                             replyPlaceholder[0].innerHTML = replyForm;
-                            grecaptcha.execute();
+                            grecaptcha.render('captchaContainer', {
+                                'sitekey': '{{ config('services.grecaptcha.site_key') }}',
+                            });
                         }
                     },
                 }));
