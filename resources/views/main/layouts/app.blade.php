@@ -10,10 +10,6 @@
 
         <title>{!! $pageTitle . ' - ' . $settings__website_name ?? $settings__website_name !!}</title>
 
-        @if($useRecaptcha)
-            <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-        @endif
-
         @vite(['resources/js/app.js'])
         @vite(['resources/css/tailwind.css'])
 
@@ -50,5 +46,9 @@
         </script>
 
         {!! $settings__footer_script !!}
+
+        @if($useRecaptcha)
+            <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+        @endif
     </body>
 </html>

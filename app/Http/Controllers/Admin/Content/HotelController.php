@@ -227,6 +227,8 @@ class HotelController extends Controller
 
         $this->deleteCache($hotel);
 
+        Cache::forget('hotelscount');
+
         return redirect()->route('admin.hotels.add-photo', [$hotel]);
     }
 
