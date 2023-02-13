@@ -53,7 +53,7 @@ class Text
     public static function placeholder($str, $data = [])
     {
         foreach ($data as $search => $replace) {
-            $replace = self::plain($replace);
+            // $replace = self::plain($replace);
             $str = str_replace($search, $replace, $str);
         }
         return $str;
