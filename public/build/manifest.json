@@ -1,25 +1,25 @@
 {
   "resources/js/app.js": {
-    "file": "assets/app.75369ddd.js",
+    "file": "assets/app.6fa338d5.js",
     "src": "resources/js/app.js",
     "isEntry": true,
     "imports": [
-      "_module.esm.97f3aa2e.js"
+      "_index.4ddbd4b3.js"
     ],
     "css": [
       "assets/app.348d43a9.css"
     ]
   },
   "resources/js/admin.js": {
-    "file": "assets/admin.2e877f52.js",
+    "file": "assets/admin.79237251.js",
     "src": "resources/js/admin.js",
     "isEntry": true,
     "imports": [
-      "_module.esm.97f3aa2e.js"
+      "_index.4ddbd4b3.js"
     ]
   },
-  "_module.esm.97f3aa2e.js": {
-    "file": "assets/module.esm.97f3aa2e.js"
+  "_index.4ddbd4b3.js": {
+    "file": "assets/index.4ddbd4b3.js"
   },
   "resources/css/tailwind.css": {
     "file": "assets/tailwind.bbc648c4.css",
