@@ -86,6 +86,8 @@ class HotelReview extends Command
                                 $reviewToSave['rating'] = $review['rating'];
                                 $reviewToSave['time'] = $review['time'];
                                 $reviewToSave['review'] = $review['text'];
+                                $reviewToSave['is_accepted'] = 'Y';
+                                $reviewToSave['source'] = 'google';
     
                                 $reviewsToSave[] = $reviewToSave;
                             }
