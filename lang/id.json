@@ -320,6 +320,12 @@
     "Replies": "Balasan",
     "Comments": "Komentar",
     "Reviews Settings": "Setting Ulasan",
-    "Allow new reviews": "Izinkan review baru",
-    "Reviews settings has been updated!": "Setting ulasan telah diupdate!"
+    "Allow new reviews": "Izinkan ulasan baru",
+    "Reviews settings has been updated!": "Setting ulasan telah diupdate!",
+    "Yes": "Ya",
+    "No": "Tidak",
+    "There are no reviews yet": "Belum ada ulasan",
+    "Allow reply to reviews": "Izinkan membalas ulasan",
+    "Reviews must be approved": "Ulasan harus disetujui",
+    "Replies must be approved": "Balasan harus disetujui"
 }

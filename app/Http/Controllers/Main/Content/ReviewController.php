@@ -8,6 +8,7 @@ use App\Models\Hotel\Hotel;
 use Illuminate\Http\Request;
 use App\Helpers\CacheSystem;
 use App\Helpers\ReCAPTCHA;
+use App\Helpers\Settings;
 
 class ReviewController extends Controller
 {
@@ -33,6 +34,11 @@ class ReviewController extends Controller
 
     public function reply(Request $request, Hotel $hotel)
     {
+        $allowReplyToReviews = Settings::get('reviewssettings__allow_reply_to_reviews', 'Y');
+        if ($allowReplyToReviews == 'N') {
+            abort(403);
+        }
+
         $validated = $request->validateWithBag('reply', [
             'name' => ['required', 'string', 'max:255'],
             'reply' => ['required', 'string', 'max:4096'],
@@ -46,13 +52,21 @@ class ReviewController extends Controller
             return redirect()->back()->with('recaptchaInvalid', __('reCAPTCHA is invalid'));
         }
 
+        $repliesMustBeApproved = Settings::get('reviewssettings__replies_must_be_approved');
+        if ($repliesMustBeApproved == 'Y') {
+            $isAccepted = 'N';
+        }
+        else {
+            $isAccepted = 'Y';
+        }
+
         $review = Review::create([
             'hotel_id' => $hotel->id,
             'name' => $validated['name'],
             'time' => time(),
             'rating' => null,
             'review' => $validated['reply'],
-            'is_accepted' => 'N',
+            'is_accepted' => $isAccepted,
             'source' => 'reply',
             'parent_id' => $validated['reply_to'],
         ]);
@@ -70,6 +84,11 @@ class ReviewController extends Controller
      */
     public function store(Request $request, Hotel $hotel)
     {   
+        $allowNewReviews = Settings::get('reviewssettings__allow_new_reviews', 'Y');
+        if ($allowNewReviews == 'N') {
+            abort(403);
+        }
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'review' => ['required', 'string', 'max:4096'],
@@ -88,13 +107,21 @@ class ReviewController extends Controller
         $validated['is_accepted'] = 'N';
         $validated['source'] = 'review';
 
+        $reviewsMustBeApproved = Settings::get('reviewssettings__reviews_must_be_approved');
+        if ($reviewsMustBeApproved == 'Y') {
+            $isAccepted = 'N';
+        }
+        else {
+            $isAccepted = 'Y';
+        }
+
         $review = Review::create([
             'name' => $validated['name'],
             'review' => $validated['review'],
             'rating' => $validated['rating'],
             'hotel_id' => $validated['hotel_id'],
             'time' => $validated['time'],
-            'is_accepted' => $validated['is_accepted'],
+            'is_accepted' => $isAccepted,
             'source' => $validated['source'],
         ]);
 

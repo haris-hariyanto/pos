@@ -50,21 +50,36 @@ class ViewServiceProvider extends ServiceProvider
             $view->with('newReviews', $newReviews);
         });
 
+        View::composer('main.contents.hotel', function ($view) {
+            if (Cache::has('reviewssettings')) {
+                $settings = json_decode(Cache::get('reviewssettings'), true);
+                if (empty($settings)) {
+                    $createCache = true;
+                }
+                else {
+                    $createCache = false;
+                }
+            }
+            else {
+                $createCache = true;
+            }
+
+            if ($createCache) {
+                $settings = MetaData::where('key', 'like', 'reviewssettings__%')->get();
+                $settings = $settings->mapWithKeys(function ($item) {
+                    return [$item->key => $item->value];
+                })->toArray();
+
+                $settingsCache = json_encode($settings);
+                Cache::forever('reviewssettings', $settingsCache);
+            }
+
+            foreach ($settings as $settingKey => $settingValue) {
+                $view->with($settingKey, $settingValue);
+            }
+        });
+
         View::composer(['main.index', 'main.*'], function ($view) {
-            /*
-            $currentView = $view->name();
-            
-            $cacheKeyMapping = [
-                'main.index' => 'pagesettings_home_',
-                'main.contents.hotel' => 'pagesettings_hotel_',
-                'main.contents.place' => 'pagesettings_place_',
-                'main.contents.continent' => 'pagesettings_continent_',
-                'main.contents.country' => 'pagesettings_country_',
-                'main.contents.country-states' => 'pagesettings_country_states_',
-                'main.contents.country-cities' => 'pagesettings_country_cities_',
-                'main.contents.country-places' => 'pagesettings_country_places_',
-            ];
-            */
             $pageSettings = Cache::get('pagesettings');
             if (!empty($pageSettings)) {
                 $settings = json_decode($pageSettings, true);

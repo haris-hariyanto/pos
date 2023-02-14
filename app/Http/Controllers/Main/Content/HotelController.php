@@ -11,6 +11,7 @@ use App\Helpers\Image;
 use App\Models\Location\Place;
 use App\Helpers\CacheSystem;
 use App\Helpers\StructuredData;
+use App\Helpers\Settings;
 
 class HotelController extends Controller
 {
@@ -89,12 +90,13 @@ class HotelController extends Controller
             'reviews' => $hotel['reviews'],
         ]);
 
-        $reviewsAndReplies = $this->recursiveReviews($hotel['reviews'], 0, 0, $preview);
+        $allowReplyToReviews = Settings::get('reviewssettings__allow_reply_to_reviews', 'Y');
+        $reviewsAndReplies = $this->recursiveReviews($hotel['reviews'], 0, 0, $preview, $allowReplyToReviews);
 
         return view('main.contents.hotel', compact('hotel', 'paragraphs', 'nearbyPlaces', 'structuredData', 'reviewsAndReplies'));
     }
 
-    private function recursiveReviews($reviews, $parent = 0, $depth = 0, $preview)
+    private function recursiveReviews($reviews, $parent = 0, $depth = 0, $preview, $allowReplyToReviews = 'Y')
     {
         if ($depth > 0) {
             $paddingLeft = 20;
@@ -109,20 +111,23 @@ class HotelController extends Controller
                 $haveReplies = $this->checkHaveReplies($reviews, $review['id']);
                 if ($haveReplies) {
                     $html = '<div id="review' . $review['id'] . '" style="padding-left: ' . $paddingLeft . 'px;">';
-                    $html .= view('components.main.components.contents.review', compact('review', 'depth'))->render();
+                    $html .= view('components.main.components.contents.review', compact('review', 'depth', 'allowReplyToReviews'))->render();
                     $html .= '<div class="border-start border-2">';
-                    $html .= $this->recursiveReviews($reviews, $review['id'], $depth + 1, $preview);
+                    $html .= $this->recursiveReviews($reviews, $review['id'], $depth + 1, $preview, $allowReplyToReviews);
                     $html .= '</div>';
                     $html .= '</div>';
                     $result[] = $html;
                 }
                 else {
                     $html = '<div id="review' . $review['id'] . '" style="padding-left: ' . $paddingLeft . 'px;">';
-                    $html .= view('components.main.components.contents.review', compact('review', 'depth'))->render();
+                    $html .= view('components.main.components.contents.review', compact('review', 'depth', 'allowReplyToReviews'))->render();
                     $html .= '</div>';
                     $result[] = $html;
                 }
             }            
+        }
+        if (count($result) == 0) {
+            $result[] = view('components.main.components.contents.reviews-empty')->render();
         }
         $result = implode('', $result);
         return $result;

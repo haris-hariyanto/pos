@@ -16,13 +16,21 @@ class ReviewSettingController extends Controller
             __('Reviews Settings') => '',
         ];
 
-        return view('admin.settings.reviews', compact('breadcrumb'));
+        $settings = MetaData::where('key', 'like', 'reviewssettings__%')->get();
+        $settings = $settings->mapWithKeys(function ($item) {
+            return [$item['key'] => $item['value']];
+        })->toArray();
+
+        return view('admin.settings.reviews', compact('breadcrumb', 'settings'));
     }
 
     public function save(Request $request)
     {
         $validated = $request->validate([
             'reviewssettings__allow_new_reviews' => ['required', 'in:Y,N'],
+            'reviewssettings__allow_reply_to_reviews' => ['required', 'in:Y,N'],
+            'reviewssettings__reviews_must_be_approved' => ['required', 'in:Y,N'],
+            'reviewssettings__replies_must_be_approved' => ['required', 'in:Y,N'],
         ]);
 
         foreach ($validated as $settingName => $settingValue) {

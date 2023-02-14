@@ -368,7 +368,6 @@
                                                 <x-main.forms.textarea name="reply" :label="__('Reply')" rows="2"></x-main.forms.textarea>
                                                 <x-main.forms.input-text name="name" :label="__('Your name')" />
                                                 <div class="mb-3">
-                                                    {{-- <div class="g-recaptcha" data-sitekey="{{ config('services.grecaptcha.site_key') }}" data-size="invisible"></div> --}}
                                                     <div id="captchaContainer"></div>
                                                 </div>
                                                 <button class="btn btn-primary" type="submit">{{ __('Send Reply') }}</button>
@@ -379,47 +378,49 @@
                                 <!-- [END] Reply form -->
                             </div>
 
-                            <!-- Comment form -->
-                            <form action="{{ route('reviews.store', ['hotel' => $hotel['id']]) }}#commentBox" method="POST">
-                                @csrf
+                            @if ($reviewssettings__allow_new_reviews == 'Y')
+                                <!-- Comment form -->
+                                <form action="{{ route('reviews.store', ['hotel' => $hotel['id']]) }}#commentBox" method="POST">
+                                    @csrf
 
-                                <div class="card shadow-sm mb-2" id="commentBox">
-                                    <div class="card-body">
-                                        <x-main.forms.textarea name="review" :label="__('Review')" rows="5">{{ old('review') }}</x-main.forms.textarea>
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <x-main.forms.input-text name="name" :label="__('Your name')" :value="old('name')" />
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="mb-1">{{ __('Rating') }}</div>
-                                                <div x-data="rating">
-                                                    <input type="hidden" name="rating" x-model="currentStarRating">
-                                                    <template x-for="(rating, index) in ratings" :key="index">
-                                                        <button type="button" class="btn px-0" @click="selectRating(index)">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-star tw-text-orange-400" viewBox="0 0 16 16" x-show="rating['full'] == false">
-                                                                <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"/>
-                                                            </svg>
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-star-fill tw-text-orange-400" viewBox="0 0 16 16" x-show="rating['full'] == true">
-                                                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
-                                                            </svg>
-                                                        </button>
-                                                    </template>
+                                    <div class="card shadow-sm mb-2" id="commentBox">
+                                        <div class="card-body">
+                                            <x-main.forms.textarea name="review" :label="__('Review')" rows="5">{{ old('review') }}</x-main.forms.textarea>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <x-main.forms.input-text name="name" :label="__('Your name')" :value="old('name')" />
                                                 </div>
-                                                @error('rating')
-                                                    <div class="text-danger small">
-                                                        {{ $message }}
+                                                <div class="col-6">
+                                                    <div class="mb-1">{{ __('Rating') }}</div>
+                                                    <div x-data="rating">
+                                                        <input type="hidden" name="rating" x-model="currentStarRating">
+                                                        <template x-for="(rating, index) in ratings" :key="index">
+                                                            <button type="button" class="btn px-0" @click="selectRating(index)">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-star tw-text-orange-400" viewBox="0 0 16 16" x-show="rating['full'] == false">
+                                                                    <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"/>
+                                                                </svg>
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-star-fill tw-text-orange-400" viewBox="0 0 16 16" x-show="rating['full'] == true">
+                                                                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                                                                </svg>
+                                                            </button>
+                                                        </template>
                                                     </div>
-                                                @enderror
+                                                    @error('rating')
+                                                        <div class="text-danger small">
+                                                            {{ $message }}
+                                                        </div>
+                                                    @enderror
+                                                </div>
                                             </div>
+                                            <div class="mb-3">
+                                                <x-main.forms.recaptcha size="normal" />
+                                            </div>
+                                            <button class="btn btn-primary" type="submit">{{ __('Send Review') }}</button>
                                         </div>
-                                        <div class="mb-3">
-                                            <x-main.forms.recaptcha size="normal" />
-                                        </div>
-                                        <button class="btn btn-primary" type="submit">{{ __('Send Review') }}</button>
                                     </div>
-                                </div>
-                            </form>
-                            <!-- [END] Comment form -->
+                                </form>
+                                <!-- [END] Comment form -->
+                            @endif
                         </div>
                     </div>
                     <!-- [END] Reviews -->

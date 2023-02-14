@@ -92,14 +92,12 @@
                     </a>
                 </li>
 
-                <!--
                 <li class="nav-item">
                     <a href="{{ route('admin.settings.reviews') }}" @class(['nav-link', 'active' => Route::currentRouteName() == 'admin.settings.reviews'])>
                         <i class="nav-icon fas fa-comments"></i>
                         <p>{{ __('Reviews Settings') }}</p>
                     </a>
                 </li>
-                -->
 
                 <li class="nav-item">
                     <a href="{{ route('admin.settings.pages') }}" @class(['nav-link', 'active' => Route::currentRouteName() == 'admin.settings.pages'])>

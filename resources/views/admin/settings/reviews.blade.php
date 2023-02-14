@@ -24,10 +24,28 @@
                         <b>{{ __('Reviews Settings') }}</b>
                     </div>
                     <div class="card-body">
-                        <div>
+                        <div class="mb-3">
                             <div class="font-weight-bold">{{ __('Allow new reviews') }}</div>
-                            <x-admin.forms.radio :label="__('Yes')" name="reviewssettings__allow_new_reviews" value="Y" :selected="false" />
-                            <x-admin.forms.radio :label="__('No')" name="reviewssettings__allow_new_reviews" value="N" :selected="false" />
+                            <x-admin.forms.radio :label="__('Yes')" name="reviewssettings__allow_new_reviews" value="Y" :selected="$settings['reviewssettings__allow_new_reviews'] == 'Y'" />
+                            <x-admin.forms.radio :label="__('No')" name="reviewssettings__allow_new_reviews" value="N" :selected="$settings['reviewssettings__allow_new_reviews'] == 'N'" />
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="font-weight-bold">{{ __('Allow reply to reviews') }}</div>
+                            <x-admin.forms.radio :label="__('Yes')" name="reviewssettings__allow_reply_to_reviews" value="Y" :selected="$settings['reviewssettings__allow_reply_to_reviews'] == 'Y'" />
+                            <x-admin.forms.radio :label="__('No')" name="reviewssettings__allow_reply_to_reviews" value="N" :selected="$settings['reviewssettings__allow_reply_to_reviews'] == 'N'" />
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="font-weight-bold">{{ __('Reviews must be approved') }}</div>
+                            <x-admin.forms.radio :label="__('Yes')" name="reviewssettings__reviews_must_be_approved" value="Y" :selected="$settings['reviewssettings__reviews_must_be_approved'] == 'Y'" />
+                            <x-admin.forms.radio :label="__('No')" name="reviewssettings__reviews_must_be_approved" value="N" :selected="$settings['reviewssettings__reviews_must_be_approved'] == 'N'" />
+                        </div>
+
+                        <div>
+                            <div class="font-weight-bold">{{ __('Replies must be approved') }}</div>
+                            <x-admin.forms.radio :label="__('Yes')" name="reviewssettings__replies_must_be_approved" value="Y" :selected="$settings['reviewssettings__replies_must_be_approved'] == 'Y'" />
+                            <x-admin.forms.radio :label="__('No')" name="reviewssettings__replies_must_be_approved" value="N" :selected="$settings['reviewssettings__replies_must_be_approved'] == 'N'" />
                         </div>
                     </div>
                     <div class="card-footer">

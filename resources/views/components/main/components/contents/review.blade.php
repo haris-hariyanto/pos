@@ -24,9 +24,11 @@
         @endif
         <div>
             <p class="mb-2">{!! nl2br($review['review'], false) !!}</p>
-            <div>
-                <button class="btn btn-link px-0" type="button" data-id="{{ $review['id'] }}" @click="reply">{{ __('Reply') }}</button>
-            </div>
+            @if ($allowReplyToReviews == 'Y')
+                <div>
+                    <button class="btn btn-link px-0" type="button" data-id="{{ $review['id'] }}" @click="reply">{{ __('Reply') }}</button>
+                </div>
+            @endif
         </div>
     </div>
 </div>
