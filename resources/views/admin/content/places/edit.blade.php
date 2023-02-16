@@ -19,12 +19,21 @@
                 @csrf
                 @method('PUT')
 
-                <div class="alert alert-info">{{ __('Delete cache manually if there is no change after updating') }}</div>
-
                 <div class="card">
                     <div class="card-body">
 
-                        <x-admin.forms.input-text name="name" :label="__('Place')" :value="$place->name" />
+                        <x-admin.forms.input-text name="name" :label="__('Name')" :value="old('name', $place->name)" />
+                        <x-admin.forms.textarea name="address" :label="__('Address')" rows="2">{{ old('address', $place->address) }}</x-admin.forms.textarea>
+                        <div class="row g-0">
+                            <div class="col-6">
+                                <x-admin.forms.input-text name="longitude" :label="__('Longitude')" :value="old('longitude', $place->longitude)" />
+                            </div>
+                            <div class="col-6">
+                                <x-admin.forms.input-text name="latitude" :label="__('Latitude')" :value="old('latitude', $place->latitude)" />
+                            </div>
+                        </div>
+                        <x-admin.forms.select :label="__('Country')" :options="$countries" name="country" :selected="old('country', $place->country)" />
+                        <x-admin.forms.select :label="__('Category')" :options="$categories" name="category" :selected="old('category', $currentCategory)" />
 
                     </div>
                     <div class="card-footer">

@@ -238,6 +238,8 @@ return [
         'review' => 'Review',
         'rating' => 'Rating',
         'reply' => 'Balasan',
+        'category' => 'Kategori',
+        'places' => 'Tempat',
     ],
 
 ];

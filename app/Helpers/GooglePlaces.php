@@ -98,6 +98,7 @@ class GooglePlaces
             }
 
             $params['type'] = $type;
+
             if ($nextPageToken) {
                 $params['pagetoken'] = $nextPageToken;
             }
@@ -158,6 +159,67 @@ class GooglePlaces
             'description' => $response['status'],
             'results' => $results,
         ];
+    }
+
+    // Untuk menambahkan tempat lewat dashboard admin
+    public function searchPlaces($query, $isoCode = false)
+    {
+        $params = [];
+        $params['key'] = $this->key;
+        $params['query'] = $query;
+
+        if ($isoCode) {
+            $params['region'] = $isoCode;
+        }
+
+        if (config('app.locale') == 'id') {
+            $params['language'] = 'id-ID';
+        }
+        else {
+            $params['language'] = 'en';
+        }
+
+        $response = Http::get($this->endpoint . 'textsearch/json', $params);
+
+        $response = $response->body();
+        $response = json_decode($response, true);
+
+        if ($response['status'] == 'OK') {
+            $results = [];
+            foreach ($response['results'] as $result) {
+                $results[] = [
+                    'name' => $result['name'],
+                    'latitude' => $result['geometry']['location']['lat'],
+                    'longitude' => $result['geometry']['location']['lng'],
+                    'viewport' => [
+                        'northeast' => [
+                            'latitude' => $result['geometry']['viewport']['northeast']['lat'],
+                            'longitude' => $result['geometry']['viewport']['northeast']['lng'],
+                        ],
+                        'southwest' => [
+                            'latitude' => $result['geometry']['viewport']['southwest']['lat'],
+                            'longitude' => $result['geometry']['viewport']['southwest']['lng'],
+                        ],
+                    ],
+                    'id' => $result['place_id'],
+                    'types' => $result['types'],
+                    'address' => !empty($result['formatted_address']) ? $result['formatted_address'] : null,
+                    'user_ratings_total' => !empty($result['user_ratings_total']) ? $result['user_ratings_total'] : 0,
+                ];
+            }
+
+            return [
+                'success' => true,
+                'description' => $response['status'],
+                'results' => $results,
+            ];
+        }
+        else {
+            return [
+                'success' => false,
+                'description' => $response['status'],
+            ];
+        }
     }
 
     public function nearbyHotels($latitude, $longitude, $maxPage = 2)

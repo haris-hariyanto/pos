@@ -6,6 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Location\Place;
 use App\Models\Hotel\HotelPlace;
+use App\Models\Location\Country;
+use App\Models\Location\Category;
+use App\Models\Location\CategoryPlace;
+use Illuminate\Support\Str;
 
 class PlaceController extends Controller
 {
@@ -33,11 +37,9 @@ class PlaceController extends Controller
         $querySearch = $request->query('search');
 
         $placesCount = Place::where('type', 'PLACE')
-            // ->where('hotels_nearby', '>', 0)
             ->count();
 
         $places = Place::where('type', 'PLACE')
-            // ->where('hotels_nearby', '>', 0)
             ->when($querySearch, function ($query) use ($querySearch) {
                 $query->where('name', 'like', '%' . $querySearch . '%');
             });
@@ -64,7 +66,6 @@ class PlaceController extends Controller
                     'name' => $place->name,
                     'country' => $place->country,
                     'continent' => $place->continent,
-                    // 'hotels_nearby' => $place->hotels_nearby,
                     'menu' => view('admin.content.places._menu', ['place' => $place])->render(),
                 ];
             }),
@@ -78,7 +79,25 @@ class PlaceController extends Controller
      */
     public function create()
     {
-        //
+        $breadcrumb = [
+            __('Dashboard') => route('admin.index'),
+            __('Places') => route('admin.places.index'),
+            __('Add Place') => '',
+        ];
+
+        $countries = Country::get();
+        $countries = $countries->mapWithKeys(function ($item, $key) {
+            return [$item['name'] => $item['name']];
+        });
+
+        $categories = collect(config('scraper.place_types_to_fetch'));
+        $categories = $categories->mapWithKeys(function ($item, $key) {
+                return [$item => __(ucwords(str_replace('_', ' ', $item)))];
+            })
+            ->prepend(__('Category'), '')
+            ->toArray();
+
+        return view('admin.content.places.create', compact('breadcrumb', 'countries', 'categories'));
     }
 
     /**
@@ -89,7 +108,54 @@ class PlaceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'address' => ['nullable', 'string', 'max:512'],
+            'longitude' => ['required', 'regex:/^\-?[0-9]{1,}\.[0-9]{1,}$/'],
+            'latitude' => ['required', 'regex:/^\-?[0-9]{1,}\.[0-9]{1,}$/'],
+            'country' => ['required', 'exists:countries,name'],
+            'category' => ['nullable', 'exists:categories,name'],
+        ]);
+
+        $baseSlug = Str::slug($validated['name']);
+        $finalSlug = $baseSlug;
+        $counter = 1;
+        while (true) {
+            $slugCount = Place::where('slug', $finalSlug)->count();
+            if ($slugCount == 0) {
+                break;
+            }
+            $finalSlug = $baseSlug . '-' . $counter;
+            $counter++;
+        }
+
+        $country = Country::where('name', $validated['country'])->first();
+        $validated['country'] = $country->name;
+        $validated['continent'] = $country->continent;
+
+        $place = Place::create([
+            'slug' => $finalSlug,
+            'name' => $validated['name'],
+            'type' => 'PLACE',
+            'address' => $validated['address'],
+            'longitude' => $validated['longitude'],
+            'latitude' => $validated['latitude'],
+            'country' => $validated['country'],
+            'continent' => $validated['continent'],
+            'gmaps_id' => null,
+        ]);
+
+        $category = Category::where('name', $validated['category'])->first();
+        if ($category) {
+            CategoryPlace::create([
+                'category_id' => $category->id,
+                'place_id' => $place->id,
+                'country' => $validated['country'],
+                'continent' => $validated['continent'],
+            ]);
+        }
+
+        return redirect()->route('admin.places.index')->with('success', __('Place has been added!'));
     }
 
     /**
@@ -117,7 +183,27 @@ class PlaceController extends Controller
             __('Edit Place') => '',
         ];
 
-        return view('admin.content.places.edit', compact('place', 'breadcrumb'));
+        $countries = Country::get();
+        $countries = $countries->mapWithKeys(function ($item, $key) {
+            return [$item['name'] => $item['name']];
+        });
+
+        $categories = collect(config('scraper.place_types_to_fetch'));
+        $categories = $categories->mapWithKeys(function ($item, $key) {
+                return [$item => __(ucwords(str_replace('_', ' ', $item)))];
+            })
+            ->prepend(__('Category'), '')
+            ->toArray();
+        
+        $currentCategory = CategoryPlace::where('place_id', $place->id)->first();
+        if ($currentCategory) {
+            $currentCategory = $currentCategory->category->name;
+        }
+        else {
+            $currentCategory = '';
+        }
+
+        return view('admin.content.places.edit', compact('place', 'breadcrumb', 'countries', 'categories', 'currentCategory'));
     }
 
     /**
@@ -130,12 +216,42 @@ class PlaceController extends Controller
     public function update(Request $request, Place $place)
     {
         $validationRules = [
-            'name' => ['required']
+            'name' => ['required', 'string', 'max:255'],
+            'address' => ['nullable', 'string', 'max:512'],
+            'longitude' => ['required', 'regex:/^\-?[0-9]{1,}\.[0-9]{1,}$/'],
+            'latitude' => ['required', 'regex:/^\-?[0-9]{1,}\.[0-9]{1,}$/'],
+            'country' => ['required', 'exists:countries,name'],
+            'category' => ['nullable', 'exists:categories,name'],
         ];
 
         $validated = $request->validate($validationRules);
 
-        $place->update($validated);
+        $country = Country::where('name', $validated['country'])->first();
+        $validated['country'] = $country->name;
+        $validated['continent'] = $country->continent;
+
+        $place->update([
+            'name' => $validated['name'],
+            'address' => $validated['address'],
+            'longitude' => $validated['longitude'],
+            'latitude' => $validated['latitude'],
+            'country' => $validated['country'],
+            'continent' => $validated['continent'],
+        ]);
+
+        CategoryPlace::where('place_id', $place->id)->delete();
+
+        if (!empty($validated['category'])) {
+            $category = Category::where('name', $validated['category'])->first();
+            if ($category) {
+                CategoryPlace::create([
+                    'category_id' => $category->id,
+                    'place_id' => $place->id,
+                    'country' => $validated['country'],
+                    'continent' => $validated['continent'],
+                ]);
+            }
+        }
 
         return redirect()->back()->with('success', __('Place has been updated!'));
     }

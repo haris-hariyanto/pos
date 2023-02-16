@@ -114,10 +114,11 @@ class CountryController extends Controller
 
     public function places(Request $request, $country, $category)
     {
+        // Cache untuk halaman tempat tempat di non-aktifkan agar daftar tempat bisa tetap terupdate
         $currentPage = $request->query('page', 1);
 
         $cacheKey = 'country' . $country . 'places' . $category . 'page' . $currentPage;
-        $cacheData = CacheSystem::get($cacheKey);
+        $cacheData = false; // CacheSystem::get($cacheKey);
 
         if ($cacheData) {
             extract($cacheData);

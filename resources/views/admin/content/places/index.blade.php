@@ -13,6 +13,16 @@
         </x-admin.components.alert>
     @endif
 
+    <div class="d-flex justify-content-end mb-3">
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">{{ __('Add Place') }}</button>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="{{ route('admin.places.create') }}">{{ __('Manual') }}</a>
+                <a class="dropdown-item" href="{{ route('admin.places.find') }}">{{ __('Google Places') }}</a>
+            </div>
+        </div>
+    </div>
+
     <div x-data="modalDelete">
         <div class="card">
             <div class="card-body">

@@ -44,6 +44,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::post('/hotels/{hotel}/update-photos', [Controllers\Admin\Content\HotelController::class, 'updatePhotos'])->name('hotels.update-cover');
     Route::get('/hotels/{hotel}/add-photos', [Controllers\Admin\Content\HotelController::class, 'changePhoto'])->name('hotels.add-photo');
 
+    Route::get('/places/find', [Controllers\Admin\Content\PlaceFinderController::class, 'index'])->name('places.find');
+    Route::post('/places/find', [Controllers\Admin\Content\PlaceFinderController::class, 'store']);
     Route::resource('places', Controllers\Admin\Content\PlaceController::class);
     Route::get('/places-index.json', [Controllers\Admin\Content\PlaceController::class, 'indexData'])->name('places.index.data');
 

@@ -11,7 +11,7 @@
         <div class="row g-2">
             @forelse ($results as $result)
                 <div class="col-12 col-lg-4">
-                    <div class="card shadow-sm">
+                    <div class="card shadow-sm h-100">
                         <div class="card-body">
                             <div class="mb-1">
                                 <a href="{{ route('place', [$result['slug']]) }}" class="fw-bold tw-line-clamp-1">{{ $result['name'] }}</a>
