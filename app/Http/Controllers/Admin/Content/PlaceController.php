@@ -64,6 +64,7 @@ class PlaceController extends Controller
                     'id' => $place->id,
                     'slug' => $place->slug,
                     'name' => $place->name,
+                    'address' => $place->address,
                     'country' => $place->country,
                     'continent' => $place->continent,
                     'menu' => view('admin.content.places._menu', ['place' => $place])->render(),

@@ -49,7 +49,9 @@ class SearchController extends Controller
                     foreach ($querySearch as $querySearchPart) {
                         $subQuery->where('name', 'like', '%' . $querySearchPart . '%');
                     }
-                });
+                })
+                ->orWhere('city', implode(' ', $querySearch))
+                ->orWhere('state', implode(' ', $querySearch));
             })
             ->when($queryStar, function ($query, $queryStar) {
                 $queryStar = explode(',', $queryStar);

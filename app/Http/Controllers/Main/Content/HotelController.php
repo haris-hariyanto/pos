@@ -12,6 +12,7 @@ use App\Models\Location\Place;
 use App\Helpers\CacheSystem;
 use App\Helpers\StructuredData;
 use App\Helpers\Settings;
+use Illuminate\Support\Facades\Cache;
 
 class HotelController extends Controller
 {
@@ -58,6 +59,10 @@ class HotelController extends Controller
             CacheSystem::generate($cacheKey, compact('hotel', 'nearbyPlaces'));
         }
 
+        // Views counter
+        $this->totalViewsHandler($hotel['id']);
+        $this->weeklyViewsHandler($hotel['id']);
+
         if (config('app.locale') == 'id') {
             $paragraphs = $this->generateArticleID($hotel);
         }
@@ -94,6 +99,56 @@ class HotelController extends Controller
         $reviewsAndReplies = $this->recursiveReviews($hotel['reviews'], 0, 0, $preview, $allowReplyToReviews);
 
         return view('main.contents.hotel', compact('hotel', 'paragraphs', 'nearbyPlaces', 'structuredData', 'reviewsAndReplies'));
+    }
+
+    private function totalViewsHandler($hotelID)
+    {
+        $hotel = Hotel::where('id', $hotelID)->first();
+        if ($hotel) {
+            $hotel->increment('total_views');
+        }
+    }
+
+    private function weeklyViewsHandler($hotelID)
+    {
+        $hotel = Hotel::where('id', $hotelID)->first();
+        if ($hotel) {
+            $cacheName = 'views' . $hotel->id;
+
+            $currentDate = date('Y-m-d');
+            $currentDate = '2023-03-06';
+
+            if (Cache::has($cacheName)) {
+                $weeklyViews = Cache::get($cacheName);
+                $weeklyViews = json_decode($weeklyViews, true);
+            }
+            else {
+                $weeklyViews = [];
+            }
+
+            if (isset($weeklyViews[$currentDate])) {
+                $weeklyViews[$currentDate] = $weeklyViews[$currentDate] + 1;
+            }
+            else {
+                $weeklyViews[$currentDate] = 1;
+            }
+
+            while (count($weeklyViews) > 7) {
+                array_shift($weeklyViews);
+            }
+
+            $currentWeekViews = 0;
+            foreach ($weeklyViews as $day => $totalViews) {
+                $currentWeekViews += $totalViews;
+            }
+
+            $hotel->update([
+                'weekly_views' => $currentWeekViews,
+            ]);
+
+            $weeklyViews = json_encode($weeklyViews);
+            Cache::forever($cacheName, $weeklyViews);
+        } // [END] if
     }
 
     private function recursiveReviews($reviews, $parent = 0, $depth = 0, $preview, $allowReplyToReviews = 'Y')

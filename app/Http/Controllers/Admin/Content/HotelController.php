@@ -57,6 +57,9 @@ class HotelController extends Controller
         }
 
         $hotels = $hotels->orderBy($querySort, $queryOrder)
+            ->when($querySort == 'total_views' || $querySort == 'weekly_views', function ($query) {
+                $query->orderBy('id', 'ASC');
+            })
             ->skip($queryOffset)
             ->take($queryLimit)
             ->get();
@@ -75,6 +78,8 @@ class HotelController extends Controller
                     'state' => $hotel->state,
                     'country' => $hotel->country,
                     'continent' => $hotel->continent,
+                    'total_views' => $hotel->total_views,
+                    'weekly_views' => $hotel->weekly_views,
                     'menu' => view('admin.content.hotels._menu', ['hotel' => $hotel])->render(),
                 ];
             }),
@@ -118,7 +123,7 @@ class HotelController extends Controller
             'url' => ['required', 'url'],
             'price' => ['nullable', 'numeric'],
             'rates_currency' => ['required_with:price'],
-            'overview' => ['nullable', 'max:2048'],
+            'overview' => ['nullable'],
             'brand' => ['nullable', 'max:255'],
             'chain' => ['nullable', 'max:255'],
             'address_line_1' => ['nullable', 'max:1024'],
