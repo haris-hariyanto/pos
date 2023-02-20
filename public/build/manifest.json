@@ -1,6 +1,6 @@
 {
   "resources/js/app.js": {
-    "file": "assets/app.6fa338d5.js",
+    "file": "assets/app.b19e42fd.js",
     "src": "resources/js/app.js",
     "isEntry": true,
     "imports": [
@@ -22,7 +22,7 @@
     "file": "assets/index.4ddbd4b3.js"
   },
   "resources/css/tailwind.css": {
-    "file": "assets/tailwind.bbc648c4.css",
+    "file": "assets/tailwind.0ae069d8.css",
     "src": "resources/css/tailwind.css",
     "isEntry": true
   },
