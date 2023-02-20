@@ -107,8 +107,8 @@
                 <div class="col-12 col-lg-3">
 
                     <!-- Filter -->
-                    <div class="d-flex overflow-auto d-lg-none">
-                        <button type="button" class="btn btn-secondary" @click="toggleFilterSection()">
+                    <div class="d-flex flex-wrap d-lg-none">
+                        <button type="button" class="btn btn-secondary me-2 mt-2" @click="toggleFilterSection()">
                             <div class="d-flex align-items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-funnel" viewBox="0 0 16 16">
                                     <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2h-11z"/>
@@ -116,7 +116,7 @@
                                 <div class="ms-2">{{ __('Filter') }}</div>
                             </div>
                         </button>
-                        <div class="dropdown ms-2">
+                        <div class="dropdown me-2 mt-2">
                             <button class="btn btn-secondary dropdown-toggle shadow-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 {{ __('Sort') }} : <span x-text="currentSortModeText"></span>
                             </button>
@@ -132,7 +132,7 @@
                                 </li>
                             </ul>
                         </div>
-                        <button class="btn btn-secondary ms-2" type="button" data-bs-toggle="modal" data-bs-target="#mapModal">{{ __('Maps') }}</button>
+                        <button class="btn btn-secondary mt-2" type="button" data-bs-toggle="modal" data-bs-target="#mapModal">{{ __('Maps') }}</button>
                     </div>
 
                     <div class="mt-2 mt-lg-0 card shadow-sm d-none d-lg-block" :class="{ 'd-none': !showFilterSection }" data-base="{{ route('place', [$place['slug']]) }}" x-ref="base">
