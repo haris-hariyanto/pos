@@ -1,9 +1,10 @@
 {
   "resources/js/app.js": {
-    "file": "assets/app.b19e42fd.js",
+    "file": "assets/app.d7bc9dc8.js",
     "src": "resources/js/app.js",
     "isEntry": true,
     "imports": [
+      "_dropdown.a20fdd29.js",
       "_index.4ddbd4b3.js"
     ],
     "css": [
@@ -17,6 +18,17 @@
     "imports": [
       "_index.4ddbd4b3.js"
     ]
+  },
+  "resources/js/autocomplete.js": {
+    "file": "assets/autocomplete.05f18f1b.js",
+    "src": "resources/js/autocomplete.js",
+    "isEntry": true,
+    "imports": [
+      "_dropdown.a20fdd29.js"
+    ]
+  },
+  "_dropdown.a20fdd29.js": {
+    "file": "assets/dropdown.a20fdd29.js"
   },
   "_index.4ddbd4b3.js": {
     "file": "assets/index.4ddbd4b3.js"

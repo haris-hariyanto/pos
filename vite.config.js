@@ -14,6 +14,7 @@ export default defineConfig({
                 'resources/css/tailwind.css',
                 'resources/js/app.js',
                 'resources/js/admin.js',
+                'resources/js/autocomplete.js',
             ],
             refresh: true,
         }),
