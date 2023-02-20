@@ -57,6 +57,7 @@ document.addEventListener('alpine:init', () => {
                         });
                         this.searchInstances.forEach(searchInstance => {
                             searchInstance.setData(dataset);
+                            console.log(dataset);
                         });
                     }
                 });

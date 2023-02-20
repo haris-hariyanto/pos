@@ -35,6 +35,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
         Route::get('/reviews', [Controllers\Admin\Setting\ReviewSettingController::class, 'index'])->name('reviews');
         Route::put('/reviews', [Controllers\Admin\Setting\ReviewSettingController::class, 'save']);
 
+        Route::get('/search', [Controllers\Admin\Setting\SearchController::class, 'index'])->name('search');
+        Route::put('/search', [Controllers\Admin\Setting\SearchController::class, 'save'])->name('save');
+
         Route::get('/pages', [Controllers\Admin\Setting\PageSettingConttoller::class, 'index'])->name('pages');
         Route::put('/pages', [Controllers\Admin\Setting\PageSettingConttoller::class, 'save']);
     });

@@ -8,6 +8,9 @@ use App\Models\Location\Place;
 use App\Models\Location\City;
 use App\Models\Hotel\Hotel;
 use Illuminate\Support\Facades\DB;
+use App\Helpers\Settings;
+use App\Helpers\GooglePlaces;
+use Illuminate\Support\Str;
 
 class SearchController extends Controller
 {
@@ -140,8 +143,27 @@ class SearchController extends Controller
             ->orderBy('user_ratings_total', 'DESC')
             ->simplePaginate(24)
             ->withQueryString();
+        
+        $isSearchFromAPI = false;
+        if (count($results) < 1) {
+            $googlePlaces = new GooglePlaces();
+            $getPlaces = $googlePlaces->searchPlaces($query);
 
-        return view('main.contents.search-places', compact('query', 'results'));
+            if ($getPlaces['success']) {
+                $isSearchFromAPI = true;
+
+                $results = [];
+                foreach ($getPlaces['results'] as $place) {
+                    $results[] = [
+                        'name' => $place['name'],
+                        'address' => $place['address'],
+                        'url' => route('new-place', [$place['id']]),
+                    ];
+                } // [END] foreach
+            }
+        }
+
+        return view('main.contents.search-places', compact('query', 'results', 'isSearchFromAPI'));
     }
 
     public function autocomplete(Request $request)
@@ -162,7 +184,7 @@ class SearchController extends Controller
 
             $autocompleteResults = $places;
 
-            if (count($places) < 5) {
+            if (count($autocompleteResults) < 5) {
                 $cities = City::where('name', 'LIKE', $query . '%')
                     ->take(5)
                     ->get();
@@ -177,6 +199,27 @@ class SearchController extends Controller
                 $autocompleteResults = array_merge($autocompleteResults, $cities);
             }
 
+            $searchAPIEnabled = Settings::get('searchsettings__enabled', 'N');
+            if (count($autocompleteResults) < 5 && $searchAPIEnabled == 'Y') {
+                $googlePlaces = new GooglePlaces();
+                $getPlaces = $googlePlaces->searchPlaces($query);
+
+                if ($getPlaces['success']) {
+                    $placeList = $getPlaces['results'];
+
+                    $APIPlacesResults = [];
+                    foreach ($placeList as $place) {
+                        $APIPlacesResults[] = [
+                            'name' => $place['name'],
+                            'tag' => __(ucwords(str_replace('_', ' ', $place['types'][0]))),
+                            'route' => route('new-place', [$place['id']]),
+                        ];
+                    }
+
+                    $autocompleteResults = array_merge($autocompleteResults, $APIPlacesResults);
+                }
+            }
+
             return [
                 'results' => $autocompleteResults,
                 'success' => true,
@@ -188,5 +231,72 @@ class SearchController extends Controller
                 'success' => true,
             ];
         }
+    }
+
+    public function newPlace($placeID)
+    {
+        $searchAPIEnabled = Settings::get('searchsettings__enabled', 'N');
+        if ($searchAPIEnabled == 'N') {
+            return redirect()->route('index');
+        }
+
+        $placeExists = Place::where('gmaps_id', $placeID)->first();
+        if ($placeExists) {
+            return redirect()->route('place', [$placeExists->slug]);
+        }
+
+        $googlePlaces = new GooglePlaces();
+        $getPlace = $googlePlaces->details($placeID);
+        if ($getPlace['success']) {
+            $place = $getPlace['result'];
+
+            $placeSlug = $this->createUniqueSlug($place['name']);
+            
+            $additionalData = [];
+            $additionalData['viewport'] = $place['geometry']['viewport'];
+            
+            $placeInstance = Place::create([
+                'slug' => $placeSlug,
+                'name' => $place['name'],
+                'type' => 'PLACE',
+                'address' => !empty($place['formatted_address']) ? $place['formatted_address'] : null,
+                'longitude' => $place['geometry']['location']['lng'],
+                'latitude' => $place['geometry']['location']['lat'],
+                'gmaps_id' => $placeID,
+                'additional_data' => json_encode($additionalData),
+                'user_ratings_total' => !empty($place['user_ratings_total']) ? $place['user_ratings_total'] : 0,
+            ]);
+
+            return redirect()->route('place', [$placeInstance->slug]);
+        }
+        else {
+            return redirect()->route('index');
+        }
+    }
+
+    private function createUniqueSlug($name)
+    {
+        $baseSlug = Str::slug($name);
+        $slug = $baseSlug;
+        $tailID = 1;
+        $loop = true;
+        while ($loop) {
+            $slugCount = Place::where('slug', $slug)->count();
+            if ($slugCount == 0) {
+                $loop = false;
+                break;
+            }
+            else {
+                $slug = $baseSlug . '-' . $tailID;
+                $tailID++;
+            }
+        }
+
+        if (empty(trim($slug))) {
+            $lastRecord = Place::orderBy('id', 'desc')->first();
+            $slug = $lastRecord->id + 1;
+        }
+
+        return $slug;
     }
 }

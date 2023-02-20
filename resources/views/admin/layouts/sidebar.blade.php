@@ -107,6 +107,13 @@
                 </li>
 
                 <li class="nav-item">
+                    <a href="{{ route('admin.settings.search') }}" @class(['nav-link', 'active' => Route::currentRouteName() == 'admin.settings.search'])>
+                        <i class="nav-icon fas fa-search"></i>
+                        <p>{{ __('Search Settings') }}</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <a href="{{ route('admin.settings.cache') }}" @class(['nav-link', 'active' => Route::currentRouteName() == 'admin.settings.cache'])>
                         <i class="nav-icon fas fa-bolt"></i>
                         <p>{{ __('Cache') }}</p>

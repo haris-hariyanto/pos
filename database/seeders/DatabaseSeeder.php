@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             PageSeeder::class,
             SettingSeeder::class,
             ReviewsSettingsSeeder::class,
+            SearchSettingsSeeder::class,
         ]);
     }
 }

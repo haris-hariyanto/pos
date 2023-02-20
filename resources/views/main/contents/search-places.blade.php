@@ -14,7 +14,11 @@
                     <div class="card shadow-sm h-100">
                         <div class="card-body">
                             <div class="mb-1">
-                                <a href="{{ route('place', [$result['slug']]) }}" class="fw-bold tw-line-clamp-1">{{ $result['name'] }}</a>
+                                @if ($isSearchFromAPI)
+                                    <a href="{{ $result['url'] }}" class="fw-bold tw-line-clamp-1">{{ $result['name'] }}</a>
+                                @else
+                                    <a href="{{ route('place', [$result['slug']]) }}" class="fw-bold tw-line-clamp-1">{{ $result['name'] }}</a>
+                                @endif
                             </div>
                             <div class="small text-muted tw-line-clamp-1">{{ $result['address'] }}</div>
                         </div>
@@ -30,8 +34,10 @@
                 </div>
             @endforelse
         </div>
-        <div class="my-2">
-            {{ $results->links('components.main.components.simple-pagination') }}
-        </div>
+        @if (!$isSearchFromAPI)
+            <div class="my-2">
+                {{ $results->links('components.main.components.simple-pagination') }}
+            </div>
+        @endif
     </div>
 </x-main.layouts.app>

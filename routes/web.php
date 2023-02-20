@@ -78,6 +78,8 @@ Route::get('/search-autocomplete', [Controllers\Main\Content\SearchController::c
 Route::post('/hotel/{hotel}/review', [Controllers\Main\Content\ReviewController::class, 'store'])->name('reviews.store');
 Route::post('/hotel/{hotel}/reply', [Controllers\Main\Content\ReviewController::class, 'reply'])->name('reviews.reply');
 
+Route::get('/new-place/{placeID}', [Controllers\Main\Content\SearchController::class, 'newPlace'])->name('new-place');
+
 Route::get('/p/{page}', [Controllers\Main\Misc\PageController::class, 'page'])->name('page');
 Route::get('/contact', [Controllers\Main\Misc\ContactController::class, 'contact'])->name('contact');
 Route::post('/contact', [Controllers\Main\Misc\ContactController::class, 'send']);

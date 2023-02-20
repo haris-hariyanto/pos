@@ -67,7 +67,6 @@ class Autocomplete {
   }
 
   createItem(lookup, item) {
-    console.log(item);
     let label;
     if (this.options.highlightTyped) {
       const idx = removeDiacritics(item.label)
@@ -109,14 +108,13 @@ class Autocomplete {
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i];
       const entry = this.options.data[key];
-      console.log(entry);
       const item = {
           label: this.options.label ? entry[this.options.label] : key,
           value: this.options.value ? entry[this.options.value] : entry,
           tag: entry['tag'],
       };
 
-      if (removeDiacritics(item.label).toLowerCase().indexOf(removeDiacritics(lookup).toLowerCase()) >= 0) {
+      if (removeDiacritics(item.label).toLowerCase().indexOf(removeDiacritics(lookup).toLowerCase()) >= 0 || true) {
         items.appendChild(this.createItem(lookup, item));
         if (this.options.maximumItems > 0 && ++count >= this.options.maximumItems)
           break;

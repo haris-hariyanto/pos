@@ -338,5 +338,8 @@
     "Weekly Views": "View Mingguan",
     "Most Popular": "Paling Populer",
     "Popular Cities": "Kota Populer",
-    "Other": "Lainnya"
+    "Other": "Lainnya",
+    "Search Settings": "Setting Pencarian",
+    "Enable search using the Google Places API": "Aktifkan pencarian menggunakan API Google Places",
+    "Search settings has been updated!": "Setting pencarian telah diupdate!"
 }

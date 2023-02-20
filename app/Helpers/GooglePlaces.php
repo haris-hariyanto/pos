@@ -41,6 +41,38 @@ class GooglePlaces
         }
     }
 
+    public function details($placeID)
+    {
+        $params = [];
+        $params['place_id'] = $placeID;
+        $params['key'] = $this->key;
+        $params['fields'] = 'name,formatted_address,geometry,user_ratings_total';
+        if (config('app.locale') == 'id') {
+            $params['language'] = 'id-ID';
+        }
+        else {
+            $params['language'] = 'en';
+        }
+
+        $response = Http::get($this->endpoint . 'details/json', $params);
+
+        $response = $response->body();
+        $response = json_decode($response, true);
+
+        if ($response['status'] == 'OK') {
+            return [
+                'success' => true,
+                'result' => $response['result'],
+            ];
+        }
+        else {
+            return [
+                'success' => false,
+                'description' => $response['status'],
+            ];
+        }
+    }
+
     public function reviews($placeID)
     {
         $params = [];
