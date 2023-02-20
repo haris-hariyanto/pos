@@ -209,11 +209,13 @@ class SearchController extends Controller
 
                     $APIPlacesResults = [];
                     foreach ($placeList as $place) {
-                        $APIPlacesResults[] = [
-                            'name' => $place['name'],
-                            'tag' => __(ucwords(str_replace('_', ' ', $place['types'][0]))),
-                            'route' => route('new-place', [$place['id']]),
-                        ];
+                        if ($place['types'][0] != 'lodging') {
+                            $APIPlacesResults[] = [
+                                'name' => $place['name'],
+                                'tag' => __(ucwords(str_replace('_', ' ', $place['types'][0]))),
+                                'route' => route('new-place', [$place['id']]),
+                            ];
+                        }
                     }
 
                     $autocompleteResults = array_merge($autocompleteResults, $APIPlacesResults);

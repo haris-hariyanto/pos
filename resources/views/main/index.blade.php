@@ -47,7 +47,7 @@
                                         <option value="findHotels">{{ __('Find Hotels') }}</option>
                                         <option value="findPlaces">{{ __('Find Places') }}</option>
                                     </select>
-                                    <input type="text" class="form-control" placeholder="{{ __('Enter an address or property') }}" name="q" data-search="true" x-model="searchQuery" @keyup.debounce="getAutocomplete()">
+                                    <input type="text" class="form-control rounded-end" placeholder="{{ __('Enter an address or property') }}" name="q" data-search="true" x-model="searchQuery" @keyup.debounce="getAutocomplete()">
                                 </div>
                             </div>
 

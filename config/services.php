@@ -41,4 +41,10 @@ return [
         'key_js' => env('GOOGLE_MAPS_JS_API_KEY', ''),
     ],
 
+    'openai' => [
+        'key' => env('OPENAI_API_KEY', null),
+        'temperature' => (int) env('OPENAI_TEMPERATURE', 0.7),
+        'max_tokens' => (int) env('OPENAI_MAX_TOKENS', 600),
+    ],
+
 ];

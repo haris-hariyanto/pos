@@ -187,7 +187,7 @@
                     results: '',
                     isLoading: false,
 
-                    currentSortMode: 'popular',
+                    currentSortMode: '{{ request()->query('sort-by', 'popular') }}',
                     get currentSortModeText()
                     {
                         const sortMode = document.querySelectorAll('[data-sort-by="' + this.currentSortMode + '"]');
