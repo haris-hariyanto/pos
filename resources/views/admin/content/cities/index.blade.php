@@ -32,6 +32,7 @@
                             <th data-field="state" data-visible="true">{{ __('State') }}</th>
                             <th data-field="country" data-visible="true">{{ __('Country') }}</th>
                             <th data-field="continent" data-visible="false">{{ __('Continent') }}</th>
+                            <th data-field="total_views" data-sortable="true" data-width="1">{{ __('Total Views') }}</th>
                             <th data-field="menu" data-align="center" data-switchable="false" data-width="1">{{ __('Menu') }}</th>
                         </tr>
                     </thead>

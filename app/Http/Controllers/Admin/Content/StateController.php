@@ -58,6 +58,7 @@ class StateController extends Controller
                     'name' => $state->name,
                     'country' => $state->country,
                     'continent' => $state->continent,
+                    'total_views' => $state->total_views,
                     'menu' => view('admin.content.states._menu', ['state' => $state])->render(),
                 ];
             }),

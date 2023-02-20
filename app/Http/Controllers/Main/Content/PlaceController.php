@@ -60,6 +60,9 @@ class PlaceController extends Controller
             CacheSystem::generate($cacheKey, compact('place', 'hotels', 'links'));
         }
 
+        // Views counter
+        $this->totalViewsHandler($place['id']);
+
         $structuredData = new StructuredData();
         $structuredData->breadcrumb([
             __('Home') => route('index'),
@@ -67,6 +70,14 @@ class PlaceController extends Controller
         ]);
 
         return view('main.contents.place', compact('place', 'hotels', 'links', 'currentPage', 'structuredData'));
+    }
+
+    private function totalViewsHandler($placeID)
+    {
+        $place = Place::where('id', $placeID)->first();
+        if ($place) {
+            $place->increment('total_views');
+        }
     }
 
     private function distance($lat1, $lon1, $lat2, $lon2, $unit) {

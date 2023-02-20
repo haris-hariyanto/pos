@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Location\Continent;
 use App\Models\Location\Place;
+use App\Models\Location\City;
 use App\Models\Hotel\Hotel;
 use App\Models\MetaData;
 use App\Helpers\CacheSystem;
@@ -42,13 +43,23 @@ class HomeController extends Controller
             }
 
             // Popular places
-            // $modelPopularPlaces = Place::orderBy('user_ratings_total', 'DESC')->where('hotels_nearby', '>', 0)->take(12)->get();
             $modelPopularPlaces = Place::orderBy('user_ratings_total', 'DESC')->take(12)->get();
             $popularPlaces = $modelPopularPlaces->toArray();
 
+            // Popular cities
+            $modelPopularCities = City::orderBy('total_views', 'DESC')->take(12)->get();
+            $popularCities = $modelPopularCities->toArray();
+
             // Popular hotels
-            $modelPopularHotels = Hotel::orderBy('number_of_reviews', 'DESC')->take(12)->get();
-            $popularHotels = $modelPopularHotels->toArray();
+            $modelPopularHotels = Hotel::orderBy('weekly_views', 'DESC')
+                ->orderBy('number_of_reviews', 'DESC')
+                ->take(12)
+                ->get();
+            $popularHotels = $modelPopularHotels->map(function ($modelPopularHotel) {
+                $popularHotel = $modelPopularHotel->toArray();
+                $popularHotel['photos'] = json_decode($popularHotel['photos'], true);
+                return $popularHotel;
+            })->toArray();
 
             // Get cover images for each continents
             $homeCoverImages = MetaData::where('key', 'home_cover_images')->first();
@@ -58,9 +69,9 @@ class HomeController extends Controller
             }
 
             // Generate cache
-            CacheSystem::generate($cacheKey, compact('continents', 'popularPlaces', 'popularHotels', 'homeCoverImages'));
+            CacheSystem::generate($cacheKey, compact('continents', 'popularPlaces', 'popularHotels', 'popularCities', 'homeCoverImages'));
         }
 
-        return view('main.index', compact('continents', 'popularPlaces', 'popularHotels', 'homeCoverImages'));
+        return view('main.index', compact('continents', 'popularPlaces', 'popularHotels', 'popularCities', 'homeCoverImages'));
     }
 }

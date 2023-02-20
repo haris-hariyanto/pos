@@ -74,6 +74,7 @@ else {
 }
 
 Route::get('/search', [Controllers\Main\Content\SearchController::class, 'index'])->name('search');
+Route::get('/search-autocomplete', [Controllers\Main\Content\SearchController::class, 'autocomplete'])->name('search.autocomplete');
 Route::post('/hotel/{hotel}/review', [Controllers\Main\Content\ReviewController::class, 'store'])->name('reviews.store');
 Route::post('/hotel/{hotel}/reply', [Controllers\Main\Content\ReviewController::class, 'reply'])->name('reviews.reply');
 

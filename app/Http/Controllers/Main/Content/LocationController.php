@@ -68,6 +68,30 @@ class LocationController extends Controller
             CacheSystem::generate($cacheKey, compact('type', 'location', 'hotels', 'links'));
         }
 
+        if ($type == 'city' || $type == config('content.location_term_city')) {
+            $this->cityTotalViewsHandler($location['id']);
+        }
+
+        if ($type == 'state' || $type == config('content.location_term_state')) {
+            $this->stateTotalViewsHandler($location['id']);
+        }
+
         return view('main.contents.hotel-location', compact('type', 'location', 'hotels', 'links', 'currentPage'));
+    }
+
+    private function cityTotalViewsHandler($cityID)
+    {
+        $city = City::where('id', $cityID)->first();
+        if ($city) {
+            $city->increment('total_views');
+        }
+    }
+
+    private function stateTotalViewsHandler($stateID)
+    {
+        $state = State::where('id', $stateID)->first();
+        if ($state) {
+            $state->increment('total_views');
+        }
     }
 }

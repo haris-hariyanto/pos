@@ -12,6 +12,7 @@
 
         @vite(['resources/js/app.js'])
         @vite(['resources/css/tailwind.css'])
+        @vite(['resources/js/autocomplete.js'])
 
         @stack('scripts')
 

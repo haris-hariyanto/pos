@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Main\Content;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Location\Place;
+use App\Models\Location\City;
 use App\Models\Hotel\Hotel;
 use Illuminate\Support\Facades\DB;
 
@@ -42,7 +43,7 @@ class SearchController extends Controller
         $queryStar = $request->query('star');
         $queryMinPrice = $request->query('min-price', null);
         $queryMaxPrice = $request->query('max-price', null);
-        $querySortBy = $request->query('sort-by', 'recommended');
+        $querySortBy = $request->query('sort-by', 'popular');
 
         $results = Hotel::where(function ($query) use ($querySearch) {
                 $query->where(function ($subQuery) use ($querySearch) {
@@ -78,8 +79,9 @@ class SearchController extends Controller
                     $query->where('price', '<=', $queryMaxPrice);
                 }
             })
-            ->when($querySortBy == 'recommended', function ($query) {
-                $query->orderBy('number_of_reviews', 'DESC');
+            ->when($querySortBy == 'popular', function ($query) {
+                $query->orderBy('total_views', 'DESC')
+                    ->orderBy('number_of_reviews', 'DESC');
             })
             ->when($querySortBy == 'lowest-price', function ($query) {
                 $query->orderBy('price', 'ASC');
@@ -140,5 +142,51 @@ class SearchController extends Controller
             ->withQueryString();
 
         return view('main.contents.search-places', compact('query', 'results'));
+    }
+
+    public function autocomplete(Request $request)
+    {
+        $query = $request->query('q');
+        if ($query) {
+            $places = Place::with('categories')
+                ->where('name', 'LIKE', '%' . $query . '%')
+                ->take(5)
+                ->get();
+            $places = $places->map(function ($item) {
+                return [
+                    'name' => $item->name,
+                    'tag' => $item->categories()->first() ? __(ucwords(str_replace('_', ' ', $item->categories()->first()->name))) : __('Other'),
+                    'route' => route('place', [$item->slug]),
+                ];
+            })->toArray();
+
+            $autocompleteResults = $places;
+
+            if (count($places) < 5) {
+                $cities = City::where('name', 'LIKE', $query . '%')
+                    ->take(5)
+                    ->get();
+                $cities = $cities->map(function ($item) {
+                    return [
+                        'name' => $item->name,
+                        'tag' => __('City'),
+                        'route' => route('hotel.location', [config('content.location_term_city'), $item->slug]),
+                    ];
+                })->toArray();
+
+                $autocompleteResults = array_merge($autocompleteResults, $cities);
+            }
+
+            return [
+                'results' => $autocompleteResults,
+                'success' => true,
+            ];
+        }
+        else {
+            return [
+                'results' => [],
+                'success' => true,
+            ];
+        }
     }
 }

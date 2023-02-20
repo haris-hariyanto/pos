@@ -23,4 +23,9 @@ class Place extends Model
     {
         return $this->belongsTo(\App\Models\Location\Country::class, ['country', 'continent'], ['name', 'continent']);
     }
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class);
+    }
 }

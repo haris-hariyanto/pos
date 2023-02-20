@@ -28,7 +28,7 @@
                             </button>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="#" class="dropdown-item" data-sort-by="recommended" @click="changeSortMode('recommended')">{{ __('Recommended') }}</a>
+                                    <a href="#" class="dropdown-item" data-sort-by="popular" @click="changeSortMode('popular')">{{ __('Most Popular') }}</a>
                                 </li>
                                 <li>
                                     <a href="#" class="dropdown-item" data-sort-by="lowest-price" @click="changeSortMode('lowest-price')">{{ __('Lowest Price') }}</a>
@@ -97,7 +97,7 @@
                             </button>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="#" class="dropdown-item" data-sort-by="recommended" @click="changeSortMode('recommended')">{{ __('Recommended') }}</a>
+                                    <a href="#" class="dropdown-item" data-sort-by="popular" @click="changeSortMode('popular')">{{ __('Most Popular') }}</a>
                                 </li>
                                 <li>
                                     <a href="#" class="dropdown-item" data-sort-by="lowest-price" @click="changeSortMode('lowest-price')">{{ __('Lowest Price') }}</a>
@@ -187,7 +187,7 @@
                     results: '',
                     isLoading: false,
 
-                    currentSortMode: 'recommended',
+                    currentSortMode: 'popular',
                     get currentSortModeText()
                     {
                         const sortMode = document.querySelectorAll('[data-sort-by="' + this.currentSortMode + '"]');

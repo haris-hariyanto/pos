@@ -59,6 +59,7 @@ class CityController extends Controller
                     'state' => $city->state,
                     'country' => $city->country,
                     'continent' => $city->continent,
+                    'total_views' => $city->total_views,
                     'menu' => view('admin.content.cities._menu', ['city' => $city])->render(),
                 ];
             }),

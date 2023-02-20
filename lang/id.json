@@ -70,6 +70,7 @@
     "States": "Provinsi / Negara Bagian",
     "Countries": "Negara",
     "Continents": "Benua",
+    "Library": "Perpustakaan",
 
     "Hotels": "Hotel",
     "Nearby Places": "Tempat-Tempat di Sekitar",
@@ -334,5 +335,8 @@
     "Place name": "Nama tempat",
     "Check All": "Pilih Semua",
     "Total Views": "Total View",
-    "Weekly Views": "View Mingguan"
+    "Weekly Views": "View Mingguan",
+    "Most Popular": "Paling Populer",
+    "Popular Cities": "Kota Populer",
+    "Other": "Lainnya"
 }

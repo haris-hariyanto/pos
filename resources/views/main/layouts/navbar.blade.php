@@ -26,7 +26,9 @@
                                 <option value="findHotels" @selected(Route::currentRouteName() == 'search.hotels')>{{ __('Find Hotels') }}</option>
                                 <option value="findPlaces" @selected(Route::currentRouteName() == 'search.places')>{{ __('Find Places') }}</option>
                             </select>
-                            <input type="text" class="form-control flex-fill" name="q" placeholder="{{ __('Enter an address or property') }}" value="{{ request()->query('q') }}">
+                            <div class="form-control z-3 p-0">
+                                <input type="text" class="form-control border-0 rounded-0 w-100 h-100" name="q" placeholder="{{ __('Enter an address or property') }}" value="{{ request()->query('q') }}">
+                            </div>                            
                             <button class="btn btn-secondary px-5" type="submit">{{ __('Search') }}</button>
                         </div>
                     </form>
