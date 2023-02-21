@@ -158,19 +158,21 @@ class LocationController extends Controller
             }
 
             // Generate cache
-            $cacheTags = [];
-            if ($type == config('content.location_term_city')) {
-                $cacheTags[] = '[city:' . $location['id'] . ']';
+            if (empty($queryStar) && empty($queryMinPrice) && empty($queryMaxPrice) && $querySortBy == 'popular') {
+                $cacheTags = [];
+                if ($type == config('content.location_term_city')) {
+                    $cacheTags[] = '[city:' . $location['id'] . ']';
+                }
+                if ($type == config('content.location_term_state')) {
+                    $cacheTags[] = '[state:' . $location['id'] . ']';
+                }
+                $cacheTags[] = '[country:' . $location['country']['id'] . ']';
+                $cacheTags[] = '[continent:' . $location['continent']['id'] . ']';
+    
+                CacheSystemDB::generate($cacheKey, compact('type', 'location', 'hotels', 'links'), [
+                    'hotels' => 'hotel',
+                ], $cacheTags);
             }
-            if ($type == config('content.location_term_state')) {
-                $cacheTags[] = '[state:' . $location['id'] . ']';
-            }
-            $cacheTags[] = '[country:' . $location['country']['id'] . ']';
-            $cacheTags[] = '[continent:' . $location['continent']['id'] . ']';
-
-            CacheSystemDB::generate($cacheKey, compact('type', 'location', 'hotels', 'links'), [
-                'hotels' => 'hotel',
-            ], $cacheTags);
             // [END] Generate cache
         }
 

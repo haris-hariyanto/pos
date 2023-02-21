@@ -106,12 +106,14 @@ class PlaceController extends Controller
             }
 
             // Generate cache
-            $cacheTags = [];
-            $cacheTags[] = '[place:' . $place['id'] . ']';
-            foreach ($hotels as $hotel) {
-                $cacheTags[] = '[hotel:' . $hotel['hotel']['id'] . ']';
+            if (empty($queryStar) && empty($queryMinPrice) && empty($queryMaxPrice) && $querySortBy == 'popular') {
+                $cacheTags = [];
+                $cacheTags[] = '[place:' . $place['id'] . ']';
+                foreach ($hotels as $hotel) {
+                    $cacheTags[] = '[hotel:' . $hotel['hotel']['id'] . ']';
+                }
+                CacheSystemDB::generate($cacheKey, compact('place', 'hotels', 'links'), [], $cacheTags);
             }
-            CacheSystemDB::generate($cacheKey, compact('place', 'hotels', 'links'), [], $cacheTags);
             // [END] Generate cache
         }
 
