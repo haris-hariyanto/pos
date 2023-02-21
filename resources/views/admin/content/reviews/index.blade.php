@@ -17,7 +17,7 @@
         <div class="card">
             <div class="card-body">
 
-                <div id="toolbar">
+                <div id="toolbar" class="d-flex align-items-center">
                     <div class="dropdown" x-data="{ type: 'all', typeName: '{{ __('All') }}' }" :data-type="type" id="filterRows" x-init="$watch('type', refreshTable)">
                         <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false" x-text="typeName"></button>
                         <div class="dropdown-menu">
@@ -26,6 +26,8 @@
                             <button class="dropdown-item" type="button" @click="type = 'replies'; typeName = '{{ __('Replies') }}'">{{ __('Replies') }}</button>
                         </div>
                     </div>
+
+                    <a href="{{ route('admin.reviews.approve_all') }}" class="btn btn-secondary ml-2">{{ __('Approve All') }}</a>
                 </div>
 
                 <table

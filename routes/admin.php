@@ -64,6 +64,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::resource('continents', Controllers\Admin\Content\ContinentController::class);
     Route::get('/continents-index.json', [Controllers\Admin\Content\ContinentController::class, 'indexData'])->name('continents.index.data');
 
+    Route::get('/reviews-approve-all', [Controllers\Admin\Content\ReviewController::class, 'approveAll'])->name('reviews.approve_all');
     Route::resource('reviews', Controllers\Admin\Content\ReviewController::class);
     Route::get('/reviews-index.json', [Controllers\Admin\Content\ReviewController::class, 'indexData'])->name('reviews.index.data');
     Route::put('/reviews/{review}/approve', [Controllers\Admin\Content\ReviewController::class, 'approve'])->name('reviews.approve');

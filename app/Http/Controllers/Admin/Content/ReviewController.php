@@ -200,6 +200,20 @@ class ReviewController extends Controller
         return redirect()->back()->with('success', __('Review has been deleted!'));
     }
 
+    public function approveAll(Request $request)
+    {
+        $reviews = Review::with('hotel')->where('is_accepted', 'N')->get();
+        foreach ($reviews as $review) {
+            $review->update([
+                'is_accepted' => 'Y',
+            ]);
+
+            CacheSystemDB::forget('hotel' . $review->hotel->slug);
+        }
+
+        return redirect()->back();
+    }
+
     public function approve(Request $request, Review $review)
     {
         CacheSystemDB::forget('hotel' . $review->hotel->slug);
