@@ -22,7 +22,7 @@ class PlaceFinderController extends Controller
             __('Google Places') => '',
         ];
 
-        $countries = Country::get();
+        $countries = Country::orderBy('name', 'ASC')->get();
 
         $placesList = [];
 
