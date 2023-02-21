@@ -10,6 +10,7 @@ use App\Models\Location\Category;
 use App\Models\Location\CategoryPlace;
 use App\Helpers\GooglePlaces;
 use Illuminate\Support\Str;
+use App\Helpers\CacheSystemDB;
 
 class PlaceFinderController extends Controller
 {
@@ -101,6 +102,11 @@ class PlaceFinderController extends Controller
                         'place_id' => $placeInstance->id,
                         'country' => $country->name,
                         'continent' => $country->continent,
+                    ]);
+
+                    CacheSystemDB::forgetWithTags([
+                        '[country:' . $country->id . ']',
+                        '[category:' . $category->id . ']'
                     ]);
                 } // [END] foreach
             }

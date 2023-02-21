@@ -39,6 +39,7 @@ document.addEventListener('alpine:init', () => {
                 url: baseURL,
                 params: {
                     q: this.searchQuery,
+                    req: this.countRequest,
                 }
             })
                 .then(response => {
@@ -55,9 +56,9 @@ document.addEventListener('alpine:init', () => {
                                 tag: result.tag,
                             });
                         });
+
                         this.searchInstances.forEach(searchInstance => {
                             searchInstance.setData(dataset);
-                            console.log(dataset);
                         });
                     }
                 });

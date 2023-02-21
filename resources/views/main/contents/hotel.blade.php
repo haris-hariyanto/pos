@@ -118,7 +118,11 @@
                                     <div class="row g-2 my-0 h-100">
                                         <div class="col-12 d-flex">
                                             @if (!empty($hotel['photos'][0]))
-                                                <img src="{{ \App\Helpers\Image::removeQueryParameters($hotel['photos'][0]) }}" class="rounded img-cover" loading="lazy" alt="{{ $hotel['name'] }}">
+                                                @if (config('content.lazy_load'))
+                                                    <img data-src="{{ \App\Helpers\Image::removeQueryParameters($hotel['photos'][0]) }}" class="rounded img-cover lazy" alt="{{ $hotel['name'] }}">
+                                                @else
+                                                    <img src="{{ \App\Helpers\Image::removeQueryParameters($hotel['photos'][0]) }}" class="rounded img-cover" loading="lazy" alt="{{ $hotel['name'] }}">
+                                                @endif
                                             @else
                                                 <img src="{{ asset('assets/main/images/no-image.png') }}" class="rounded img-cover" loading="lazy" alt="No image">
                                             @endif
@@ -131,7 +135,11 @@
                                             @if ($index > 0)
                                                 @if (!empty($photo))
                                                     <div class="col-6 d-flex">
-                                                        <img src="{{ \App\Helpers\Image::removeQueryParameters($photo) }}" class="rounded img-cover-small" loading="lazy" alt="{{ $hotel['name'] }}">
+                                                        @if (config('content.lazy_load'))
+                                                            <img data-src="{{ \App\Helpers\Image::removeQueryParameters($photo) }}" class="rounded img-cover-small lazy" alt="{{ $hotel['name'] }}">
+                                                        @else
+                                                            <img src="{{ \App\Helpers\Image::removeQueryParameters($photo) }}" class="rounded img-cover-small" loading="lazy" alt="{{ $hotel['name'] }}">
+                                                        @endif
                                                     </div>
                                                 @else
                                                     <div class="col-6 d-flex">

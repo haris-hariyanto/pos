@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Hotel\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use App\Helpers\CacheSystemDB;
 use Illuminate\Support\Facades\Validator;
 
 class ReviewController extends Controller
@@ -123,7 +124,7 @@ class ReviewController extends Controller
             return redirect()->back()->with('error', $errors->first('reply'));
         }
 
-        Cache::forget('hotel' . $review->hotel->slug);
+        CacheSystemDB::forget('hotel' . $review->hotel->slug);
 
         $validated = $validator->validated();
 
@@ -171,7 +172,7 @@ class ReviewController extends Controller
      */
     public function update(Request $request, Review $review)
     {
-        Cache::forget('hotel' . $review->hotel->slug);
+        CacheSystemDB::forget('hotel' . $review->hotel->slug);
 
         $validationRules = [
             'review' => ['required'],
@@ -193,7 +194,7 @@ class ReviewController extends Controller
      */
     public function destroy(Request $request, Review $review)
     {
-        Cache::forget('hotel' . $review->hotel->slug);
+        CacheSystemDB::forget('hotel' . $review->hotel->slug);
         $review->delete();
 
         return redirect()->back()->with('success', __('Review has been deleted!'));
@@ -201,7 +202,7 @@ class ReviewController extends Controller
 
     public function approve(Request $request, Review $review)
     {
-        Cache::forget('hotel' . $review->hotel->slug);
+        CacheSystemDB::forget('hotel' . $review->hotel->slug);
         
         $review->update([
             'is_accepted' => 'Y',
@@ -218,7 +219,7 @@ class ReviewController extends Controller
 
     public function unapprove(Request $request, Review $review)
     {
-        Cache::forget('hotel' . $review->hotel->slug);
+        CacheSystemDB::forget('hotel' . $review->hotel->slug);
         
         $review->update([
             'is_accepted' => 'N',

@@ -6,18 +6,17 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Location\Place;
 use App\Models\Hotel\Hotel;
-use App\Helpers\CacheSystem;
+use App\Helpers\CacheSystemDB;
 use App\Helpers\StructuredData;
 
 class PlaceController extends Controller
 {
     public function index(Request $request, $place)
     {
-        // Cache untuk halaman tempat di non-aktifkan agar detail hotel bisa tetap terupdate
         $currentPage = $request->query('page', 1);
 
         $cacheKey = 'place' . $place . 'page' . $currentPage;
-        $cacheData = false; // CacheSystem::get($cacheKey);
+        $cacheData = CacheSystemDB::get($cacheKey);
 
         if ($cacheData && !$request->expectsJson()) {
             extract($cacheData);
@@ -107,7 +106,13 @@ class PlaceController extends Controller
             }
 
             // Generate cache
-            CacheSystem::generate($cacheKey, compact('place', 'hotels', 'links'));
+            $cacheTags = [];
+            $cacheTags[] = '[place:' . $place['id'] . ']';
+            foreach ($hotels as $hotel) {
+                $cacheTags[] = '[hotel:' . $hotel['hotel']['id'] . ']';
+            }
+            CacheSystemDB::generate($cacheKey, compact('place', 'hotels', 'links'), [], $cacheTags);
+            // [END] Generate cache
         }
 
         // Views counter

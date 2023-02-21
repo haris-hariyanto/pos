@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Content;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Location\City;
+use App\Helpers\CacheSystemDB;
 
 class CityController extends Controller
 {
@@ -130,6 +131,8 @@ class CityController extends Controller
     public function destroy(City $city)
     {
         $city->hotels()->delete();
+
+        CacheSystemDB::forgetWithTags($city->id, 'city');
         $city->delete();
 
         return redirect()->back()->with('success', __('City has been deleted!'));

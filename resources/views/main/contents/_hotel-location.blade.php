@@ -1,0 +1,104 @@
+<x-main.layouts.app>
+    <x-slot:pageTitle>{{ __('Hotels in :location, :country', ['location' => $location['name'], 'country' => $location['country']['name']]) }}</x-slot:pageTitle>
+    <x-slot:pageTitle>
+        {{ 
+            \App\Helpers\Text::placeholder($type == config('content.location_term_city') ? $pagesettings_city_page_title : $pagesettings_state_page_title, [
+                '[appname]' => $settings__website_name,
+                '[country_name]' => $location['country']['name'],
+                '[city_name]' => $location['name'],
+                '[state_name]' => $location['name'],
+                '[page]' => $currentPage,
+                '[current_url]' => route('hotel.location', [$type, $location['slug']]),
+            ])
+        }}
+    </x-slot:pageTitle>
+
+    @push('metaData')
+        {!!
+            \App\Helpers\Text::placeholder($type == config('content.location_term_city') ? $pagesettings_city_meta_data : $pagesettings_state_meta_data, [
+                '[appname]' => $settings__website_name,
+                '[country_name]' => $location['country']['name'],
+                '[city_name]' => $location['name'],
+                '[state_name]' => $location['name'],
+                '[page]' => $currentPage,
+                '[current_url]' => route('hotel.location', [$type, $location['slug']]),
+            ])
+        !!}
+
+        @if ($currentPage == 1)
+            <link rel="canonical" href="{{ route('hotel.location', [$type, $location['slug']]) }}">
+        @else
+            <link rel="canonical" href="{{ route('hotel.location', [$type, $location['slug'], 'page' => $currentPage]) }}">
+        @endif
+    @endpush
+
+    <div class="bg-white shadow-sm">
+        <div class="container py-2 px-4">
+
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-10">
+                    <!-- Breadcrumb -->
+                    <div class="mt-2">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a href="{{ route('index') }}">{{ __('Home') }}</a>
+                                </li>
+
+                                @if (!empty($location['continent']))
+                                    <li class="breadcrumb-item">
+                                        <a href="{{ route('continent', [$location['continent']['slug']]) }}">{{ $location['continent']['name'] }}</a>
+                                    </li>
+                                @endif
+
+                                @if (!empty($location['country']))
+                                    <li class="breadcrumb-item">
+                                        <a href="{{ route('country', [$location['country']['slug']]) }}">{{ $location['country']['name'] }}</a>
+                                    </li>
+                                @endif
+
+                                <li class="breadcrumb-item active" aria-current="page">{{ $location['name'] }}</li>
+                            </ol>
+                        </nav>
+                    </div>
+                    <!-- [END] Breadcrumb -->
+
+                    <h1 class="fs-2 mb-3">
+                        {{
+                            \App\Helpers\Text::placeholder($type == 'city' ? $pagesettings_city_heading : $pagesettings_state_heading, [
+                                '[appname]' => $settings__website_name,
+                                '[country_name]' => $location['country']['name'],
+                                '[city_name]' => $location['name'],
+                                '[state_name]' => $location['name'],
+                                '[page]' => $currentPage,
+                                '[current_url]' => route('hotel.location', [$type, $location['slug']]),
+                            ]) 
+                        }}
+                    </h1>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="p-1">
+        <div class="container py-4">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-10">
+                    @forelse ($hotels as $hotel)
+                        <x-main.components.contents.hotel :hotel="$hotel" />
+                    @empty
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <p class="mb-0">{{ __('No hotels available.') }}</p>
+                            </div>
+                        </div>
+                    @endforelse
+                </div>
+                <div class="col-12 col-lg-10">
+                    {!! $links !!}
+                </div>
+            </div>
+        </div>
+    </div>
+</x-main.layouts.app>

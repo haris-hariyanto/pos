@@ -19,8 +19,6 @@
                 @csrf
                 @method('PUT')
 
-                <div class="alert alert-info">{{ __('Delete cache manually if there is no change after updating') }}</div>
-
                 <div class="card">
                     <div class="card-body">
 

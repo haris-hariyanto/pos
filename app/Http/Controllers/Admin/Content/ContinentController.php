@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Content;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Location\Continent;
+use App\Helpers\CacheSystemDB;
 
 class ContinentController extends Controller
 {
@@ -143,6 +144,8 @@ class ContinentController extends Controller
         \App\Models\Hotel\Hotel::where('continent', $continent->name)->update(['continent' => $validated['name']]);
         $continent->update($validated);
 
+        CacheSystemDB::forgetWithTags($continent->id, 'continent');
+
         return redirect()->back()->with('success', __('Continent has been updated!'));
     }
 
@@ -154,6 +157,8 @@ class ContinentController extends Controller
      */
     public function destroy(Continent $continent)
     {
+        CacheSystemDB::forgetWithTags($continent->id, 'continent');
+        
         $continent->countries()->delete();
         $continent->states()->delete();
         $continent->cities()->delete();

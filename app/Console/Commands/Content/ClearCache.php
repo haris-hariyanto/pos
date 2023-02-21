@@ -4,6 +4,7 @@ namespace App\Console\Commands\Content;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
+use App\Helpers\CacheSystemDB;
 
 class ClearCache extends Command
 {
@@ -29,7 +30,7 @@ class ClearCache extends Command
     public function handle()
     {
         $this->line('Menghapus cache');
-        Cache::flush();
+        CacheSystemDB::flush();
         $this->line('Cache berhasil dihapus');
     }
 }

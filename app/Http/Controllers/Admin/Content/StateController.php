@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Content;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Location\State;
+use App\Helpers\CacheSystemDB;
 
 class StateController extends Controller
 {
@@ -134,6 +135,8 @@ class StateController extends Controller
         \App\Models\Hotel\Hotel::where('country', $state->country)->where('state', $state->name)->update(['state' => $validated['name']]);
         $state->update($validated);
 
+        CacheSystemDB::forgetWithTags($state->id, 'state');
+
         return redirect()->back()->with('success', __('State has been updated!'));
     }
 
@@ -145,6 +148,8 @@ class StateController extends Controller
      */
     public function destroy(State $state)
     {
+        CacheSystemDB::forgetWithTags($state->id, 'state');
+        
         $state->cities()->delete();
         $state->hotels()->delete();
         $state->delete();

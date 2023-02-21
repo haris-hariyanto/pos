@@ -9,7 +9,7 @@ use App\Models\Location\Place;
 use App\Models\Location\City;
 use App\Models\Hotel\Hotel;
 use App\Models\MetaData;
-use App\Helpers\CacheSystem;
+use App\Helpers\CacheSystemDB;
 use Illuminate\Support\Facades\Cache;
 
 class HomeController extends Controller
@@ -17,7 +17,7 @@ class HomeController extends Controller
     public function index()
     {
         $cacheKey = 'homepage';
-        $cacheData = CacheSystem::get($cacheKey);
+        $cacheData = CacheSystemDB::get($cacheKey);
 
         if ($cacheData) {
             extract($cacheData);
@@ -28,12 +28,14 @@ class HomeController extends Controller
             $continents = [];
             foreach ($modelContinents as $modelContinent) {
                 $continent = [];
+                $continent['id'] = $modelContinent->id;
                 $continent['name'] = $modelContinent->name;
                 $continent['slug'] = $modelContinent->slug;
                 
                 $continent['countries'] = [];
                 foreach ($modelContinent->countries()->take(8)->get() as $country) {
                     $continent['countries'][] = [
+                        'id' => $country->id,
                         'name' => $country->name,
                         'slug' => $country->slug,
                     ];
@@ -69,7 +71,20 @@ class HomeController extends Controller
             }
 
             // Generate cache
-            CacheSystem::generate($cacheKey, compact('continents', 'popularPlaces', 'popularHotels', 'popularCities', 'homeCoverImages'));
+            $cacheTags = [];
+            $cacheTags[] = '[coverImages]';
+            foreach ($continents as $continent) {
+                foreach ($continent['countries'] as $country) {
+                    $cacheTags[] = '[country:' . $country['id'] . ']';
+                }
+            }
+            CacheSystemDB::generate($cacheKey, compact('continents', 'popularPlaces', 'popularHotels', 'popularCities', 'homeCoverImages'), [
+                'continents' => 'continent',
+                'popularPlaces' => 'place',
+                'popularHotels' => 'hotel',
+                'popularCities' => 'city',
+            ], $cacheTags);
+            // [END] Generate cache
         }
 
         return view('main.index', compact('continents', 'popularPlaces', 'popularHotels', 'popularCities', 'homeCoverImages'));

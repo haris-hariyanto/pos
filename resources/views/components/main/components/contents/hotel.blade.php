@@ -1,4 +1,4 @@
-@props(['hotel', 'placeAndDistance' => false, 'showAddress' => false])
+@props(['hotel', 'placeAndDistance' => false, 'showAddress' => false, 'isFromJson' => false])
 
 <div class="card shadow-sm mb-2">
     <div class="card-body">
@@ -6,7 +6,11 @@
             <div class="col-12 col-lg-4">
                 <div class="me-0 me-lg-1 mb-3 mb-lg-0 d-flex justify-content-center align-items-center h-100">
                     @if (!empty($hotel['photos'][0]))
-                        <img src="{{ \App\Helpers\Image::removeQueryParameters($hotel['photos'][0]) }}" alt="{{ $hotel['name'] }}" class="img-fluid rounded tw-max-h-72" loading="lazy">
+                        @if (config('content.lazy_load') && $isFromJson == false)
+                            <img data-src="{{ \App\Helpers\Image::removeQueryParameters($hotel['photos'][0]) }}" alt="{{ $hotel['name'] }}" class="img-fluid rounded tw-max-h-72 lazy">
+                        @else
+                            <img src="{{ \App\Helpers\Image::removeQueryParameters($hotel['photos'][0]) }}" alt="{{ $hotel['name'] }}" class="img-fluid rounded tw-max-h-72" loading="lazy">
+                        @endif
                     @else
                         <img src="{{ asset('assets/main/images/no-image.png') }}" alt="No image" class="img-fluid rounded tw-max-h-72" loading="lazy">
                     @endif

@@ -10,6 +10,7 @@ use App\Models\Location\Country;
 use App\Models\Location\Category;
 use App\Models\Location\CategoryPlace;
 use Illuminate\Support\Str;
+use App\Helpers\CacheSystemDB;
 
 class PlaceController extends Controller
 {
@@ -155,6 +156,11 @@ class PlaceController extends Controller
                 'country' => $validated['country'],
                 'continent' => $validated['continent'],
             ]);
+
+            CacheSystemDB::forgetWithTags([
+                '[country:' . $country->id . ']',
+                '[category:' . $category->id . ']'
+            ]);
         }
 
         return redirect()->route('admin.places.index')->with('success', __('Place has been added!'));
@@ -254,6 +260,8 @@ class PlaceController extends Controller
                 ]);
             }
         }
+
+        CacheSystemDB::forgetWithTags($place->id, 'place');
 
         return redirect()->back()->with('success', __('Place has been updated!'));
     }

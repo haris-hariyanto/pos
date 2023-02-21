@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Hotel\Review;
 use App\Models\Hotel\Hotel;
 use Illuminate\Http\Request;
-use App\Helpers\CacheSystem;
+use App\Helpers\CacheSystemDB;
 use App\Helpers\ReCAPTCHA;
 use App\Helpers\Settings;
 
@@ -71,7 +71,7 @@ class ReviewController extends Controller
             'parent_id' => $validated['reply_to'],
         ]);
 
-        CacheSystem::forget('hotel' . $hotel['slug']);
+        CacheSystemDB::forgetWithTags($hotel['id'], 'hotel');
 
         return redirect()->route('hotel', ['hotel' => $hotel->slug, 'unapproved' => $review->id, '#review' . $review->id]);
     }
@@ -125,7 +125,7 @@ class ReviewController extends Controller
             'source' => $validated['source'],
         ]);
 
-        CacheSystem::forget('hotel' . $hotel['slug']);
+        CacheSystemDB::forgetWithTags($hotel['id'], 'hotel');
 
         return redirect()->route('hotel', [$hotel->slug, 'unapproved' => $review->id, '#review' . $review->id]);
     }

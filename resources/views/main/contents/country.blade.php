@@ -53,13 +53,25 @@
     </div>
 
     <div class="container py-4">
-        <iframe 
-            src="https://www.google.com/maps/embed/v1/place?key={{ config('services.google_maps.key') }}&q={{ urlencode($country['name']) }}"
-            class="border-0 w-100 tw-h-96 rounded shadow-sm"
-            frameborder="0"
-            referrerpolicy="no-referrer-when-downgrade"
-            allowfullscreen>
-        </iframe>
+        @if (config('content.lazy_load'))
+            <iframe 
+                data-src="https://www.google.com/maps/embed/v1/place?key={{ config('services.google_maps.key') }}&q={{ urlencode($country['name']) }}"
+                title="{{ $country['name'] }}"
+                class="border-0 w-100 tw-h-96 rounded shadow-sm lazy"
+                frameborder="0"
+                referrerpolicy="no-referrer-when-downgrade"
+                allowfullscreen>
+            </iframe>
+        @else
+            <iframe 
+                src="https://www.google.com/maps/embed/v1/place?key={{ config('services.google_maps.key') }}&q={{ urlencode($country['name']) }}"
+                title="{{ $country['name'] }}"
+                class="border-0 w-100 tw-h-96 rounded shadow-sm"
+                frameborder="0"
+                referrerpolicy="no-referrer-when-downgrade"
+                allowfullscreen>
+            </iframe>
+        @endif
     </div>
 
     <div class="container pb-4">

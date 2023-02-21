@@ -15,6 +15,7 @@ export default defineConfig({
                 'resources/js/app.js',
                 'resources/js/admin.js',
                 'resources/js/autocomplete.js',
+                'resources/js/lazyload.js',
             ],
             refresh: true,
         }),

@@ -71,7 +71,11 @@
                     <div class="card shadow-sm h-100">
                         <div class="card-body">
                             <div class="mb-3">
-                                <img src="{{ !empty($homeCoverImages[$continent['slug']]) ? $homeCoverImages[$continent['slug']] : config('content.default_cover') }}" alt="{{ $continent['name'] }}" class="rounded home-cover-image" loading="lazy">
+                                @if (config('content.lazy_load'))
+                                    <img data-src="{{ !empty($homeCoverImages[$continent['slug']]) ? $homeCoverImages[$continent['slug']] : config('content.default_cover') }}" alt="{{ $continent['name'] }}" class="rounded home-cover-image lazy">
+                                @else
+                                    <img src="{{ !empty($homeCoverImages[$continent['slug']]) ? $homeCoverImages[$continent['slug']] : config('content.default_cover') }}" alt="{{ $continent['name'] }}" class="rounded home-cover-image" loading="lazy">
+                                @endif
                             </div>
                             <h3 class="fs-5 mb-2">{{ $continent['name'] }}</h3>
                             <div class="row">
@@ -99,7 +103,11 @@
                 <div class="col-12 col-md-6 col-lg-4 col-xl-3">
                     <div class="card tw-shadow hover:tw-shadow-lg h-100">
                         @if (!empty($popularHotel['photos'][0]))
-                            <img src="{{ \App\Helpers\Image::removeQueryParameters($popularHotel['photos'][0]) }}" alt="{{ $popularHotel['name'] }}" class="home-cover-image card-img-top rounded-top" loading="lazy">
+                            @if (config('content.lazy_load'))
+                                <img data-src="{{ \App\Helpers\Image::removeQueryParameters($popularHotel['photos'][0]) }}" alt="{{ $popularHotel['name'] }}" class="home-cover-image card-img-top rounded-top lazy">
+                            @else
+                                <img src="{{ \App\Helpers\Image::removeQueryParameters($popularHotel['photos'][0]) }}" alt="{{ $popularHotel['name'] }}" class="home-cover-image card-img-top rounded-top" loading="lazy">
+                            @endif
                         @else
                             <img src="{{ asset('assets/main/images/no-image.png') }}" alt="No image" class="rounded home-cover-image" loading="lazy">
                         @endif

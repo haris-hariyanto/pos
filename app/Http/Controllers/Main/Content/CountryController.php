@@ -11,14 +11,14 @@ use App\Models\Location\Place;
 use App\Models\Location\Category;
 use App\Models\Location\CategoryPlace;
 use App\Models\Hotel\Hotel;
-use App\Helpers\CacheSystem;
+use App\Helpers\CacheSystemDB;
 
 class CountryController extends Controller
 {
     public function index($country)
     {
         $cacheKey = 'country' . $country;
-        $cacheData = CacheSystem::get($cacheKey);
+        $cacheData = CacheSystemDB::get($cacheKey);
 
         if ($cacheData) {
             extract($cacheData);
@@ -35,6 +35,7 @@ class CountryController extends Controller
             foreach ($modelBestHotels as $modelBestHotel) {
                 $images = json_decode($modelBestHotel->photos, true);
                 $bestHotels[] = [
+                    'id' => $modelBestHotel->id,
                     'slug' => $modelBestHotel->slug,
                     'name' => $modelBestHotel->name,
                     'images' => $images,
@@ -52,15 +53,21 @@ class CountryController extends Controller
 
             $modelPlaces = Place::where('country', $modelCountry->name)->where('continent', $modelCountry->continent)
                 ->where('type', 'PLACE')
-                // ->where('is_hotels_scraped', 'Y')
-                // ->where('hotels_nearby', '>', 0)
                 ->take(15)
                 ->orderBy('user_ratings_total', 'DESC')
                 ->get();
             $places = $modelPlaces->toArray();
 
             // Generate cache
-            CacheSystem::generate($cacheKey, compact('country', 'bestHotels', 'cities', 'states', 'places'));
+            $cacheTags = [];
+            $cacheTags[] = '[country:' . $country['id'] . ']';
+            $cacheTags[] = '[continent:' . $country['continent']['id'] . ']';
+            CacheSystemDB::generate($cacheKey, compact('country', 'bestHotels', 'cities', 'states', 'places'), [
+                'bestHotels' => 'hotel',
+                'cities' => 'city',
+                'states' => 'state',
+                'places' => 'place',
+            ], $cacheTags);
         }
 
         $categories = Category::orderBy('name', 'ASC')->whereIn('name', config('scraper.place_types_to_fetch'))->get();
@@ -71,7 +78,7 @@ class CountryController extends Controller
     public function cities($country)
     {
         $cacheKey = 'country' . $country . 'cities';
-        $cacheData = CacheSystem::get($cacheKey);
+        $cacheData = CacheSystemDB::get($cacheKey);
 
         if ($cacheData) {
             extract($cacheData);
@@ -84,7 +91,14 @@ class CountryController extends Controller
             $country = $modelCountry->toArray();
 
             // Generate cache
-            CacheSystem::generate($cacheKey, compact('country'));
+            $cacheTags = [];
+            $cacheTags[] = '[country:' . $country['id'] . ']';
+            $cacheTags[] = '[continent:' . $country['continent']['id'] . ']';
+            foreach ($country['cities'] as $city) {
+                $cacheTags[] = '[city:' . $city['id'] . ']';
+            }
+            CacheSystemDB::generate($cacheKey, compact('country'), [], $cacheTags);
+            // [END] Generate cache
         }
 
         return view('main.contents.country-cities', compact('country'));
@@ -93,7 +107,7 @@ class CountryController extends Controller
     public function states($country)
     {
         $cacheKey = 'country' . $country . 'states';
-        $cacheData = CacheSystem::get($cacheKey);
+        $cacheData = CacheSystemDB::get($cacheKey);
 
         if ($cacheData) {
             extract($cacheData);
@@ -106,7 +120,14 @@ class CountryController extends Controller
             $country = $modelCountry->toArray();
 
             // Generate cache
-            CacheSystem::generate($cacheData, compact('country'));
+            $cacheTags = [];
+            $cacheTags[] = '[country:' . $country['id'] . ']';
+            $cacheTags[] = '[continent:' . $country['continent']['id'] . ']';
+            foreach ($country['states'] as $state) {
+                $cacheTags[] = '[state:' . $state['id'] . ']';
+            }
+            CacheSystemDB::generate($cacheKey, compact('country'), [], $cacheTags);
+            // [END] Generate cache
         }
 
         return view('main.contents.country-states', compact('country'));
@@ -114,11 +135,10 @@ class CountryController extends Controller
 
     public function places(Request $request, $country, $category)
     {
-        // Cache untuk halaman tempat tempat di non-aktifkan agar daftar tempat bisa tetap terupdate
         $currentPage = $request->query('page', 1);
 
         $cacheKey = 'country' . $country . 'places' . $category . 'page' . $currentPage;
-        $cacheData = false; // CacheSystem::get($cacheKey);
+        $cacheData = CacheSystemDB::get($cacheKey);
 
         if ($cacheData) {
             extract($cacheData);
@@ -146,7 +166,14 @@ class CountryController extends Controller
             $links = $placesModel->links('components.main.components.simple-pagination')->render();
 
             // Generate cache
-            CacheSystem::generate($cacheKey, compact('country', 'places', 'category', 'links'));
+            $cacheTags = [];
+            $cacheTags[] = '[country:' . $country['id'] . ']';
+            $cacheTags[] = '[continent:' . $country['continent']['id'] . ']';
+            $cacheTags[] = '[category:' . $category['id'] . ']';
+            CacheSystemDB::generate($cacheKey, compact('country', 'places', 'category', 'links'), [
+                'places' => 'place'
+            ], $cacheTags);
+            // [END] Generate cache
         }
 
         return view('main.contents.country-places', compact('country', 'places', 'category', 'links', 'currentPage'));

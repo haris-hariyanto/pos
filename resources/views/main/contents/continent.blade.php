@@ -58,7 +58,11 @@
                             <div class="mb-2">
                                 <div class="d-flex align-items-center">
                                     <div class="me-3">
-                                        <img src="https://flagsapi.com/{{ $country['iso_code'] }}/flat/24.png" alt="" loading="lazy" width="24" height="24">
+                                        @if (config('content.lazy_load'))
+                                            <img data-src="https://flagsapi.com/{{ $country['iso_code'] }}/flat/24.png" alt="" class="lazy" width="24" height="24">
+                                        @else
+                                            <img src="https://flagsapi.com/{{ $country['iso_code'] }}/flat/24.png" alt="" loading="lazy" width="24" height="24">
+                                        @endif
                                     </div>
                                     <div class="tw-line-clamp-1">
                                         <a href="{{ route('country', [$country['slug']]) }}">{{ $country['name'] }}</a>

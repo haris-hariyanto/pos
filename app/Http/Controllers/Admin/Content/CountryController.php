@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Content;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Location\Country;
+use App\Helpers\CacheSystemDB;
 
 class CountryController extends Controller
 {
@@ -133,6 +134,8 @@ class CountryController extends Controller
         \App\Models\Hotel\Hotel::where('country', $country->name)->where('continent', $country->continent)->update(['country' => $validated['name']]);
         $country->update($validated);
 
+        CacheSystemDB::forgetWithTags($country->id, 'country');
+
         return redirect()->back()->with('success', __('Country has been updated!'));
     }
 
@@ -144,6 +147,8 @@ class CountryController extends Controller
      */
     public function destroy(Country $country)
     {
+        CacheSystemDB::forgetWithTags($country->id, 'country');
+        
         $country->states()->delete();
         $country->cities()->delete();
         $country->places()->delete();

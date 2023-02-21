@@ -15,7 +15,7 @@ use App\Models\Location\Country;
 use App\Models\Location\City;
 use App\Models\Location\State;
 use Illuminate\Support\Str;
-use App\Helpers\CacheSystem;
+use App\Helpers\CacheSystemDB;
 
 class HotelController extends Controller
 {
@@ -172,7 +172,7 @@ class HotelController extends Controller
                     ]);
 
                     // Hapus cache
-                    Cache::forget('country' . $country->slug . 'cities');
+                    CacheSystemDB::forget('country' . $country->slug . 'cities');
                 }
             }
             else {
@@ -202,7 +202,7 @@ class HotelController extends Controller
                     ]);
 
                     // Hapus cache
-                    Cache::forget('country' . $country->slug . 'states');
+                    CacheSystemDB::forget('country' . $country->slug . 'states');
                 }
             }
             else {
@@ -385,11 +385,9 @@ class HotelController extends Controller
             $validated['star_rating'] = null;
         }
 
-        $this->deleteCache($hotel); // Cache old data
-
         $hotel->update($validated);
 
-        $this->deleteCache($hotel); // Cache new data
+        $this->deleteCache($hotel);
 
         return redirect()->back()->with('success', __('Hotel has been updated!'));
     }
@@ -416,11 +414,9 @@ class HotelController extends Controller
 
             $photos = json_encode($photos);
 
-            $this->deleteCache($hotel); // Cache old data
-
             $hotel->update(['photos' => $photos]);
 
-            $this->deleteCache($hotel); // Cache new data
+            $this->deleteCache($hotel);
 
             if ($inputSource == 'create') {
                 return redirect()->route('admin.hotels.index')->with('success', __('Hotel has been added!'));
@@ -456,11 +452,9 @@ class HotelController extends Controller
 
             $photos = json_encode($photos);
 
-            $this->deleteCache($hotel); // Cache old data
-
             $hotel->update(['photos' => $photos]);
 
-            $this->deleteCache($hotel); // Cache new data
+            $this->deleteCache($hotel);
 
             if ($inputSource == 'create') {
                 return redirect()->route('admin.hotels.index')->with('success', __('Hotel has been added!'));
@@ -475,60 +469,8 @@ class HotelController extends Controller
         }
     }
 
-    private function deleteCache(Hotel $hotel)
-    {
-        // Hotel page
-        $key = 'hotel' . $hotel->slug;
-        CacheSystem::forget($key);
-
-        // Country page
-        $country = Country::where('name', $hotel->country)
-            ->where('continent', $hotel->continent)
-            ->first();
-        if ($country) {
-            $key = 'country' . $country->slug;
-            CacheSystem::forget($key);
-        }
-
-        // State page
-        if (!empty($hotel->state)) {
-            $state = State::where('name', $hotel->state)
-                ->where('country', $hotel->country)
-                ->first();
-            if ($state) {
-                $totalHotels = Hotel::select('id')
-                    ->where('state', $state->name)
-                    ->where('country', $state->country)
-                    ->count();
-                $totalPages = ceil($totalHotels / config('content.hotels_pagination_items_per_page'));
-                for ($i = 1; $i <= $totalPages; $i++) {
-                    $key = 'location' . config('content.location_term_state') . $state->slug . 'page' . $i;
-                    CacheSystem::forget($key);
-                    $key = 'locationstate' . $state->slug . 'page' . $i;
-                    CacheSystem::forget($key);
-                }
-            }
-        }
-
-        // City page
-        if (!empty($hotel->city)) {
-            $city = City::where('name', $hotel->city)
-                ->where('country', $hotel->country)
-                ->first();
-            if ($city) {
-                $totalHotels = Hotel::select('id')
-                    ->where('city', $city->name)
-                    ->where('country', $city->country)
-                    ->count();
-                $totalPages = ceil($totalHotels / config('content.hotels_pagination_items_per_page'));
-                for ($i = 1; $i <= $totalPages; $i++) {
-                    $key = 'location' . config('content.location_term_city') . $city->slug . 'page' . $i;
-                    CacheSystem::forget($key);
-                    $key = 'locationcity' . $city->slug . 'page' . $i;
-                    CacheSystem::forget($key);
-                }
-            }
-        }
+    private function deleteCache(Hotel $hotel) {
+        CacheSystemDB::forgetWithTags($hotel->id, 'hotel');
     }
 
     /**
@@ -543,6 +485,7 @@ class HotelController extends Controller
         $hotel->delete();
 
         Cache::forget('hotelscount');
+        $this->deleteCache($hotel);
 
         return redirect()->back()->with('success', __('Hotel has been deleted!'));
     }

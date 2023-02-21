@@ -9,7 +9,7 @@ use App\Models\Hotel\HotelPlace;
 use App\Helpers\Text;
 use App\Helpers\Image;
 use App\Models\Location\Place;
-use App\Helpers\CacheSystem;
+use App\Helpers\CacheSystemDB;
 use App\Helpers\StructuredData;
 use App\Helpers\Settings;
 use Illuminate\Support\Facades\Cache;
@@ -21,7 +21,7 @@ class HotelController extends Controller
         $preview = $request->query('unapproved');
 
         $cacheKey = 'hotel' . $hotel;
-        $cacheData = CacheSystem::get($cacheKey);
+        $cacheData = CacheSystemDB::get($cacheKey);
 
         if ($cacheData) {
             extract($cacheData);
@@ -56,7 +56,16 @@ class HotelController extends Controller
             }
             
             // Generate cache
-            CacheSystem::generate($cacheKey, compact('hotel', 'nearbyPlaces'));
+            $cacheTags = [];
+            $cacheTags[] = '[hotel:' . $hotel['id'] . ']';
+            foreach ($nearbyPlaces as $nearbyPlace) {
+                $cacheTags[] = '[place:' . $nearbyPlace['place']['id'] . ']';
+            }
+            foreach ($hotel['reviews'] as $review) {
+                $cacheTags[] = '[review:' . $review['id'] . ']';
+            }
+            CacheSystemDB::generate($cacheKey, compact('hotel', 'nearbyPlaces'), [], $cacheTags);
+            // [END] Generate cache
         }
 
         // Views counter

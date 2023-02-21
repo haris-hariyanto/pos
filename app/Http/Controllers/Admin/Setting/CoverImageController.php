@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Location\Continent;
 use App\Models\MetaData;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Cache;
+use App\Helpers\CacheSystemDB;
 
 class CoverImageController extends Controller
 {
@@ -47,7 +47,7 @@ class CoverImageController extends Controller
             ['value' => $homeCoverImages]
         );
 
-        Cache::forget('homepage');
+        CacheSystemDB::forgetWithTags('coverImages');
 
         return redirect()->back()->with('success', __('Cover images has been updated!'));
     }

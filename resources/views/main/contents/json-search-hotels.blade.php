@@ -1,5 +1,5 @@
 @forelse ($resultsArray as $result)
-    <x-main.components.contents.hotel :hotel="$result" :show-address="true" />
+    <x-main.components.contents.hotel :hotel="$result" :show-address="true" :is-from-json="true" />
 @empty
     <div class="card shadow-sm">
         <div class="card-body">
