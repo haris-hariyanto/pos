@@ -10,8 +10,13 @@ use Illuminate\Support\Facades\DB;
 
 class CacheSystemDB
 {
-    public static function generate($key, $data = [], $cacheTags = [], $otherTags = [])
+    public static function generate($key, $data = [], $cacheTags = [], $otherTags = [], $expiredDays = 0)
     {
+        if ($expiredDays > 0) {
+            $expiredDays = 7 * 60 * 60;
+            $expiredDays = time() + $expiredDays;
+        }
+
         $cacheData = json_encode($data);
 
         $tags = [];
@@ -46,7 +51,7 @@ class CacheSystemDB
 
         DB::table('page_caches')->updateOrInsert(
             ['key' => $key],
-            ['value' => $cacheData, 'tags' => $tags]
+            ['value' => $cacheData, 'tags' => $tags, 'expiration' => $expiredDays],
         );
     }
 
@@ -55,6 +60,10 @@ class CacheSystemDB
         $cache = DB::table('page_caches')->where('key', $key)
             ->first();
         if ($cache) {
+            $currentTime = time();
+            if ($currentTime > $cache->expiration) {
+                DB::table('page_caches')->where('key', $key)->delete();
+            }
             return json_decode($cache->value, true);
         }
         else {

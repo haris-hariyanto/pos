@@ -83,7 +83,7 @@ class HomeController extends Controller
                 'popularPlaces' => 'place',
                 'popularHotels' => 'hotel',
                 'popularCities' => 'city',
-            ], $cacheTags);
+            ], $cacheTags, 7);
             // [END] Generate cache
         }
 
