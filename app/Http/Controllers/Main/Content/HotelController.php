@@ -125,7 +125,6 @@ class HotelController extends Controller
             $cacheName = 'views' . $hotel->id;
 
             $currentDate = date('Y-m-d');
-            $currentDate = '2023-03-06';
 
             if (Cache::has($cacheName)) {
                 $weeklyViews = Cache::get($cacheName);

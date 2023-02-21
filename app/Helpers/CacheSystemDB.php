@@ -61,7 +61,7 @@ class CacheSystemDB
             ->first();
         if ($cache) {
             $currentTime = time();
-            if ($currentTime > $cache->expiration) {
+            if ($cache->expiration > 0 && $currentTime > $cache->expiration) {
                 DB::table('page_caches')->where('key', $key)->delete();
             }
             return json_decode($cache->value, true);
