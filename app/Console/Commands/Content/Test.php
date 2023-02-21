@@ -40,6 +40,108 @@ class Test extends Command
      */
     public function handle()
     {
+        Place::truncate();
+        // Clone places
+        $segment = 1;
+        while (true) {
+            $limit = 1000;
+            $skip = ($segment - 1) * $limit;
+
+            $placesModelClone = new Place;
+            $placesClone = $placesModelClone
+                ->setConnection('clone')
+                ->skip($skip)
+                ->take($limit)
+                ->get();
+            
+            if (count($placesClone) < 1) {
+                break;
+            }
+
+            foreach ($placesClone as $placeClone) {
+                $this->line('[ * ] Place ID ' . $placeClone->id . ' : ' . $placeClone->name);
+                Place::create([
+                    'slug' => $placeClone->slug,
+                    'name' => $placeClone->name,
+                    'type' => $placeClone->type,
+                    'address' => $placeClone->address,
+                    'longitude' => $placeClone->longitude,
+                    'latitude' => $placeClone->latitude,
+                    'city' => $placeClone->city,
+                    'state' => $placeClone->state,
+                    'country' => $placeClone->country,
+                    'continent' => $placeClone->continent,
+                    'gmaps_id' => $placeClone->gmaps_id,
+                    'is_hotels_scraped' => $placeClone->is_hotels_scraped,
+                    'hotels_nearby' => $placeClone->hotels_nearby,
+                    'user_ratings_total' => $placeClone->user_ratings_total,
+                    'additional_data' => $placeClone->additional_data,
+                ]);
+            }
+
+            $segment++;
+        }
+        // [END] Clone places
+
+        // Clone categories
+        Category::truncate();
+        $segment = 1;
+        while (true) {
+            $limit = 1000;
+            $skip = ($segment - 1) * $limit;
+
+            $categoriesModelClone = new Category;
+            $categoriesClone = $categoriesModelClone
+                ->setConnection('clone')
+                ->skip($skip)
+                ->take($limit)
+                ->get();
+            
+            if (count($categoriesClone) < 1) {
+                break;
+            }
+
+            foreach ($categoriesClone as $categoryClone) {
+                Category::create([
+                    'slug' => $categoryClone['slug'],
+                    'name' => $categoryClone['name'],
+                ]);
+            }
+
+            $segment++;
+        }
+        // [END] Clone categories
+
+        // Clone category place
+        CategoryPlace::truncate();
+        $segment = 1;
+        while (true) {
+            $limit = 1000;
+            $skip = ($segment - 1) * $limit;
+
+            $placeCategoriesModelClone = new CategoryPlace;
+            $placeCategoriesClone = $placeCategoriesModelClone
+                ->setConnection('clone')
+                ->skip($skip)
+                ->take($limit)
+                ->get();
+            
+            if (count($placeCategoriesClone) < 1) {
+                break;
+            }
+
+            foreach ($placeCategoriesClone as $placeCategoryClone) {
+                CategoryPlace::create([
+                    'place_id' => $placeCategoryClone->place_id,
+                    'category_id' => $placeCategoryClone->category_id,
+                    'country' => $placeCategoryClone->country,
+                    'continent' => $placeCategoryClone->continent,
+                ]);
+            }
+
+            $segment++;
+        }
+        // [END] Clone category place
         /*
         $places = Place::get();
         foreach ($places as $place) {
