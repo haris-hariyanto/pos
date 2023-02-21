@@ -40,8 +40,9 @@ class Test extends Command
      */
     public function handle()
     {
-        /*
         Place::truncate();
+        Category::truncate();
+        CategoryPlace::truncate();
         // Clone places
         $segment = 1;
         while (true) {
@@ -51,6 +52,7 @@ class Test extends Command
             $placesModelClone = new Place;
             $placesClone = $placesModelClone
                 ->setConnection('clone')
+                // ->with('categories')
                 ->skip($skip)
                 ->take($limit)
                 ->get();
@@ -61,7 +63,7 @@ class Test extends Command
 
             foreach ($placesClone as $placeClone) {
                 $this->line('[ * ] Place ID ' . $placeClone->id . ' : ' . $placeClone->name);
-                Place::create([
+                $place = Place::create([
                     'slug' => $placeClone->slug,
                     'name' => $placeClone->name,
                     'type' => $placeClone->type,
@@ -78,11 +80,25 @@ class Test extends Command
                     'user_ratings_total' => $placeClone->user_ratings_total,
                     'additional_data' => $placeClone->additional_data,
                 ]);
+
+                foreach ($placeClone->categories()->get() as $categoryClone) {
+                    $category = Category::firstOrCreate(
+                        ['slug' => $categoryClone['slug']],
+                        ['name' => $categoryClone['name']],
+                    );
+
+                    CategoryPlace::firstOrCreate(
+                        ['place_id' => $place->id, 'category_id' => $category->id],
+                        ['country' => $placeClone->country, 'continent' => $placeClone->continent]
+                    );
+                }
             }
 
             $segment++;
         }
         // [END] Clone places
+
+        /*
 
         // Clone categories
         Category::truncate();
@@ -112,7 +128,6 @@ class Test extends Command
             $segment++;
         }
         // [END] Clone categories
-        */
 
         // Clone category place
         CategoryPlace::truncate();
@@ -158,7 +173,6 @@ class Test extends Command
             $segment++;
         }
         // [END] Clone category place
-        /*
         $places = Place::get();
         foreach ($places as $place) {
             $additionalData = $place->additional_data;
