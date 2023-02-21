@@ -40,6 +40,7 @@ class Test extends Command
      */
     public function handle()
     {
+        /*
         Place::truncate();
         // Clone places
         $segment = 1;
@@ -111,6 +112,7 @@ class Test extends Command
             $segment++;
         }
         // [END] Clone categories
+        */
 
         // Clone category place
         CategoryPlace::truncate();
@@ -131,9 +133,17 @@ class Test extends Command
             }
 
             foreach ($placeCategoriesClone as $placeCategoryClone) {
+                $sourcePlace = new Place;
+                $place = $sourcePlace->setConnection('clone')
+                    ->where('id', $placeCategoryClone->place_id)
+                    ->first();
+                $sourceCategory = new Category;
+                $category = $sourceCategory->setConnection('clone')
+                    ->where('id', $placeCategoryClone->category_id)
+                    ->first();
                 CategoryPlace::create([
-                    'place_id' => $placeCategoryClone->place_id,
-                    'category_id' => $placeCategoryClone->category_id,
+                    'place_id' => $place->id,
+                    'category_id' => $category->id,
                     'country' => $placeCategoryClone->country,
                     'continent' => $placeCategoryClone->continent,
                 ]);
