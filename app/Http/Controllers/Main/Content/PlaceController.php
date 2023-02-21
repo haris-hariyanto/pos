@@ -15,10 +15,15 @@ class PlaceController extends Controller
     {
         $currentPage = $request->query('page', 1);
 
+        $queryStar = $request->query('star', null);
+        $queryMinPrice = $request->query('min-price', null);
+        $queryMaxPrice = $request->query('max-price', null);
+        $querySortBy = $request->query('sort-by', 'popular');
+
         $cacheKey = 'place' . $place . 'page' . $currentPage;
         $cacheData = CacheSystemDB::get($cacheKey);
 
-        if ($cacheData && !$request->expectsJson()) {
+        if ($cacheData && !$request->expectsJson() && empty($queryStar) && empty($queryMinPrice) && empty($queryMaxPrice) && $querySortBy == 'popular') {
             extract($cacheData);
         }
         else {
@@ -27,11 +32,6 @@ class PlaceController extends Controller
                 return redirect()->route('index');
             }
             $place = $modelPlace->toArray();
-
-            $queryStar = $request->query('star');
-            $queryMinPrice = $request->query('min-price', null);
-            $queryMaxPrice = $request->query('max-price', null);
-            $querySortBy = $request->query('sort-by', 'popular');
 
             $latitude = explode('.', $place['latitude']);
             $longitude = explode('.', $place['longitude']);

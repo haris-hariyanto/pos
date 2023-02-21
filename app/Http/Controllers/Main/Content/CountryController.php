@@ -45,16 +45,16 @@ class CountryController extends Controller
                 ];
             }
 
-            $modelCities = City::where('country', $modelCountry->name)->where('continent', $modelCountry->continent)->orderBy('name', 'ASC')->limit(24)->get();
+            $modelCities = City::where('country', $modelCountry->name)->where('continent', $modelCountry->continent)->orderBy('total_views', 'DESC')->limit(24)->get();
             $cities = $modelCities->toArray();
 
-            $modelStates = State::where('country', $modelCountry->name)->where('continent', $modelCountry->continent)->orderBy('name', 'ASC')->limit(24)->get();
+            $modelStates = State::where('country', $modelCountry->name)->where('continent', $modelCountry->continent)->orderBy('total_views', 'DESC')->limit(24)->get();
             $states = $modelStates->toArray();
 
             $modelPlaces = Place::where('country', $modelCountry->name)->where('continent', $modelCountry->continent)
                 ->where('type', 'PLACE')
                 ->take(15)
-                ->orderBy('user_ratings_total', 'DESC')
+                ->orderBy('total_views', 'DESC')
                 ->get();
             $places = $modelPlaces->toArray();
 

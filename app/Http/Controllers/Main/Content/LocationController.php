@@ -15,21 +15,21 @@ class LocationController extends Controller
     {
         $currentPage = $request->query('page', 1);
 
+        $queryStar = $request->query('star', null);
+        $queryMinPrice = $request->query('min-price', null);
+        $queryMaxPrice = $request->query('max-price', null);
+        $querySortBy = $request->query('sort-by', 'popular');
+
         $cacheKey = 'location' . $type . $location . 'page' . $currentPage;
         $cacheData = CacheSystemDB::get($cacheKey);
 
-        if ($cacheData && !$request->expectsJson()) {
+        if ($cacheData && !$request->expectsJson() && empty($queryStar) && empty($queryMinPrice) && empty($queryMaxPrice) && $querySortBy == 'popular') {
             extract($cacheData);
         }
         else {
             if (!in_array($type, ['city', 'state', config('content.location_term_city'), config('content.location_term_state')])) {
                 return redirect()->route('index');
             }
-
-            $queryStar = $request->query('star');
-            $queryMinPrice = $request->query('min-price', null);
-            $queryMaxPrice = $request->query('max-price', null);
-            $querySortBy = $request->query('sort-by', 'popular');
             
             if ($type == config('content.location_term_city')) {
                 $modelCity = City::with('continent', 'country')->where('slug', $location)->first();
