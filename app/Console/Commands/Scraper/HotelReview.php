@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 use App\Models\Hotel\Hotel;
 use App\Models\Hotel\Review;
 use App\Helpers\GooglePlaces;
-use Illuminate\Support\Facades\Cache;
+use App\Helpers\CacheSystemDB;
 
 class HotelReview extends Command
 {
@@ -56,7 +56,7 @@ class HotelReview extends Command
                 $this->line('[ * ] Scrape review : ' . $i . ' / ' . $limitHotels);
                 $this->line('[ * ] Nama hotel : ' . $hotel->name);
     
-                Cache::forget('hotel' . $hotel->slug);
+                CacheSystemDB::forget('hotel' . $hotel->slug);
                 
                 $hotel->update([
                     'is_reviews_scraped' => 'PROCESS',
