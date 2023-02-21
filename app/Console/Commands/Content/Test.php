@@ -134,13 +134,19 @@ class Test extends Command
 
             foreach ($placeCategoriesClone as $placeCategoryClone) {
                 $sourcePlace = new Place;
-                $place = $sourcePlace->setConnection('clone')
+                $place_ = $sourcePlace->setConnection('clone')
                     ->where('id', $placeCategoryClone->place_id)
                     ->first();
+                $place = Place::where('gmaps_id', $place_->gmaps_id)
+                    ->first();
+
                 $sourceCategory = new Category;
-                $category = $sourceCategory->setConnection('clone')
+                $category_ = $sourceCategory->setConnection('clone')
                     ->where('id', $placeCategoryClone->category_id)
                     ->first();
+                $category = Category::where('slug', $category_->slug)
+                    ->first();
+                    
                 CategoryPlace::create([
                     'place_id' => $place->id,
                     'category_id' => $category->id,
