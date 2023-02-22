@@ -249,6 +249,8 @@ class PlaceController extends Controller
 
         CategoryPlace::where('place_id', $place->id)->delete();
 
+        CacheSystemDB::forgetWithTags($place->id, 'place');
+
         if (!empty($validated['category'])) {
             $category = Category::where('name', $validated['category'])->first();
             if ($category) {
@@ -265,8 +267,6 @@ class PlaceController extends Controller
                 ]);
             }
         }
-
-        CacheSystemDB::forgetWithTags($place->id, 'place');
 
         return redirect()->back()->with('success', __('Place has been updated!'));
     }
