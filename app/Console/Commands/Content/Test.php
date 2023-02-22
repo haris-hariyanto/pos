@@ -17,6 +17,8 @@ use App\Models\Location\CategoryPlace;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
 use App\Helpers\CacheSystemDB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class Test extends Command
 {
@@ -36,7 +38,12 @@ class Test extends Command
 
     public function handle()
     {
-        CacheSystemDB::forgetWithTags([]);
+        $caches = DB::table('page_caches')->get();
+        foreach ($caches as $cache) {
+            if (!Storage::exists('caches/' . $cache->key . '.json')) {
+                Storage::put('caches/' . $cache->key . '.json', $cache->value);
+            }
+        }
     }
 
     /**
