@@ -70,6 +70,8 @@ class PlaceFinderController extends Controller
                 $placeExists->update([
                     'name' => $place['name'],
                 ]);
+
+                CacheSystemDB::forgetWithTags($placeExists->id, 'place');
             }
             else {
                 $placeSlug = $this->createUniqueSlug($place['name']);

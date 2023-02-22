@@ -258,6 +258,11 @@ class PlaceController extends Controller
                     'country' => $validated['country'],
                     'continent' => $validated['continent'],
                 ]);
+
+                CacheSystemDB::forgetWithTags([
+                    '[country:' . $country->id . ']',
+                    '[category:' . $category->id . ']'
+                ]);
             }
         }
 
@@ -275,7 +280,7 @@ class PlaceController extends Controller
     public function destroy(Place $place)
     {
         CacheSystemDB::forgetWithTags($place->id, 'place');
-        
+
         HotelPlace::where('place_id', $place->id)->delete();
         $place->delete();
 
