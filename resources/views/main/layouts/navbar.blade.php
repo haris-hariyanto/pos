@@ -1,4 +1,4 @@
-<div x-data="autocomplete" x-ref="base" data-base="{{ route('search.autocomplete') }}">
+<div x-data="autocomplete" x-ref="base" data-base="{{ route('search.autocomplete') }}" x-init="searchQuery = '{{ request()->query('q') }}'">
     <nav class="navbar navbar-expand-md navbar-dark bg-primary fixed-top">
         <div class="container px-4">
     
@@ -91,7 +91,7 @@
         <!-- Search bar mobile -->
         <div class="bg-primary d-block d-md-none">
             <div class="container">
-                <form action="{{ route('search') }}" method="GET" class="pb-2 pt-1" x-data="{ searchMode: 'findHotels', showSelectMode: false }">
+                <form action="{{ route('search') }}" method="GET" class="pb-2 pt-1" x-data="{ searchMode: '{{ Route::currentRouteName() == 'search.hotels' ? 'findHotels' : 'findPlaces' }}', showSelectMode: false }">
                     <input type="hidden" name="mode" x-model="searchMode">
                     <div class="input-group">
                         <!--
