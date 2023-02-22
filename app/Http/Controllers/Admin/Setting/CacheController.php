@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Setting;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use App\Helpers\CacheSystemDB;
 
 class CacheController extends Controller
 {
@@ -20,7 +21,7 @@ class CacheController extends Controller
 
     public function flush()
     {
-        Cache::flush();
+        CacheSystemDB::flush();
         return redirect()->back()->with('success', __('Cache has been flushed!'));
     }
 }
