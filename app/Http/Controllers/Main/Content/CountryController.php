@@ -160,8 +160,8 @@ class CountryController extends Controller
                 // })
                 ->where('category_id', $modelCategory->id)
                 ->where('country', $modelCountry->name)
-                ->orderBy('total_views', 'DESC')
-                ->orderBy('user_ratings_total', 'DESC')
+                ->orderBy('places.total_views', 'DESC')
+                ->orderBy('places.user_ratings_total', 'DESC')
                 ->simplePaginate(24);
             $places = $placesModel->toArray();
             $places = $places['data'];
