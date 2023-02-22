@@ -88,7 +88,7 @@ class PlaceController extends Controller
             __('Add Place') => '',
         ];
 
-        $countries = Country::get();
+        $countries = Country::orderBy('name', 'ASC')->get();
         $countries = $countries->mapWithKeys(function ($item, $key) {
             return [$item['name'] => $item['name']];
         });
@@ -191,7 +191,7 @@ class PlaceController extends Controller
             __('Edit Place') => '',
         ];
 
-        $countries = Country::get();
+        $countries = Country::orderBy('name', 'ASC')->get();
         $countries = $countries->mapWithKeys(function ($item, $key) {
             return [$item['name'] => $item['name']];
         });
