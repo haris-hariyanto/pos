@@ -91,7 +91,7 @@
         <!-- Search bar mobile -->
         <div class="bg-primary d-block d-md-none">
             <div class="container">
-                <form action="{{ route('search') }}" method="GET" class="pb-2 pt-1" x-data="{ searchMode: '{{ Route::currentRouteName() == 'search.hotels' ? 'findHotels' : 'findPlaces' }}', showSelectMode: false }">
+                <form action="{{ route('search') }}" method="GET" class="pb-2 pt-1" x-data="{ searchMode: '{{ Route::currentRouteName() == 'search.places' ? 'findPlaces' : 'findHotels' }}', showSelectMode: false }">
                     <input type="hidden" name="mode" x-model="searchMode">
                     <div class="input-group">
                         <!--
