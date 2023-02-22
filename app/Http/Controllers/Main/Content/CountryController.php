@@ -154,14 +154,12 @@ class CountryController extends Controller
             $category = $modelCategory->toArray();
             $category['name'] = __(ucwords(str_replace('_', ' ', $category['name'])));
 
-            $placesModel = CategoryPlace::with('place')
-                // ->whereHas('place', function ($query) {
-                //     $query->where('hotels_nearby', '>', 0);
-                // })
+            $placesModel = CategoryPlace::with(['place' => function ($query) {
+                    $query->orderBy('total_views', 'DESC')
+                        ->orderBy('user_ratings_total', 'DESC');
+                }])
                 ->where('category_id', $modelCategory->id)
                 ->where('country', $modelCountry->name)
-                ->orderBy('places.total_views', 'DESC')
-                ->orderBy('places.user_ratings_total', 'DESC')
                 ->simplePaginate(24);
             $places = $placesModel->toArray();
             $places = $places['data'];
