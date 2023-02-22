@@ -91,14 +91,28 @@
         <!-- Search bar mobile -->
         <div class="bg-primary d-block d-md-none">
             <div class="container">
-                <form action="{{ route('search') }}" method="GET" class="pb-2 pt-1">
+                <form action="{{ route('search') }}" method="GET" class="pb-2 pt-1" x-data="{ searchMode: 'findHotels', showSelectMode: false }">
+                    <input type="hidden" name="mode" x-model="searchMode">
                     <div class="input-group">
-                        <select name="mode" class="form-select" style="flex: 0 1 fit-content;">
-                            <option value="findHotels" @selected(Route::currentRouteName() == 'search.hotels')>{{ __('Find Hotels') }}</option>
-                            <option value="findPlaces" @selected(Route::currentRouteName() == 'search.places')>{{ __('Find Places') }}</option>
+                        <!--
+                        <select name="mode" class="form-select" style="flex: 0 1 20%;">
+                            <option value="findHotels" @selected(Route::currentRouteName() == 'search.hotels')>{{ __('Hotels') }}</option>
+                            <option value="findPlaces" @selected(Route::currentRouteName() == 'search.places')>{{ __('Places') }}</option>
                         </select>
-                        <input type="text" class="form-control" name="q" placeholder="{{ __('Enter an address or property') }}" value="{{ request()->query('q') }}" data-search="true" x-model="searchQuery" @keyup.debounce="getAutocomplete()">
-                        <button class="btn btn-secondary">{{ __('Search') }}</button>
+                        -->
+                        <input type="text" class="form-control" name="q" placeholder="{{ __('Enter an address or property') }}" value="{{ request()->query('q') }}" data-search="true" x-model="searchQuery" @keyup.debounce="getAutocomplete()" @click="showSelectMode = true">
+                        <button class="btn btn-secondary" type="submit">{{ __('Search') }}</button>
+                    </div>
+                    <div x-show="showSelectMode" x-transition>
+                        <div class="mt-2 d-flex align-items-center">
+                            <button type="button" class="btn btn-outline-light btn-sm rounded-5 me-1" :class="{ 'active' : searchMode == 'findHotels' }" @click="searchMode = 'findHotels'">{{ __('Hotels') }}</button>
+                            <button type="button" class="btn btn-outline-light btn-sm rounded-5" :class="{ 'active' : searchMode == 'findPlaces' }" @click="searchMode = 'findPlaces'">{{ __('Places') }}</button>
+                            <button type="button" class="btn btn-link btn-sm text-light" @click="showSelectMode = false">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>

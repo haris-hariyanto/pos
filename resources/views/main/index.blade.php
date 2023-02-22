@@ -40,14 +40,23 @@
                         <!-- [END] Search bar for big screen -->
 
                         <!-- Search bar for small screen -->
-                        <form action="{{ route('search') }}" method="GET" class="d-block d-lg-none">
+                        <form action="{{ route('search') }}" method="GET" class="d-block d-lg-none" x-data="{ searchMode: 'findHotels' }">
                             <div class="mb-2">
+                                <div class="mb-2">
+                                    <button type="button" class="btn btn-outline-primary btn-sm rounded-5" :class="{ 'active' : searchMode == 'findHotels' }" @click="searchMode = 'findHotels'">{{ __('Hotels') }}</button>
+                                    <button type="button" class="btn btn-outline-primary btn-sm rounded-5" :class="{ 'active' : searchMode == 'findPlaces' }" @click="searchMode = 'findPlaces'">{{ __('Places') }}</button>
+                                </div>
+
+                                <input type="hidden" name="mode" x-model="searchMode">
+
                                 <div class="input-group">
-                                    <select name="mode" class="form-select" style="flex: 0 1 fit-content;">
-                                        <option value="findHotels">{{ __('Find Hotels') }}</option>
-                                        <option value="findPlaces">{{ __('Find Places') }}</option>
+                                    <!--
+                                    <select name="mode" class="form-select" style="width: 33%;">
+                                        <option value="findHotels">{{ __('Hotels') }}</option>
+                                        <option value="findPlaces">{{ __('Places') }}</option>
                                     </select>
-                                    <input type="text" class="form-control rounded-end" placeholder="{{ __('Enter an address or property') }}" name="q" data-search="true" x-model="searchQuery" @keyup.debounce="getAutocomplete()">
+                                    -->
+                                    <input type="text" class="form-control rounded-end" style="width: 66%;" placeholder="{{ __('Enter an address or property') }}" name="q" data-search="true" x-model="searchQuery" @keyup.debounce="getAutocomplete()">
                                 </div>
                             </div>
 
