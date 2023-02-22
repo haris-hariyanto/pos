@@ -1,12 +1,13 @@
 <?php
 
 /**
- * Sistem cache yang baru, menggunakan database
+ * Sistem cache yang baru, menggunakan database dan storage
  */
 
 namespace App\Helpers;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class CacheSystemDB
 {
@@ -53,10 +54,16 @@ class CacheSystemDB
             ['key' => $key],
             ['value' => $cacheData, 'tags' => $tags, 'expiration' => $expiredDays],
         );
+        Storage::put('caches/' . $key . '.json', $cacheData);
     }
 
     public static function get($key)
     {
+        if (Storage::exists('caches/' . $key . '.json')) {
+            $cacheData = Storage::get('caches/' . $key . '.json');
+            return json_decode($cacheData, true);
+        }
+        
         $cache = DB::table('page_caches')->where('key', $key)
             ->first();
         if ($cache) {
@@ -74,6 +81,20 @@ class CacheSystemDB
     public static function forgetWithTags($tags, $tagType = false)
     {
         if (is_array($tags)) {
+            // Delete file cache
+            $caches = DB::table('page_caches')->select('key')
+            ->where(function ($query) use ($tags) {
+                foreach ($tags as $tag) {
+                    $query->where('tags', 'like', '%' . $tag . '%');
+                }
+            })->get();
+            $keys = [];
+            foreach ($caches as $cache) {
+                $keys[] = 'caches/' . $cache->key . '.json';
+            }
+            Storage::delete($keys);
+            // [END] Delete file cache
+
             DB::table('page_caches')->where(function ($query) use ($tags) {
                 foreach ($tags as $tag) {
                     $query->where('tags', 'like', '%' . $tag . '%');
@@ -82,9 +103,27 @@ class CacheSystemDB
         }
         else {
             if ($tagType) {
+                // Delete file cache
+                $caches = DB::table('page_caches')->select('key')->where('tags', 'like', '%[' . $tagType . ':' . $tags . ']%')->get();
+                $keys = [];
+                foreach ($caches as $cache) {
+                    $keys[] = 'caches/' . $cache->key . '.json';
+                }
+                Storage::delete($keys);
+                // [END] Delete file cache
+
                 DB::table('page_caches')->where('tags', 'like', '%[' . $tagType . ':' . $tags . ']%')->delete();
             }
             else {
+                // Delete file cache
+                $caches = DB::table('page_caches')->select('key')->where('tags', 'like', '%' . $tags . '%')->get();
+                $keys = [];
+                foreach ($caches as $cache) {
+                    $keys[] = 'caches/' . $cache->key . '.json';
+                }
+                Storage::delete($keys);
+                // [END] Delete file cache
+
                 DB::table('page_caches')->where('tags', 'like', '%' . $tags . '%')->delete();
             }
         }
@@ -92,11 +131,13 @@ class CacheSystemDB
 
     public static function forget($key)
     {
+        Storage::delete('caches/' . $key . '.json');
         $cache = DB::table('page_caches')->where('key', $key)->delete();
     }
 
     public static function flush()
     {
+        Storage::deleteDirectory('caches');
         DB::table('page_caches')->truncate();
     }
 }

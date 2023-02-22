@@ -274,6 +274,8 @@ class PlaceController extends Controller
      */
     public function destroy(Place $place)
     {
+        CacheSystemDB::forgetWithTags($place->id, 'place');
+        
         HotelPlace::where('place_id', $place->id)->delete();
         $place->delete();
 

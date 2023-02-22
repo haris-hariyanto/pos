@@ -142,6 +142,7 @@ class ContinentController extends Controller
         \App\Models\Location\State::where('continent', $continent->name)->update(['continent' => $validated['name']]);
         \App\Models\Location\Country::where('continent', $continent->name)->update(['continent' => $validated['name']]);
         \App\Models\Hotel\Hotel::where('continent', $continent->name)->update(['continent' => $validated['name']]);
+        \App\Models\Location\CategoryPlace::where('continent', $continent->name)->update(['continent' => $validated['name']]);
         $continent->update($validated);
 
         CacheSystemDB::forgetWithTags($continent->id, 'continent');

@@ -132,6 +132,7 @@ class CountryController extends Controller
         \App\Models\Location\City::where('country', $country->name)->where('continent', $country->continent)->update(['country' => $validated['name']]);
         \App\Models\Location\State::where('country', $country->name)->where('continent', $country->continent)->update(['country' => $validated['name']]);
         \App\Models\Hotel\Hotel::where('country', $country->name)->where('continent', $country->continent)->update(['country' => $validated['name']]);
+        \App\Models\Location\CategoryPlace::where('country', $country->name)->where('continent', $country->continent)->update(['country' => $validated['name']]);
         $country->update($validated);
 
         CacheSystemDB::forgetWithTags($country->id, 'country');

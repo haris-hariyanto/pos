@@ -16,6 +16,7 @@ use App\Models\Location\Category;
 use App\Models\Location\CategoryPlace;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
+use App\Helpers\CacheSystemDB;
 
 class Test extends Command
 {
@@ -33,12 +34,17 @@ class Test extends Command
      */
     protected $description = 'Command description';
 
+    public function handle()
+    {
+        CacheSystemDB::forgetWithTags([]);
+    }
+
     /**
      * Execute the console command.
      *
      * @return int
      */
-    public function handle()
+    public function _handle()
     {
         Place::truncate();
         Category::truncate();
