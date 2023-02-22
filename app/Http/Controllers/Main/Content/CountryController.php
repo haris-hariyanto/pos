@@ -170,9 +170,10 @@ class CountryController extends Controller
             $cacheTags[] = '[country:' . $country['id'] . ']';
             $cacheTags[] = '[continent:' . $country['continent']['id'] . ']';
             $cacheTags[] = '[category:' . $category['id'] . ']';
-            CacheSystemDB::generate($cacheKey, compact('country', 'places', 'category', 'links'), [
-                'places' => 'place'
-            ], $cacheTags);
+            foreach ($places as $place) {
+                $cacheTags[] = '[place:' . $place['place']['id'] . ']';
+            }
+            CacheSystemDB::generate($cacheKey, compact('country', 'places', 'category', 'links'), [], $cacheTags);
             // [END] Generate cache
         }
 
