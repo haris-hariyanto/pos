@@ -38,12 +38,14 @@ class Test extends Command
 
     public function handle()
     {
+        /*
         CacheSystemDB::forgetWithTags([
             '[country:',
             '[category:',
         ]);
 
         return 0;
+        */
         $caches = DB::table('page_caches')->get();
         foreach ($caches as $cache) {
             if (!Storage::exists('caches/' . $cache->key . '.json')) {
