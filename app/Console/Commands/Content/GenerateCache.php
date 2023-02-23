@@ -35,6 +35,7 @@ class GenerateCache extends Command
      */
     public function handle()
     {
+        /*
         $this->line('Membuat Cache');
 
         $route = route('index');
@@ -76,29 +77,33 @@ class GenerateCache extends Command
             $request = Request::create($route, 'GET');
             $response = app()->handle($request);
         }
+        */
 
         $hotels = Hotel::get();
         foreach ($hotels as $hotel) {
             $route = route('hotel', [$hotel->slug]);
             $this->info('[ * ] Membuat cache : ' . $route);
-            $request = Request::create($route, 'GET');
-            $response = app()->handle($request);
+            file_get_contents($route);
+            // $request = Request::create($route, 'GET');
+            // $response = app()->handle($request);
         }
 
         $cities = City::get();
         foreach ($cities as $city) {
             $route = route('hotel.location', ['city', $city->slug]);
             $this->info('[ * ] Membuat cache : ' . $route);
-            $request = Request::create($route, 'GET');
-            $response = app()->handle($request);
+            file_get_contents($route);
+            // $request = Request::create($route, 'GET');
+            // $response = app()->handle($request);
         }
 
         $states = State::get();
         foreach ($states as $state) {
             $route = route('hotel.location', ['state', $state->slug]);
             $this->info('[ * ] Membuat cache : ' . $route);
-            $request = Request::create($route, 'GET');
-            $response = app()->handle($request);
+            file_get_contents($route);
+            // $request = Request::create($route, 'GET');
+            // $response = app()->handle($request);
         }
     }
 }
