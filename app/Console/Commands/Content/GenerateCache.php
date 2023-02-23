@@ -11,6 +11,7 @@ use App\Models\Location\State;
 use App\Models\Location\Category;
 use App\Models\Location\Place;
 use App\Models\Hotel\Hotel;
+use App\Helpers\CacheSystemDB;
 
 class GenerateCache extends Command
 {
@@ -79,7 +80,7 @@ class GenerateCache extends Command
         }
         */
 
-        $hotels = Hotel::get();
+        $hotels = Hotel::whwre('id', '>=', 19307)->get();
         foreach ($hotels as $hotel) {
             $route = route('hotel', [$hotel->slug]);
             $this->info('[ * ] Membuat cache : ' . $route);

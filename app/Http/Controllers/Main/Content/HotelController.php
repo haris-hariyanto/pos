@@ -39,19 +39,21 @@ class HotelController extends Controller
             if (!empty($hotel['longitude']) && !empty($hotel['latitude'])) {
                 $latitude = explode('.', $hotel['latitude']);
                 $longitude = explode('.', $hotel['longitude']);
-    
-                $nearbyPlacesModel = Place::where('latitude', 'like', $latitude[0] . '.' . substr($latitude[1], 0, 1) . '%')
-                    ->where('longitude', 'like', $longitude[0] . '.' . substr($longitude[1], 0, 1) . '%')
-                    ->get();
-    
-                foreach ($nearbyPlacesModel as $nearbyPlaceModel) {
-                    $nearbyPlacesData = [];
-                    $nearbyPlacesData['place'] = $nearbyPlaceModel->toArray();
-    
-                    $distanceKM = $this->distance($nearbyPlaceModel->latitude, $nearbyPlaceModel->longitude, $hotel['latitude'], $hotel['longitude'], 'K');
-                    $nearbyPlacesData['m_distance'] = round($distanceKM * 1000, 0);
-    
-                    $nearbyPlaces[] = $nearbyPlacesData;
+
+                if (count($latitude) > 1 && count($longitude) > 1) {
+                    $nearbyPlacesModel = Place::where('latitude', 'like', $latitude[0] . '.' . substr($latitude[1], 0, 1) . '%')
+                        ->where('longitude', 'like', $longitude[0] . '.' . substr($longitude[1], 0, 1) . '%')
+                        ->get();
+        
+                    foreach ($nearbyPlacesModel as $nearbyPlaceModel) {
+                        $nearbyPlacesData = [];
+                        $nearbyPlacesData['place'] = $nearbyPlaceModel->toArray();
+        
+                        $distanceKM = $this->distance($nearbyPlaceModel->latitude, $nearbyPlaceModel->longitude, $hotel['latitude'], $hotel['longitude'], 'K');
+                        $nearbyPlacesData['m_distance'] = round($distanceKM * 1000, 0);
+        
+                        $nearbyPlaces[] = $nearbyPlacesData;
+                    }
                 }
             }
             
