@@ -80,7 +80,7 @@ class GenerateCache extends Command
         }
         */
 
-        $hotels = Hotel::whwre('id', '>=', 19307)->get();
+        $hotels = Hotel::where('id', '>=', 19307)->get();
         foreach ($hotels as $hotel) {
             $route = route('hotel', [$hotel->slug]);
             $this->info('[ * ] Membuat cache : ' . $route);
