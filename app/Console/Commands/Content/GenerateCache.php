@@ -80,13 +80,15 @@ class GenerateCache extends Command
         }
         */
 
-        $hotels = Hotel::where('id', '>=', 19307)->get();
+        $hotels = Hotel::get();
         foreach ($hotels as $hotel) {
-            $route = route('hotel', [$hotel->slug]);
-            $this->info('[ * ] Membuat cache : ' . $route);
-            file_get_contents($route);
-            // $request = Request::create($route, 'GET');
-            // $response = app()->handle($request);
+            if (!CacheSystemDB::get('hotel' . $hotel->slug)) {
+                $route = route('hotel', [$hotel->slug]);
+                $this->info('[ * ] Membuat cache : ' . $route);
+                file_get_contents($route);
+                // $request = Request::create($route, 'GET');
+                // $response = app()->handle($request);
+            }
         }
 
         $cities = City::get();
