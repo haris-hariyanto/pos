@@ -38,10 +38,11 @@ class Test extends Command
 
     public function handle()
     {
-        $countries = Country::where('continent', 'Australia dan Oceania')
-            ->get();
-        foreach ($countries as $country) {
-            CacheSystemDB::forgetWithTags($country->id, 'country');
+        $hotels = Hotel::whereRaw('total_views <> weekly_views')->get();
+        foreach ($hotels as $hotel) {
+            $hotel->update([
+                'total_views' => $hotel->weekly_views,
+            ]);
         }
     }
 
