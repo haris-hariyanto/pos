@@ -12,6 +12,7 @@ use App\Models\Location\Category;
 use App\Models\Location\Place;
 use App\Models\Hotel\Hotel;
 use App\Helpers\CacheSystemDB;
+use Illuminate\Support\Facades\Http;
 
 class GenerateCache extends Command
 {
@@ -85,7 +86,8 @@ class GenerateCache extends Command
             if (!CacheSystemDB::get('hotel' . $hotel->slug)) {
                 $route = route('hotel', [$hotel->slug]);
                 $this->info('[ * ] Membuat cache : ' . $route);
-                file_get_contents($route);
+                // file_get_contents($route);
+                Http::retry(5, 1000)->get($route);
                 // $request = Request::create($route, 'GET');
                 // $response = app()->handle($request);
             }
@@ -95,7 +97,8 @@ class GenerateCache extends Command
         foreach ($cities as $city) {
             $route = route('hotel.location', ['city', $city->slug]);
             $this->info('[ * ] Membuat cache : ' . $route);
-            file_get_contents($route);
+            // file_get_contents($route);
+            Http::retry(5, 1000)->get($route);
             // $request = Request::create($route, 'GET');
             // $response = app()->handle($request);
         }
@@ -104,7 +107,8 @@ class GenerateCache extends Command
         foreach ($states as $state) {
             $route = route('hotel.location', ['state', $state->slug]);
             $this->info('[ * ] Membuat cache : ' . $route);
-            file_get_contents($route);
+            // file_get_contents($route);
+            Http::retry(5, 1000)->get($route);
             // $request = Request::create($route, 'GET');
             // $response = app()->handle($request);
         }
