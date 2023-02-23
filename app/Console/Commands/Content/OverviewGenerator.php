@@ -30,6 +30,8 @@ class OverviewGenerator extends Command
      */
     public function handle()
     {
+        return 0;
+
         $OpenAIKey = config('services.openai.key');
 
         if (!$OpenAIKey) {
@@ -89,13 +91,12 @@ class OverviewGenerator extends Command
     private function generatePrompt($hotel) {
         $prompt = '';
         if (config('app.locale') == 'id') {
-            // $prompt .= 'Buat deskripsi hotel' . "\n";
             $prompt .= 'Saya ingin membuat artikel untuk keperluan SEO dan rangking di search engine Google. ';
             $prompt .= 'Buat sebuah artikel tentang hotel dengan bahasa Indonesia santai menggunakan data yang disediakan. ';
             $prompt .= 'Artikel harus berisi minimal 10 paragraf. ';
             $prompt .= 'Tiap paragraf harus berisi minimum 200 kata. ';
             $prompt .= 'Tulis dengan format HTML tanpa tag html dan body. ';
-            $prompt .= 'Judul utama: <h2>. Sub judul: <h3>. Kesimpulan: <h4>. Paragraf: <p>.';
+            $prompt .= 'Judul utama: <h2>. Sub judul: <h3>. Kesimpulan: <h4>. Paragraf: <p>.' . "\n";
 
             $prompt .= 'Nama hotel : ' . $hotel->name . "\n";
 
@@ -148,13 +149,12 @@ class OverviewGenerator extends Command
             }
         }
         if (config('app.locale') == 'en') {
-            // $prompt .= 'Write hotel description' . "\n";
             $prompt .= 'I want to create an article for SEO purposes and ranking on the Google search engine. ';
             $prompt .= 'Write an article about hotel in relaxed Indonesian language using the following data. ';
             $prompt .= 'The article consists of at least 10 paragraphs. ';
             $prompt .= 'Each paragraph must have a minimum of 200 words. ';
             $prompt .= 'Write in HTML without html and body tag. ';
-            $prompt .= 'Primary title: <h2>. Subtitles: <h3>. Conclusion title: <h4>. Paragraphs: <p>.';
+            $prompt .= 'Primary title: <h2>. Subtitles: <h3>. Conclusion title: <h4>. Paragraphs: <p>.' . "\n";
 
             $prompt .= 'Hotel name : ' . $hotel->name . "\n";
 

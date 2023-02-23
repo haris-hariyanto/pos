@@ -38,6 +38,15 @@ class Test extends Command
 
     public function handle()
     {
+        $countries = Country::where('continent', 'Australia dan Oceania')
+            ->get();
+        foreach ($countries as $country) {
+            CacheSystemDB::forgetWithTags($country->id, 'country');
+        }
+    }
+
+    public function __handle()
+    {
         /*
         CacheSystemDB::forgetWithTags([
             '[country:',
