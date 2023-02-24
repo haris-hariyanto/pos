@@ -33,7 +33,6 @@ class ArticleGenerator extends Command
     {
         $this->line('[ * ] Menghitung hotel...');
 
-        /*
         $hotelsTotal = Hotel::count();
         $hotelsWithoutArticle = Hotel::where('article', '')
             ->orWhereNull('article')
@@ -46,7 +45,6 @@ class ArticleGenerator extends Command
         $this->info('[ * ] Hotel dengan artikel : ' . $hotelsWithArticle);
         $this->info('[ * ] Hotel tanpa artikel : ' . $hotelsWithoutArticle);
         $this->line('--------------------');
-        */
 
         $limit = $this->ask('Limit Hotel', 1000);
 
