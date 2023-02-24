@@ -304,14 +304,18 @@
                                     <hr>
 
                                     @if (count($paragraphs) > 0)
-                                        <h2 class="fs-5">{{ __('About :hotel', ['hotel' => $hotel['name']]) }}</h2>
+                                        <h2 class="fs-4">{{ __('About :hotel', ['hotel' => $hotel['name']]) }}</h2>
                                         @foreach ($paragraphs as $paragraph)
                                             <p>{{ $paragraph }}</p>
                                         @endforeach
                                     @endif
 
+                                    @if (!empty($hotel['article']))
+                                        {!! \App\Helpers\Text::article($hotel['article']) !!}
+                                    @endif
+
                                     @if (count($nearbyPlaces) > 0)
-                                        <h2 class="fs-5">{{ __('Nearby Places') }}</h2>
+                                        <h2 class="fs-4">{{ __('Nearby Places') }}</h2>
                                         <ul>
                                             @foreach ($nearbyPlaces as $nearbyPlace)
                                                 <li>

@@ -110,4 +110,11 @@ class Text
 
         return $date . ' ' . $monthText . ' ' . $year . ', ' . date('H:i', $time);
     }
+
+    public static function article($text)
+    {
+        $search = ['<h2>', '<h3>', '<h4>'];
+        $replace = ['<h2 class="fs-4">', '<h3 class="fs-5">', '<h4 class="fs-5">'];
+        return str_replace($search, $replace, $text);
+    }
 }

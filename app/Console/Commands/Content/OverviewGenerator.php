@@ -30,7 +30,6 @@ class OverviewGenerator extends Command
      */
     public function handle()
     {
-        return 0;
 
         $OpenAIKey = config('services.openai.key');
 
@@ -68,15 +67,21 @@ class OverviewGenerator extends Command
 
             $this->info('[ ' . $i . '/' . $limit .  ' ] Hotel : ' . $hotel->name);
 
-            $result = $client->completions()->create([
-                'model' => 'text-davinci-003',
-                'temperature' => config('services.openai.temperature'),
-                'top_p' => 1,
-                'frequency_penalty' => 0,
-                'presence_penalty' => 0,
-                'max_tokens' => config('services.openai.max_tokens'),
-                'prompt' => $this->generatePrompt($hotel),
-            ]);
+            try {
+                $result = $client->completions()->create([
+                    'model' => 'text-davinci-003',
+                    'temperature' => config('services.openai.temperature'),
+                    'top_p' => 1,
+                    'frequency_penalty' => 0,
+                    'presence_penalty' => 0,
+                    'max_tokens' => config('services.openai.max_tokens'),
+                    'prompt' => $this->generatePrompt($hotel),
+                ]);
+            }
+            catch (\OpenAI\Exceptions\ErrorException $err) {
+                dd('Ok');
+            }
+            dd($result);
             $result = trim($result['choices'][0]['text']);
 
             $hotel->update([

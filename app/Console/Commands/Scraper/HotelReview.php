@@ -7,6 +7,7 @@ use App\Models\Hotel\Hotel;
 use App\Models\Hotel\Review;
 use App\Helpers\GooglePlaces;
 use App\Helpers\CacheSystemDB;
+use App\Helpers\Text;
 
 class HotelReview extends Command
 {
@@ -85,7 +86,7 @@ class HotelReview extends Command
                                 $reviewToSave['name'] = $review['author_name'];
                                 $reviewToSave['rating'] = $review['rating'];
                                 $reviewToSave['time'] = $review['time'];
-                                $reviewToSave['review'] = $review['text'];
+                                $reviewToSave['review'] = Text::plain($review['text']);
                                 $reviewToSave['is_accepted'] = 'Y';
                                 $reviewToSave['source'] = 'google';
     
