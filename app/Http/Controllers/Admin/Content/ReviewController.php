@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use App\Helpers\CacheSystemDB;
 use Illuminate\Support\Facades\Validator;
+use App\Helpers\Text;
 
 class ReviewController extends Controller
 {
@@ -133,7 +134,7 @@ class ReviewController extends Controller
             'name' => $request->user()->username,
             'time' => time(),
             'rating' => null,
-            'review' => $validated['reply'],
+            'review' => Text::plain($validated['reply']),
             'is_accepted' => 'Y',
             'source' => 'reply',
             'parent_id' => $review->id,
@@ -180,6 +181,7 @@ class ReviewController extends Controller
         ];
 
         $validated = $request->validate($validationRules);
+        $validated['review'] = Text::plain($validated['review']);
 
         $review->update($validated);
 

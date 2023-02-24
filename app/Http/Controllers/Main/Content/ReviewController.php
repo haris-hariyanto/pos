@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Helpers\CacheSystemDB;
 use App\Helpers\ReCAPTCHA;
 use App\Helpers\Settings;
+use App\Helpers\Text;
 
 class ReviewController extends Controller
 {
@@ -65,7 +66,7 @@ class ReviewController extends Controller
             'name' => $validated['name'],
             'time' => time(),
             'rating' => null,
-            'review' => $validated['reply'],
+            'review' => Text::plain($validated['reply']),
             'is_accepted' => $isAccepted,
             'source' => 'reply',
             'parent_id' => $validated['reply_to'],
@@ -117,7 +118,7 @@ class ReviewController extends Controller
 
         $review = Review::create([
             'name' => $validated['name'],
-            'review' => $validated['review'],
+            'review' => Text::plain($validated['review']),
             'rating' => $validated['rating'],
             'hotel_id' => $validated['hotel_id'],
             'time' => $validated['time'],
