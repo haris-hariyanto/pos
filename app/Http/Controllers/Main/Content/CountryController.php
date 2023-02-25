@@ -208,8 +208,10 @@ class CountryController extends Controller
                         $longitude = explode('.', $place['longitude']);
 
                         $query->orWhere(function ($subQuery) use ($latitude, $longitude) {
-                            $subQuery->where('latitude', 'like', $latitude[0] . '.' . substr($latitude[1], 0, 1) . '%')
-                                ->where('longitude', 'like', $longitude[0] . '.' . substr($longitude[1], 0, 1) . '%');
+                            if (count($latitude) > 1 && count($longitude) > 1) {
+                                $subQuery->where('latitude', 'like', $latitude[0] . '.' . substr($latitude[1], 0, 1) . '%')
+                                    ->where('longitude', 'like', $longitude[0] . '.' . substr($longitude[1], 0, 1) . '%');
+                            }
                         });
                     } // [END] foreach
                 })
