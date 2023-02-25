@@ -31,7 +31,7 @@ class LocationController extends Controller
                 return redirect()->route('index');
             }
             
-            if ($type == config('content.location_term_city')) {
+            if ($type == config('content.location_term_city') || $type == 'city') {
                 $modelCity = City::with('continent', 'country')->where('slug', $location)->first();
                 if (!$modelCity) {
                     return redirect()->route('index');
@@ -90,7 +90,7 @@ class LocationController extends Controller
                 $links = $modelHotels->links('components.main.components.simple-pagination')->render();
             }
 
-            if ($type == config('content.location_term_state')) {
+            if ($type == config('content.location_term_state') || $type == 'state') {
                 $modelState = State::with('continent', 'country')->where('slug', $location)->first();
                 if (!$modelState) {
                     return redirect()->route('index');
