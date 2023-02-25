@@ -59,6 +59,7 @@ class CacheSystemDB
 
     public static function get($key)
     {
+        // return false;
         if (Storage::exists('caches/' . $key . '.json')) {
             $cacheData = Storage::get('caches/' . $key . '.json');
             return json_decode($cacheData, true);

@@ -343,5 +343,7 @@
     "Enable search using the Google Places API": "Aktifkan pencarian menggunakan API Google Places",
     "Search settings has been updated!": "Setting pencarian telah diupdate!",
     "Maps": "Peta",
-    "Close": "Tutup"
+    "Close": "Tutup",
+    "Popular :place_category in :continent": ":place_category Populer di :continent",
+    "Popular Cities in :continent": "Kota Populer di :continent"
 }

@@ -73,4 +73,16 @@
             </div>
         </div>
     </div>
+
+    <div class="container pb-4">
+        <h2 class="fs-3 mb-3">{{ __('Popular Hotels') }}</h2>
+
+        <div class="row g-2 tw-justify-center">
+            @foreach ($hotels as $hotel)
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                    <x-main.components.contents.hotel-small :hotel="$hotel" />
+                </div>
+            @endforeach
+        </div>
+    </div>
 </x-main.layouts.app>

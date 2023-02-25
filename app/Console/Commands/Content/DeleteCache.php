@@ -81,6 +81,7 @@ class DeleteCache extends Command
                     $page = 1;
                     while (CacheSystemDB::get('country' . $country->slug . 'places' . $category->slug . 'page' . $page)) {
                         $this->line('[ * ] Menghapus cache halaman daftar tempat (' . $category->name . ') di ' . $country->name . ' halaman ' . $page);
+                        CacheSystemDB::forget('country' . $country->slug . 'places' . $category->slug . 'page' . $page);
                         $page++;
                     }
                 }

@@ -50,7 +50,7 @@
     </div>
 
     <div class="container py-4">
-        <div class="card shadow-sm">
+        <div class="card mb-3 shadow-sm">
             <div class="card-body">
                 <div class="row">
                     @foreach ($continent['countries'] as $country)
@@ -75,4 +75,54 @@
             </div>
         </div>
     </div>
+
+    <div class="container pb-4">
+        <h2 class="fs-3 mb-3">{{ __('Popular Cities in :continent', ['continent' => $continent['name']]) }}</h2>
+        <div class="card shadow-sm mb-3">
+            <div class="card-body">
+                <!-- Cities list -->
+                <div class="row g-2">
+                    @foreach ($cities as $city)
+                        <div class="col-12 col-md-6 col-lg-3 col-xl-2">
+                            <div class="mb-2">
+                                <div class="tw-line-clamp-1">
+                                    <a href="{{ route('hotel.location', [config('content.location_term_city'), $city['slug']]) }}">{{ $city['name'] }}</a>
+                                </div>
+                                <div class="text-muted small tw-line-clamp-1">
+                                    {{ $city['country'] }}
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+                <!-- [END] Cities list -->
+            </div>
+        </div>
+    </div>
+
+    @foreach ($places as $category => $placesList)
+        <div class="container pb-4">
+            <h2 class="fs-3 mb-3">{{ __('Popular :place_category in :continent', ['place_category' => __(ucwords(str_replace('_', ' ', $category))), 'continent' => $continent['name']]) }}</h2>
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <!-- Places list -->
+                    <div class="row g-2">
+                        @foreach ($placesList as $place)
+                            <div class="col-12 col-lg-4">
+                                <div class="mb-2">
+                                    <div class="tw-line-clamp-1">
+                                        <a href="{{ route('place', [$place['slug']]) }}">{{ $place['name'] }}</a>
+                                    </div>
+                                    <div class="text-muted small tw-line-clamp-1">
+                                        {{ $place['country'] }}
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                    <!-- [END] Places list -->
+                </div>
+            </div>
+        </div>
+    @endforeach
 </x-main.layouts.app>
