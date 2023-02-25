@@ -1,5 +1,5 @@
 const cssFileName = 'app.348d43a9.css';
-const jsFileName = 'app.013eeee8.js';
+const jsFileName = 'app.65f43da6.js';
 
 module.exports = {
     content: [

@@ -1,22 +1,22 @@
 {
   "resources/js/app.js": {
-    "file": "assets/app.013eeee8.js",
+    "file": "assets/app.65f43da6.js",
     "src": "resources/js/app.js",
     "isEntry": true,
     "imports": [
       "_dropdown.a20fdd29.js",
-      "_index.4514a9b6.js"
+      "_index.4ddbd4b3.js"
     ],
     "css": [
       "assets/app.348d43a9.css"
     ]
   },
   "resources/js/admin.js": {
-    "file": "assets/admin.aff28d7f.js",
+    "file": "assets/admin.79237251.js",
     "src": "resources/js/admin.js",
     "isEntry": true,
     "imports": [
-      "_index.4514a9b6.js"
+      "_index.4ddbd4b3.js"
     ]
   },
   "resources/js/autocomplete.js": {
@@ -35,11 +35,11 @@
   "_dropdown.a20fdd29.js": {
     "file": "assets/dropdown.a20fdd29.js"
   },
-  "_index.4514a9b6.js": {
-    "file": "assets/index.4514a9b6.js"
+  "_index.4ddbd4b3.js": {
+    "file": "assets/index.4ddbd4b3.js"
   },
   "resources/css/tailwind.css": {
-    "file": "assets/tailwind.0ae069d8.css",
+    "file": "assets/tailwind.e7d6caa4.css",
     "src": "resources/css/tailwind.css",
     "isEntry": true
   },
