@@ -37,20 +37,20 @@ class GenerateCache extends Command
      */
     public function handle()
     {
-        /*
         $this->line('Membuat Cache');
 
         $route = route('index');
         $this->info('[ * ] Membuat cache : ' . $route);
-        $request = Request::create($route, 'GET');
-        $response = app()->handle($request);
+        // $request = Request::create($route, 'GET');
+        // $response = app()->handle($request);
 
         $continents = Continent::get();
         foreach ($continents as $continent) {
             $route = route('continent', [$continent->slug]);
             $this->info('[ * ] Membuat cache : ' . $route);
-            $request = Request::create($route, 'GET');
-            $response = app()->handle($request);
+            Http::retry(5, 1000)->get($route);
+            // $request = Request::create($route, 'GET');
+            // $response = app()->handle($request);
         }
 
         $countries = Country::get();
@@ -60,18 +60,21 @@ class GenerateCache extends Command
             foreach ($routes as $route) {
                 $route = route($route, [$country->slug]);
                 $this->info('[ * ] Membuat cache : ' . $route);
-                $request = Request::create($route, 'GET');
-                $response = app()->handle($request);
+                Http::retry(5, 1000)->get($route);
+                // $request = Request::create($route, 'GET');
+                // $response = app()->handle($request);
             }
 
             foreach ($categories as $category) {
                 $route = route('country.places', [$country->slug, $category->slug]);
                 $this->info('[ * ] Membuat cache : ' . $route);
-                $request = Request::create($route, 'GET');
-                $response = app()->handle($request);
+                Http::retry(5, 1000)->get($route);
+                // $request = Request::create($route, 'GET');
+                // $response = app()->handle($request);
             }
         }
 
+        /*
         $places = Place::get();
         foreach ($places as $place) {
             $route = route('place', [$place->slug]);
