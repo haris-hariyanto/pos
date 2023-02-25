@@ -46,8 +46,9 @@ class ViewServiceProvider extends ServiceProvider
         });
 
         View::composer('admin.*', function ($view) {
-            $newReviews = Review::where('is_accepted', 'N')->count();
-            $view->with('newReviews', $newReviews);
+            // $newReviews = Review::where('is_accepted', 'N')->count();
+            // $view->with('newReviews', $newReviews);
+            $view->with('newReviews', 0);
         });
 
         View::composer('main.contents.hotel', function ($view) {
