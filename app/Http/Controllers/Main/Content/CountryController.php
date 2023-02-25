@@ -264,6 +264,10 @@ class CountryController extends Controller
             // [END] Generate cache
         }
 
+        if (empty($hotels)) {
+            $hotels = [];
+        }
+
         return view('main.contents.country-places', compact('country', 'places', 'category', 'links', 'currentPage', 'hotels'));
     }
 }
