@@ -73,8 +73,8 @@ class ReviewController extends Controller
             'parent_id' => $validated['reply_to'],
         ]);
 
-        CacheSystemDB::forgetWithTags($hotel['id'], 'hotel');
-
+        // CacheSystemDB::forgetWithTags($hotel['id'], 'hotel');
+        CacheSystemDB::forget('hotel' . $hotel->slug);
         Cache::forget('reviewscount');
 
         return redirect()->route('hotel', ['hotel' => $hotel->slug, 'unapproved' => $review->id, '#review' . $review->id]);
@@ -129,8 +129,8 @@ class ReviewController extends Controller
             'source' => $validated['source'],
         ]);
 
-        CacheSystemDB::forgetWithTags($hotel['id'], 'hotel');
-
+        // CacheSystemDB::forgetWithTags($hotel['id'], 'hotel');
+        CacheSystemDB::forget('hotel' . $hotel->slug);
         Cache::forget('reviewscount');
 
         return redirect()->route('hotel', [$hotel->slug, 'unapproved' => $review->id, '#review' . $review->id]);
