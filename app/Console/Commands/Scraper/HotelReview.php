@@ -56,8 +56,17 @@ class HotelReview extends Command
 
                 $this->line('[ * ] Scrape review : ' . $i . ' / ' . $limitHotels);
                 $this->line('[ * ] Nama hotel : ' . $hotel->name);
-    
-                CacheSystemDB::forget('hotel' . $hotel->slug);
+                
+                try {
+                    CacheSystemDB::forget('hotel' . $hotel->slug);
+                }
+                catch (\Illuminate\Database\QueryException $queryException) {
+                    $this->error('[ * ] Database error');
+                    $this->line('[ * ] Sleep : 3 detik');
+                    $this->line('--------------------');
+                    sleep(3);
+                    continue;
+                }
                 
                 $hotel->update([
                     'is_reviews_scraped' => 'PROCESS',

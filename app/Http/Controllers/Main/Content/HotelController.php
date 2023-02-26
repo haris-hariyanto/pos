@@ -21,6 +21,11 @@ class HotelController extends Controller
         $preview = $request->query('unapproved');
 
         $cacheKey = 'hotel' . $hotel;
+
+        if ($preview) {
+            CacheSystemDB::forget($cacheKey);
+        }
+
         $cacheData = CacheSystemDB::get($cacheKey);
 
         if ($cacheData) {

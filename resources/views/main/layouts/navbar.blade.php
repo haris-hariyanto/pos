@@ -47,13 +47,6 @@
                                 >{{ __('Register') }}</a>
                             </li>
                         @endif
-                        <li class="nav-item">
-                            <a 
-                                href="{{ route('login') }}" 
-                                @class(['nav-link', 'active' => Route::currentRouteName() === 'login'])
-                                @if (Route::currentRouteName() === 'login') aria-current="page" @endif
-                            >{{ __('Login') }}</a>
-                        </li>
                     @endguest
     
                     @auth
