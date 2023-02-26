@@ -81,53 +81,55 @@ class CacheSystemDB
 
     public static function forgetWithTags($tags, $tagType = false)
     {
-        if (is_array($tags)) {
-            // Delete file cache
-            $caches = DB::table('page_caches')->select('key')
-            ->where(function ($query) use ($tags) {
-                foreach ($tags as $tag) {
-                    $query->where('tags', 'like', '%' . $tag . '%');
-                }
-            })->get();
-            $keys = [];
-            foreach ($caches as $cache) {
-                $keys[] = 'caches/' . $cache->key . '.json';
-            }
-            Storage::delete($keys);
-            // [END] Delete file cache
-
-            DB::table('page_caches')->where(function ($query) use ($tags) {
-                foreach ($tags as $tag) {
-                    $query->where('tags', 'like', '%' . $tag . '%');
-                }
-            })->delete();
-        }
-        else {
-            if ($tagType) {
+        dispatch(function () use ($tags, $tagType) {
+            if (is_array($tags)) {
                 // Delete file cache
-                $caches = DB::table('page_caches')->select('key')->where('tags', 'like', '%[' . $tagType . ':' . $tags . ']%')->get();
+                $caches = DB::table('page_caches')->select('key')
+                ->where(function ($query) use ($tags) {
+                    foreach ($tags as $tag) {
+                        $query->where('tags', 'like', '%' . $tag . '%');
+                    }
+                })->get();
                 $keys = [];
                 foreach ($caches as $cache) {
                     $keys[] = 'caches/' . $cache->key . '.json';
                 }
                 Storage::delete($keys);
                 // [END] Delete file cache
-
-                DB::table('page_caches')->where('tags', 'like', '%[' . $tagType . ':' . $tags . ']%')->delete();
+    
+                DB::table('page_caches')->where(function ($query) use ($tags) {
+                    foreach ($tags as $tag) {
+                        $query->where('tags', 'like', '%' . $tag . '%');
+                    }
+                })->delete();
             }
             else {
-                // Delete file cache
-                $caches = DB::table('page_caches')->select('key')->where('tags', 'like', '%' . $tags . '%')->get();
-                $keys = [];
-                foreach ($caches as $cache) {
-                    $keys[] = 'caches/' . $cache->key . '.json';
+                if ($tagType) {
+                    // Delete file cache
+                    $caches = DB::table('page_caches')->select('key')->where('tags', 'like', '%[' . $tagType . ':' . $tags . ']%')->get();
+                    $keys = [];
+                    foreach ($caches as $cache) {
+                        $keys[] = 'caches/' . $cache->key . '.json';
+                    }
+                    Storage::delete($keys);
+                    // [END] Delete file cache
+    
+                    DB::table('page_caches')->where('tags', 'like', '%[' . $tagType . ':' . $tags . ']%')->delete();
                 }
-                Storage::delete($keys);
-                // [END] Delete file cache
-
-                DB::table('page_caches')->where('tags', 'like', '%' . $tags . '%')->delete();
+                else {
+                    // Delete file cache
+                    $caches = DB::table('page_caches')->select('key')->where('tags', 'like', '%' . $tags . '%')->get();
+                    $keys = [];
+                    foreach ($caches as $cache) {
+                        $keys[] = 'caches/' . $cache->key . '.json';
+                    }
+                    Storage::delete($keys);
+                    // [END] Delete file cache
+    
+                    DB::table('page_caches')->where('tags', 'like', '%' . $tags . '%')->delete();
+                }
             }
-        }
+        });
     }
 
     public static function forget($key)
