@@ -36,7 +36,9 @@ class ReviewController extends Controller
         $querySearch = $request->query('search');
         $queryType = $request->query('type', 'all');
 
-        $reviewsCount = Review::count();
+        $reviewsCount = Cache::rememberForever('reviewscount', function () {
+            return Review::count();
+        });
 
         $reviews = Review::with('hotel')
             ->when($querySearch, function ($query) use ($querySearch) {
@@ -196,6 +198,8 @@ class ReviewController extends Controller
      */
     public function destroy(Request $request, Review $review)
     {
+        Cache::forget('reviewscount');
+
         CacheSystemDB::forget('hotel' . $review->hotel->slug);
         $review->delete();
 

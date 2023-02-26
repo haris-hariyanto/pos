@@ -10,6 +10,7 @@ use App\Helpers\CacheSystemDB;
 use App\Helpers\ReCAPTCHA;
 use App\Helpers\Settings;
 use App\Helpers\Text;
+use Illuminate\Support\Facades\Cache;
 
 class ReviewController extends Controller
 {
@@ -74,6 +75,8 @@ class ReviewController extends Controller
 
         CacheSystemDB::forgetWithTags($hotel['id'], 'hotel');
 
+        Cache::forget('reviewscount');
+
         return redirect()->route('hotel', ['hotel' => $hotel->slug, 'unapproved' => $review->id, '#review' . $review->id]);
     }
 
@@ -127,6 +130,8 @@ class ReviewController extends Controller
         ]);
 
         CacheSystemDB::forgetWithTags($hotel['id'], 'hotel');
+
+        Cache::forget('reviewscount');
 
         return redirect()->route('hotel', [$hotel->slug, 'unapproved' => $review->id, '#review' . $review->id]);
     }

@@ -134,8 +134,10 @@ class CacheSystemDB
 
     public static function forget($key)
     {
-        Storage::delete('caches/' . $key . '.json');
-        $cache = DB::table('page_caches')->where('key', $key)->delete();
+        dispatch(function () use ($key) {
+            Storage::delete('caches/' . $key . '.json');
+            $cache = DB::table('page_caches')->where('key', $key)->delete();
+        });
     }
 
     public static function flush()
