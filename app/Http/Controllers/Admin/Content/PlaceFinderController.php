@@ -93,6 +93,8 @@ class PlaceFinderController extends Controller
                     'user_ratings_total' => $place['user_ratings_total'],
                 ]);
 
+                $tags = [];
+
                 foreach ($place['types'] as $category) {
                     $category = Category::firstOrCreate([
                         'name' => $category,
@@ -106,11 +108,22 @@ class PlaceFinderController extends Controller
                         'continent' => $country->continent,
                     ]);
 
+                    $tags[$category->id] = $category->id;
+
+                    /*
                     CacheSystemDB::forgetWithTags([
                         '[country:' . $country->id . ']',
                         '[category:' . $category->id . ']'
                     ]);
+                    */
                 } // [END] foreach
+
+                foreach ($tags as $tag) {
+                    CacheSystemDB::forgetWithTags([
+                        '[country:' . $country->id . ']',
+                        '[category:' . $tag . ']',
+                    ]);
+                }
             }
         }
 
