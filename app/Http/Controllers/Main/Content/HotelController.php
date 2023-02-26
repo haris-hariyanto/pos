@@ -24,12 +24,9 @@ class HotelController extends Controller
 
         $cacheData = CacheSystemDB::get($cacheKey);
 
-        /*
         if ($preview) {
-            // CacheSystemDB::forget($cacheKey);
             $cacheData = false;
         }
-        */
 
         if ($cacheData) {
             extract($cacheData);
