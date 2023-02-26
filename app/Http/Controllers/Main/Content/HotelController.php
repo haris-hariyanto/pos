@@ -22,11 +22,12 @@ class HotelController extends Controller
 
         $cacheKey = 'hotel' . $hotel;
 
-        if ($preview) {
-            CacheSystemDB::forget($cacheKey);
-        }
-
         $cacheData = CacheSystemDB::get($cacheKey);
+
+        if ($preview) {
+            // CacheSystemDB::forget($cacheKey);
+            $cacheData = false;
+        }
 
         if ($cacheData) {
             extract($cacheData);
