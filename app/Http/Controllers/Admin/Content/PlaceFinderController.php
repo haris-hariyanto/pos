@@ -62,6 +62,7 @@ class PlaceFinderController extends Controller
 
         $country = Country::where('name', $request->country)->first();
         $places = $request->places;
+        $tags = [];
         foreach ($places as $place) {
             $place = json_decode($place, true);
 
@@ -93,8 +94,6 @@ class PlaceFinderController extends Controller
                     'user_ratings_total' => $place['user_ratings_total'],
                 ]);
 
-                $tags = [];
-
                 foreach ($place['types'] as $category) {
                     $category = Category::firstOrCreate([
                         'name' => $category,
@@ -117,14 +116,14 @@ class PlaceFinderController extends Controller
                     ]);
                     */
                 } // [END] foreach
-
-                foreach ($tags as $tag) {
-                    CacheSystemDB::forgetWithTags([
-                        '[country:' . $country->id . ']',
-                        '[category:' . $tag . ']',
-                    ]);
-                }
             }
+        }
+
+        foreach ($tags as $tag) {
+            CacheSystemDB::forgetWithTags([
+                '[country:' . $country->id . ']',
+                '[category:' . $tag . ']',
+            ]);
         }
 
         return redirect()->route('admin.places.index')->with('success', __('Places has been added!'));
