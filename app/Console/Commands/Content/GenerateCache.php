@@ -41,16 +41,13 @@ class GenerateCache extends Command
 
         $route = route('index');
         $this->info('[ * ] Membuat cache : ' . $route);
-        // $request = Request::create($route, 'GET');
-        // $response = app()->handle($request);
+        Http::retry(5, 1000)->get($route);
 
         $continents = Continent::get();
         foreach ($continents as $continent) {
             $route = route('continent', [$continent->slug]);
             $this->info('[ * ] Membuat cache : ' . $route);
             Http::retry(5, 1000)->get($route);
-            // $request = Request::create($route, 'GET');
-            // $response = app()->handle($request);
         }
 
         $countries = Country::get();
@@ -61,59 +58,43 @@ class GenerateCache extends Command
                 $route = route($route, [$country->slug]);
                 $this->info('[ * ] Membuat cache : ' . $route);
                 Http::retry(5, 1000)->get($route);
-                // $request = Request::create($route, 'GET');
-                // $response = app()->handle($request);
             }
 
             foreach ($categories as $category) {
                 $route = route('country.places', [$country->slug, $category->slug]);
                 $this->info('[ * ] Membuat cache : ' . $route);
                 Http::retry(5, 1000)->get($route);
-                // $request = Request::create($route, 'GET');
-                // $response = app()->handle($request);
             }
         }
 
-        /*
         $places = Place::get();
         foreach ($places as $place) {
             $route = route('place', [$place->slug]);
             $this->info('[ * ] Membuat cache : ' . $route);
-            $request = Request::create($route, 'GET');
-            $response = app()->handle($request);
-        }
-        */
-
-        $hotels = Hotel::get();
-        foreach ($hotels as $hotel) {
-            if (!CacheSystemDB::get('hotel' . $hotel->slug)) {
-                $route = route('hotel', [$hotel->slug]);
-                $this->info('[ * ] Membuat cache : ' . $route);
-                // file_get_contents($route);
-                Http::retry(5, 1000)->get($route);
-                // $request = Request::create($route, 'GET');
-                // $response = app()->handle($request);
-            }
+            Http::retry(5, 1000)->get($route);
         }
 
         $cities = City::get();
         foreach ($cities as $city) {
             $route = route('hotel.location', ['city', $city->slug]);
             $this->info('[ * ] Membuat cache : ' . $route);
-            // file_get_contents($route);
             Http::retry(5, 1000)->get($route);
-            // $request = Request::create($route, 'GET');
-            // $response = app()->handle($request);
         }
 
         $states = State::get();
         foreach ($states as $state) {
             $route = route('hotel.location', ['state', $state->slug]);
             $this->info('[ * ] Membuat cache : ' . $route);
-            // file_get_contents($route);
             Http::retry(5, 1000)->get($route);
-            // $request = Request::create($route, 'GET');
-            // $response = app()->handle($request);
+        }
+
+        $hotels = Hotel::get();
+        foreach ($hotels as $hotel) {
+            if (!CacheSystemDB::get('hotel' . $hotel->slug)) {
+                $route = route('hotel', [$hotel->slug]);
+                $this->info('[ * ] Membuat cache : ' . $route);
+                Http::retry(5, 1000)->get($route);
+            }
         }
     }
 }
