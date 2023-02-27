@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use App\Models\Location\Continent;
 use App\Models\Location\Country;
 use App\Models\Location\Category;
+use App\Models\Location\Place;
 use App\Helpers\CacheSystemDB;
 
 class DeleteCache extends Command
@@ -33,15 +34,22 @@ class DeleteCache extends Command
     {
         $choices = [
             'Semua halaman',
+            'Halaman Awal',
             'Benua',
+            'Negara',
             'Daftar Kota',
             'Daftar Provinsi / State',
-            'Daftar Tempat'
+            'Daftar Tempat',
         ];
 
         $cacheToDelete = $this->choice('Pilih cache untuk dihapus', $choices, 0);
 
-        if ($cacheToDelete == $choices[0] || $cacheToDelete == $choices[1]) {
+        if ($cacheToDelete == $choices[0] || $cacheToDelete == 'Halaman Awal') {
+            $this->line('[ * ] Menghapus cache halaman awal');
+            CacheSystemDB::forget('homepage');
+        }
+
+        if ($cacheToDelete == $choices[0] || $cacheToDelete == 'Benua') {
             $this->line('[ * ] Menghapus cache halaman benua');
 
             $continents = Continent::get();
@@ -51,7 +59,17 @@ class DeleteCache extends Command
             }
         }
 
-        if ($cacheToDelete == $choices[0] || $cacheToDelete == $choices[2]) {
+        if ($cacheToDelete == $choices[0] || $cacheToDelete == 'Negara') {
+            $this->line('[ * ] Menghapus cache halaman negara');
+
+            $countries = Country::get();
+            foreach ($countries as $country) {
+                $this->line('[ * ] Menghapus halaman negara : ' . $country->name);
+                CacheSystemDB::forget('country' . $country->slug);
+            }
+        }
+
+        if ($cacheToDelete == $choices[0] || $cacheToDelete == 'Daftar Kota') {
             $this->line('[ * ] Menghapus cache halaman daftar kota');
 
             $countries = Country::get();
@@ -61,7 +79,7 @@ class DeleteCache extends Command
             }
         }
 
-        if ($cacheToDelete == $choices[0] || $cacheToDelete == $choices[3]) {
+        if ($cacheToDelete == $choices[0] || $cacheToDelete == 'Daftar Provinsi / State') {
             $this->line('[ * ] Menghapus cache halaman daftar provinsi / state');
 
             $countries = Country::get();
@@ -71,7 +89,7 @@ class DeleteCache extends Command
             }
         }
 
-        if ($cacheToDelete == $choices[0] || $cacheToDelete == $choices[4]) {
+        if ($cacheToDelete == $choices[0] || $cacheToDelete == 'Daftar Tempat') {
             $this->line('[ * ] Menghapus cache halaman daftar tempat');
 
             $countries = Country::get();

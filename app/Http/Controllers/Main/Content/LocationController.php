@@ -8,6 +8,8 @@ use App\Models\Location\City;
 use App\Models\Location\State;
 use App\Models\Hotel\Hotel;
 use App\Helpers\CacheSystemDB;
+use Illuminate\Support\Facades\Cache;
+use App\Helpers\Text;
 
 class LocationController extends Controller
 {
@@ -184,7 +186,30 @@ class LocationController extends Controller
             $this->stateTotalViewsHandler($location['id']);
         }
 
-        return view('main.contents.hotel-location', compact('type', 'location', 'hotels', 'links', 'currentPage'));
+        // Get lowest price
+        $cacheKeyLowestPrice = 'location' . $type . $location['slug'] . 'lowest-price';
+        $lowestPrice = Cache::rememberForever($cacheKeyLowestPrice, function () use ($type, $location) {
+            if ($type == 'city' || $type == config('content.location_term_city')) {
+                $getLowestPrice = Hotel::where('city', $location['name'])
+                    ->where('country', $location['country']['name'])
+                    ->min('price');
+                return $getLowestPrice;
+            }
+
+            if ($type == 'state' || $type == config('content.location_term_state')) {
+                $getLowestPrice = Hotel::where('state', $location['name'])
+                    ->where('country', $location['country']['name'])
+                    ->min('price');
+                return $getLowestPrice;
+            }
+        });
+        if (!is_int($lowestPrice) || empty($lowestPrice)) {
+            $lowestPrice = config('content.default_lowest_price');
+        }
+        $lowestPrice = Text::priceWithoutCurrency($lowestPrice);
+        // [END] Get lowest price
+
+        return view('main.contents.hotel-location', compact('type', 'location', 'hotels', 'links', 'currentPage', 'lowestPrice'));
     }
 
     private function cityTotalViewsHandler($cityID)

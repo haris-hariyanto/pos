@@ -44,6 +44,7 @@ return [
             '[place_name]' => 'Nama tempat',
             // '[total_hotels]' => 'Jumlah hotel yang ditemukan',
             '[page]' => 'Nomor halaman',
+            '[starting_price]' => 'Harga hotel paling murah',
         ],
     ],
     'continent' => [
@@ -126,6 +127,7 @@ return [
             '[country_name]' => 'Nama negara',
             '[city_name]' => 'Nama kota',
             '[page]' => 'Nomor halaman',
+            '[starting_price]' => 'Harga hotel paling murah',
         ],
     ],
     'state' => [
@@ -141,6 +143,7 @@ return [
             '[country_name]' => 'Nama negara',
             '[state_name]' => 'Nama state',
             '[page]' => 'Nomor halaman',
+            '[starting_price]' => 'Harga hotel paling murah',
         ],
     ],
 ];

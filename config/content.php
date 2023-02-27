@@ -7,4 +7,6 @@ return [
 
     'hotels_pagination_items_per_page' => 25,
     'lazy_load' => env('LAZY_LOAD', false),
+
+    'default_lowest_price' => 50000,
 ];

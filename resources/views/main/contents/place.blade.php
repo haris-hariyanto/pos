@@ -6,6 +6,7 @@
                 '[place_name]' => $place['name'],
                 '[page]' => $currentPage,
                 '[current_url]' => route('place', [$place['slug']]),
+                '[starting_price]' => $lowestPrice,
             ])
         }}
     </x-slot:pageTitle>
@@ -17,6 +18,7 @@
                 '[place_name]' => $place['name'],
                 '[page]' => $currentPage,
                 '[current_url]' => route('place', [$place['slug']]),
+                '[starting_price]' => $lowestPrice,
             ])
         !!}
 
@@ -67,6 +69,7 @@
                                 '[place_name]' => $place['name'],
                                 '[page]' => $currentPage,
                                 '[current_url]' => route('place', [$place['slug']]),
+                                '[starting_price]' => $lowestPrice,
                             ])
                         }}
                     </h1>

@@ -2,26 +2,28 @@
     <x-slot:pageTitle>{{ __('Hotels in :location, :country', ['location' => $location['name'], 'country' => $location['country']['name']]) }}</x-slot:pageTitle>
     <x-slot:pageTitle>
         {{ 
-            \App\Helpers\Text::placeholder($type == config('content.location_term_city') ? $pagesettings_city_page_title : $pagesettings_state_page_title, [
+            \App\Helpers\Text::placeholder($type == 'city' || $type == config('content.location_term_city') ? $pagesettings_city_page_title : $pagesettings_state_page_title, [
                 '[appname]' => $settings__website_name,
                 '[country_name]' => $location['country']['name'],
                 '[city_name]' => $location['name'],
                 '[state_name]' => $location['name'],
                 '[page]' => $currentPage,
                 '[current_url]' => route('hotel.location', [$type, $location['slug']]),
+                '[starting_price]' => $lowestPrice,
             ])
         }}
     </x-slot:pageTitle>
 
     @push('metaData')
         {!!
-            \App\Helpers\Text::placeholder($type == config('content.location_term_city') ? $pagesettings_city_meta_data : $pagesettings_state_meta_data, [
+            \App\Helpers\Text::placeholder($type == 'city' || $type == config('content.location_term_city') ? $pagesettings_city_meta_data : $pagesettings_state_meta_data, [
                 '[appname]' => $settings__website_name,
                 '[country_name]' => $location['country']['name'],
                 '[city_name]' => $location['name'],
                 '[state_name]' => $location['name'],
                 '[page]' => $currentPage,
                 '[current_url]' => route('hotel.location', [$type, $location['slug']]),
+                '[starting_price]' => $lowestPrice,
             ])
         !!}
 
@@ -65,13 +67,14 @@
 
                     <h1 class="fs-2 mb-3">
                         {{
-                            \App\Helpers\Text::placeholder($type == 'city' ? $pagesettings_city_heading : $pagesettings_state_heading, [
+                            \App\Helpers\Text::placeholder($type == 'city' || $type == config('content.location_term_city') ? $pagesettings_city_heading : $pagesettings_state_heading, [
                                 '[appname]' => $settings__website_name,
                                 '[country_name]' => $location['country']['name'],
                                 '[city_name]' => $location['name'],
                                 '[state_name]' => $location['name'],
                                 '[page]' => $currentPage,
                                 '[current_url]' => route('hotel.location', [$type, $location['slug']]),
+                                '[starting_price]' => $lowestPrice,
                             ]) 
                         }}
                     </h1>

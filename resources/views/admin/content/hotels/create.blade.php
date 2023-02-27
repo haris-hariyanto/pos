@@ -68,6 +68,7 @@
                         </div>
 
                         <x-admin.forms.textarea name="overview" :label="__('Overview')">{{ old('overview') }}</x-admin.forms.textarea>
+                        <x-admin.forms.textarea name="article" :label="__('Article')">{{ old('article') }}</x-admin.forms.textarea>
 
                         <hr>
 

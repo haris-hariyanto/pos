@@ -8,6 +8,8 @@ use App\Models\Location\Place;
 use App\Models\Hotel\Hotel;
 use App\Helpers\CacheSystemDB;
 use App\Helpers\StructuredData;
+use App\Helpers\Text;
+use Illuminate\Support\Facades\Cache;
 
 class PlaceController extends Controller
 {
@@ -120,13 +122,35 @@ class PlaceController extends Controller
         // Views counter
         $this->totalViewsHandler($place['id']);
 
+        // Get lowest price
+        $cacheKeyLowestPrice = 'place' . $place['slug'] . 'lowest-price';
+        $lowestPrice = Cache::rememberForever($cacheKeyLowestPrice, function () use ($place) {
+            $latitude = explode('.', $place['latitude']);
+            $longitude = explode('.', $place['longitude']);
+
+            if (count($latitude) > 1 && count($longitude) > 1) {
+                $getLowestPrice = Hotel::where('latitude', 'like', $latitude[0] . '.' . substr($latitude[1], 0, 1) . '%')
+                    ->where('longitude', 'like', $longitude[0] . '.' . substr($longitude[1], 0, 1) . '%')
+                    ->min('price');
+                return $getLowestPrice;
+            }
+            else {
+                return null;
+            }
+        });
+        if (!is_int($lowestPrice) || empty($lowestPrice)) {
+            $lowestPrice = config('content.default_lowest_price');
+        };
+        $lowestPrice = Text::priceWithoutCurrency($lowestPrice);
+        // [END] Get lowest price
+
         $structuredData = new StructuredData();
         $structuredData->breadcrumb([
             __('Home') => route('index'),
             $place['name'] => ''
         ]);
 
-        return view('main.contents.place', compact('place', 'hotels', 'links', 'currentPage', 'structuredData'));
+        return view('main.contents.place', compact('place', 'hotels', 'links', 'currentPage', 'structuredData', 'lowestPrice'));
     }
 
     private function totalViewsHandler($placeID)

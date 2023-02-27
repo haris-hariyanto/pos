@@ -345,5 +345,6 @@
     "Maps": "Peta",
     "Close": "Tutup",
     "Popular :place_category in :continent": ":place_category Populer di :continent",
-    "Popular Cities in :continent": "Kota Populer di :continent"
+    "Popular Cities in :continent": "Kota Populer di :continent",
+    "Article": "Artikel"
 }

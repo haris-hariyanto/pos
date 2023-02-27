@@ -50,6 +50,14 @@ class Text
         }
     }
 
+    public static function priceWithoutCurrency($price = 0)
+    {
+        // $price = round($price, -3, PHP_ROUND_HALF_DOWN);
+        $price = 1000 * floor($price / 1000);
+        $price = number_format($price, 0, '.', ',');
+        return $price;
+    }
+
     public static function placeholder($str, $data = [])
     {
         foreach ($data as $search => $replace) {
