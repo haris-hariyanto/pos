@@ -237,6 +237,7 @@ class CountryController extends Controller
                         $longitude = explode('.', $place['longitude']);
     
                         if (
+                            count($latitude) > 1 && count($longitude) > 1 &&
                             $hotelLatitude[0] == $latitude[0] && 
                             substr($hotelLatitude[1], 0, 1) == substr($latitude[1], 0, 1) &&
                             $hotelLongitude[0] == $longitude[0] &&

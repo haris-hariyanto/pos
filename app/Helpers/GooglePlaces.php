@@ -22,7 +22,7 @@ class GooglePlaces
         $params['inputtype'] = 'textquery';
         $params['locationbias'] = 'circle:100@' . $latitude . ',' . $longitude;
 
-        $response = Http::get($this->endpoint . 'findplacefromtext/json', $params);
+        $response = Http::retry(5, 1000)->get($this->endpoint . 'findplacefromtext/json', $params);
 
         $response = $response->body();
         $response = json_decode($response, true);
@@ -54,7 +54,7 @@ class GooglePlaces
             $params['language'] = 'en';
         }
 
-        $response = Http::get($this->endpoint . 'details/json', $params);
+        $response = Http::retry(5, 1000)->get($this->endpoint . 'details/json', $params);
 
         $response = $response->body();
         $response = json_decode($response, true);
@@ -86,7 +86,7 @@ class GooglePlaces
             $params['language'] = 'en';
         }
 
-        $response = Http::get($this->endpoint . 'details/json', $params);
+        $response = Http::retry(5, 1000)->get($this->endpoint . 'details/json', $params);
 
         $response = $response->body();
         $response = json_decode($response, true);
@@ -138,7 +138,7 @@ class GooglePlaces
                 $params['region'] = $isoCode;
             }
 
-            $response = Http::get($this->endpoint . 'textsearch/json', $params);
+            $response = Http::retry(5, 1000)->get($this->endpoint . 'textsearch/json', $params);
 
             $response = $response->body();
             $response = json_decode($response, true);
@@ -211,7 +211,7 @@ class GooglePlaces
             $params['language'] = 'en';
         }
 
-        $response = Http::get($this->endpoint . 'textsearch/json', $params);
+        $response = Http::retry(5, 1000)->get($this->endpoint . 'textsearch/json', $params);
 
         $response = $response->body();
         $response = json_decode($response, true);
@@ -270,7 +270,7 @@ class GooglePlaces
                 $params['pagetoken'] = $nextPageToken;
             }
 
-            $response = Http::get($this->endpoint . 'nearbysearch/json', $params);
+            $response = Http::retry(5, 1000)->get($this->endpoint . 'nearbysearch/json', $params);
 
             $response = $response->body();
             $response = json_decode($response, true);
