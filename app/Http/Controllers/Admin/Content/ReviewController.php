@@ -53,7 +53,7 @@ class ReviewController extends Controller
                 }
             });
 
-        if ($querySearch || $queryType) {
+        if ($querySearch || $queryType != 'all') {
             $reviewsCountFiltered = $reviews->count();
         }
         else {
