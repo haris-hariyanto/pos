@@ -8,6 +8,7 @@ use App\Models\Hotel\Review;
 use App\Helpers\GooglePlaces;
 use App\Helpers\CacheSystemDB;
 use App\Helpers\Text;
+use Illuminate\Support\Facades\Cache;
 
 class HotelReview extends Command
 {
@@ -98,8 +99,10 @@ class HotelReview extends Command
                                 $reviewToSave['review'] = Text::plain($review['text']);
                                 $reviewToSave['is_accepted'] = 'Y';
                                 $reviewToSave['source'] = 'google';
-    
-                                $reviewsToSave[] = $reviewToSave;
+
+                                if (!empty($reviewToSave['review'])) {
+                                    $reviewsToSave[] = $reviewToSave;
+                                }
                             }
                             $this->line('[ * ] Menyimpan review');
                         }
@@ -128,6 +131,7 @@ class HotelReview extends Command
                     $prepareData[] = new Review($reviewToSave);
                 }
                 $hotel->reviews()->saveMany($prepareData);
+                Cache::forget('reviewscount');
     
                 $this->line('--------------------');
 
