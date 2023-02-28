@@ -20,6 +20,9 @@
     <div x-data="modalDelete">
         <div class="card">
             <div class="card-body">
+                <div id="toolbar">
+                    <button type="button" class="btn btn-danger disabled" data-toggle="modal" data-target="#modalBulkDelete" id="bulkDeleteBtn">{{ __('Delete') }}</button>
+                </div>
                 <table
                     data-toggle="table"
                     data-url="{{ route('admin.hotels.index.data') }}"
@@ -28,9 +31,14 @@
                     data-search="true"
                     data-show-columns="true"
                     data-show-columns-toggle-all="true"
+                    data-id-field="id"
+                    data-select-item-name="hotels"
+                    data-toolbar="#toolbar"
+                    id="mainTable"
                 >
                     <thead>
                         <tr>
+                            <th data-checkbox="true"></th>
                             <th data-field="id" data-sortable="true" data-visible="false" data-width="1">{{ __('ID') }}</th>
                             <th data-field="name" data-sortable="true">{{ __('Hotel Name') }}</th>
                             <th data-field="chain" data-visible="false">{{ __('Hotel Chain') }}</th>
@@ -59,6 +67,19 @@
                 </form>
             </x-slot>
         </x-admin.components.modal>
+
+        <x-admin.components.modal name="bulkDelete">
+            <x-slot:modalTitle>{{ __('Delete Hotel?') }}</x-slot:modalTitle>
+            <p class="mb-0">{!! __('Delete :count hotels?', ['count' => '<span id="totalHotelsToDelete">0</span>']) !!}</p>
+            <x-slot:modalFooter>
+                <form action="{{ route('admin.hotels.bulk-delete') }}" method="POST" id="formDelete">
+                    @csrf
+                    @method('DELETE')
+                    <input type="hidden" name="hotelsIDToDelete" value="">
+                    <button class="btn btn-danger" type="submit" id="bulkDeleteSubmit">{{ __('Delete') }}</button>
+                </form>
+            </x-slot:modalFooter>
+        </x-admin.components.modal>
     </div>
 
     @push('scripts')
@@ -77,6 +98,44 @@
                         this.itemName = e.target.dataset.name;
                     },
                 }));
+            });
+
+            $('#mainTable').bootstrapTable({
+                onPostBody: function () {
+                    const bulkDeleteButton = document.getElementById('bulkDeleteBtn');
+                    const checkboxes = document.querySelectorAll('input[name="hotels"], input[name="btSelectAll"]');
+                    const totalHotelsToDelete = document.getElementById('totalHotelsToDelete');
+
+                    checkboxes.forEach(e => {
+                        e.addEventListener('change', () => {
+                            const checkedCheckboxes = document.querySelectorAll('input[name="hotels"]:checked');
+                            if (checkedCheckboxes.length > 0) {
+                                bulkDeleteButton.classList.remove('disabled');
+                                totalHotelsToDelete.innerHTML = checkedCheckboxes.length;
+                            }
+                            else {
+                                bulkDeleteButton.classList.add('disabled');
+                            }
+                        });
+                    });
+                },
+            });
+
+            const bulkDeleteSubmit = document.getElementById('bulkDeleteSubmit');
+            const formDelete = document.getElementById('formDelete');
+            bulkDeleteSubmit.addEventListener('click', (e) => {
+                const hotelsToDelete = [];
+                const checkedCheckboxes = document.querySelectorAll('input[name="hotels"]:checked');
+                checkedCheckboxes.forEach(e => {
+                    hotelsToDelete.push(e.value);
+                });
+                const JSONHotelsToDelete = JSON.stringify(hotelsToDelete);
+
+                const hotelsField = document.querySelectorAll('input[name="hotelsIDToDelete"]');
+                if (hotelsField.length == 1) {
+                    hotelsField[0].value = JSONHotelsToDelete;
+                }
+
             });
         </script>
     @endpush

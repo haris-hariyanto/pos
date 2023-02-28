@@ -346,5 +346,7 @@
     "Close": "Tutup",
     "Popular :place_category in :continent": ":place_category Populer di :continent",
     "Popular Cities in :continent": "Kota Populer di :continent",
-    "Article": "Artikel"
+    "Article": "Artikel",
+    "Delete :count hotels?": "Hapus :count hotel?",
+    ":count hotel has been deleted!": ":count hotel telah dihapus!"
 }

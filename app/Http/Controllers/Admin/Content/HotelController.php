@@ -491,4 +491,24 @@ class HotelController extends Controller
 
         return redirect()->back()->with('success', __('Hotel has been deleted!'));
     }
+
+    public function bulkDelete(Request $request)
+    {
+        $hotelsIDToDelete = $request->post('hotelsIDToDelete');
+        $hotelsIDToDelete = json_decode($hotelsIDToDelete, true);
+        
+        Hotel::where(function ($query) use ($hotelsIDToDelete) {
+            foreach ($hotelsIDToDelete as $hotelIDToDelete) {
+                $query->orWhere('id', $hotelIDToDelete);
+            }
+        })->delete();
+
+        Cache::forget('hotelscount');
+
+        foreach ($hotelsIDToDelete as $hotelIDToDelete) {
+            CacheSystemDB::forgetWithTags($hotelIDToDelete, 'hotel');
+        }
+
+        return redirect()->back()->with('success', __(':count hotel has been deleted!', ['count' => count($hotelsIDToDelete)]));
+    }
 }
