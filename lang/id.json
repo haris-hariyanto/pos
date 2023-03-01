@@ -348,5 +348,9 @@
     "Popular Cities in :continent": "Kota Populer di :continent",
     "Article": "Artikel",
     "Delete :count hotels?": "Hapus :count hotel?",
-    ":count hotel has been deleted!": ":count hotel telah dihapus!"
+    ":count hotels has been deleted!": ":count hotel telah dihapus!",
+    "Delete Hotels?": "Hapus Hotel?",
+    "Delete Places?": "Hapus Tempat?",
+    "Delete :count places?": "Hapus :count tempat?",
+    ":count places has been deleted!": ":count places telah dihapus!"
 }

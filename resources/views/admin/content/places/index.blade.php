@@ -26,6 +26,9 @@
     <div x-data="modalDelete">
         <div class="card">
             <div class="card-body">
+                <div id="toolbar">
+                    <button type="button" class="btn btn-danger disabled" data-toggle="modal" data-target="#modalBulkDelete" id="bulkDeleteBtn">{{ __('Delete') }}</button>
+                </div>
                 <table
                     data-toggle="table"
                     data-url="{{ route('admin.places.index.data') }}"
@@ -34,9 +37,14 @@
                     data-search="true"
                     data-show-columns="true"
                     data-show-columns-toggle-all="true"
+                    data-id-field="id"
+                    data-select-item-name="places"
+                    data-toolbar="#toolbar"
+                    id="mainTable"
                 >
                     <thead>
                         <tr>
+                            <th data-checkbox="true"></th>
                             <th data-field="id" data-sortable="true" data-visible="false" data-width="1">{{ __('ID') }}</th>
                             <th data-field="name" data-sortable="true">{{ __('Place Name') }}</th>
                             <th data-field="address" data-visible="true">{{ __('Address') }}</th>
@@ -61,6 +69,19 @@
                 </form>
             </x-slot>
         </x-admin.components.modal>
+
+        <x-admin.components.modal name="bulkDelete">
+            <x-slot:modalTitle>{{ __('Delete Places?') }}</x-slot:modalTitle>
+            <p class="mb-0">{!! __('Delete :count places?', ['count' => '<span id="totalPlacesToDelete"></span>']) !!}</p>
+            <x-slot:modalFooter>
+                <form action="{{ route('admin.places.bulk-delete') }}" method="POST" id="formDelete">
+                    @csrf
+                    @method('DELETE')
+                    <input type="hidden" name="placesIDToDelete" value="">
+                    <button class="btn btn-danger" type="submit" id="bulkDeleteSubmit">{{ __('Submit') }}</button>
+                </form>
+            </x-slot:modalFooter>
+        </x-admin.components.modal>
     </div>
 
     @push('scripts')
@@ -79,6 +100,44 @@
                         this.itemName = e.target.dataset.name;
                     },
                 }));
+            });
+
+            $('#mainTable').bootstrapTable({
+                onPostBody: function () {
+                    const bulkDeleteButton = document.getElementById('bulkDeleteBtn');
+                    const checkboxes = document.querySelectorAll('input[name="places"], input[name="btSelectAll"]');
+                    const totalPlacesToDelete = document.getElementById('totalPlacesToDelete');
+
+                    checkboxes.forEach(e => {
+                        e.addEventListener('change', () => {
+                            const checkedCheckboxes = document.querySelectorAll('input[name="places"]:checked');
+                            if (checkedCheckboxes.length > 0) {
+                                bulkDeleteButton.classList.remove('disabled');
+                                totalPlacesToDelete.innerHTML = checkedCheckboxes.length;
+                            }
+                            else {
+                                bulkDeleteButton.classList.add('disabled');
+                            }
+                        });
+                    });
+                },
+            });
+
+            const bulkDeleteSubmit = document.getElementById('bulkDeleteSubmit');
+            const formDelete = document.getElementById('formDelete');
+            bulkDeleteSubmit.addEventListener('click', (e) => {
+                const placesToDelete = [];
+                const checkedCheckboxes = document.querySelectorAll('input[name="places"]:checked');
+                checkedCheckboxes.forEach(e => {
+                    placesToDelete.push(e.value);
+                });
+                const JSONPlacesToDelete = JSON.stringify(placesToDelete);
+
+                const placesField = document.querySelectorAll('input[name="placesIDToDelete"]');
+                if (placesField.length == 1) {
+                    placesField[0].value = JSONPlacesToDelete;
+                }
+
             });
         </script>
     @endpush

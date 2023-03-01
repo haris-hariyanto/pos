@@ -281,9 +281,33 @@ class PlaceController extends Controller
     {
         CacheSystemDB::forgetWithTags($place->id, 'place');
 
-        HotelPlace::where('place_id', $place->id)->delete();
+        CategoryPlace::where('place_id', $place->id)->delete();
         $place->delete();
 
         return redirect()->back()->with('success', __('Place has been deleted!'));
+    }
+
+    public function bulkDelete(Request $request)
+    {
+        $placesIDToDelete = $request->post('placesIDToDelete');
+        $placesIDToDelete = json_decode($placesIDToDelete, true);
+
+        CategoryPlace::where(function ($query) use ($placesIDToDelete) {
+            foreach ($placesIDToDelete as $placeIDToDelete) {
+                $query->orWhere('place_id', $placeIDToDelete);
+            }
+        })->delete();
+        
+        Place::where(function ($query) use ($placesIDToDelete) {
+            foreach ($placesIDToDelete as $placeIDToDelete) {
+                $query->orWhere('id', $placeIDToDelete);
+            }
+        })->delete();
+
+        foreach ($placesIDToDelete as $placeIDToDelete) {
+            CacheSystemDB::forgetWithTags($placeIDToDelete, 'place');
+        }
+
+        return redirect()->back()->with('success', __(':count places has been deleted!', ['count' => count($placesIDToDelete)]));
     }
 }

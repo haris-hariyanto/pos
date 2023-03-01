@@ -509,6 +509,6 @@ class HotelController extends Controller
             CacheSystemDB::forgetWithTags($hotelIDToDelete, 'hotel');
         }
 
-        return redirect()->back()->with('success', __(':count hotel has been deleted!', ['count' => count($hotelsIDToDelete)]));
+        return redirect()->back()->with('success', __(':count hotels has been deleted!', ['count' => count($hotelsIDToDelete)]));
     }
 }

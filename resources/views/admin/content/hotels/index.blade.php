@@ -69,7 +69,7 @@
         </x-admin.components.modal>
 
         <x-admin.components.modal name="bulkDelete">
-            <x-slot:modalTitle>{{ __('Delete Hotel?') }}</x-slot:modalTitle>
+            <x-slot:modalTitle>{{ __('Delete Hotels?') }}</x-slot:modalTitle>
             <p class="mb-0">{!! __('Delete :count hotels?', ['count' => '<span id="totalHotelsToDelete">0</span>']) !!}</p>
             <x-slot:modalFooter>
                 <form action="{{ route('admin.hotels.bulk-delete') }}" method="POST" id="formDelete">
