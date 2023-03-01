@@ -38,6 +38,14 @@ class PlaceController extends Controller
             $latitude = explode('.', $place['latitude']);
             $longitude = explode('.', $place['longitude']);
 
+            if (empty($latitude[1])) {
+                $latitude[1] = '0';
+            }
+
+            if (empty($longitude[1])) {
+                $longitude[1] = '0';
+            }
+
             $modelHotels = Hotel::where('latitude', 'like', $latitude[0] . '.' . substr($latitude[1], 0, 1) . '%')
                 ->where('longitude', 'like', $longitude[0] . '.' . substr($longitude[1], 0, 1) . '%')
                 // ->where('overview', '<>', '')
