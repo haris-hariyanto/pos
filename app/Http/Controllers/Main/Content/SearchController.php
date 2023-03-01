@@ -170,33 +170,33 @@ class SearchController extends Controller
     {
         $query = $request->query('q');
         if ($query) {
-            $places = Place::with('categories')
-                ->where('name', 'LIKE', '%' . $query . '%')
+            $cities = City::where('name', 'LIKE', $query . '%')
                 ->take(5)
                 ->get();
-            $places = $places->map(function ($item) {
+            $cities = $cities->map(function ($item) {
                 return [
                     'name' => $item->name,
-                    'tag' => $item->categories()->first() ? __(ucwords(str_replace('_', ' ', $item->categories()->first()->name))) : __('Other'),
-                    'route' => route('place', [$item->slug]),
+                    'tag' => __('City'),
+                    'route' => route('hotel.location', [config('content.location_term_city'), $item->slug]),
                 ];
             })->toArray();
 
-            $autocompleteResults = $places;
+            $autocompleteResults = $cities;
 
             if (count($autocompleteResults) < 5) {
-                $cities = City::where('name', 'LIKE', $query . '%')
+                $places = Place::with('categories')
+                    ->where('name', 'LIKE', '%' . $query . '%')
                     ->take(5)
                     ->get();
-                $cities = $cities->map(function ($item) {
+                $places = $places->map(function ($item) {
                     return [
                         'name' => $item->name,
-                        'tag' => __('City'),
-                        'route' => route('hotel.location', [config('content.location_term_city'), $item->slug]),
+                        'tag' => $item->categories()->first() ? __(ucwords(str_replace('_', ' ', $item->categories()->first()->name))) : __('Other'),
+                        'route' => route('place', [$item->slug]),
                     ];
                 })->toArray();
 
-                $autocompleteResults = array_merge($cities, $autocompleteResults);
+                $autocompleteResults = array_merge($autocompleteResults, $places);
             }
 
             $searchAPIEnabled = Settings::get('searchsettings__enabled', 'N');
