@@ -196,7 +196,7 @@ class SearchController extends Controller
                     ];
                 })->toArray();
 
-                $autocompleteResults = array_merge($autocompleteResults, $cities);
+                $autocompleteResults = array_merge($cities, $autocompleteResults);
             }
 
             $searchAPIEnabled = Settings::get('searchsettings__enabled', 'N');

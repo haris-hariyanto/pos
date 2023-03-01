@@ -352,5 +352,7 @@
     "Delete Hotels?": "Hapus Hotel?",
     "Delete Places?": "Hapus Tempat?",
     "Delete :count places?": "Hapus :count tempat?",
-    ":count places has been deleted!": ":count places telah dihapus!"
+    ":count places has been deleted!": ":count places telah dihapus!",
+    "Other Places Near :place": "Tempat Lainnya Dekat :place",
+    "Hotel Recommendations": "Rekomendasi Hotel"
 }

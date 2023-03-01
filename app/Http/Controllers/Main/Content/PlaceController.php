@@ -140,10 +140,16 @@ class PlaceController extends Controller
                 $getLowestPrice = Hotel::where('latitude', 'like', $latitude[0] . '.' . substr($latitude[1], 0, 1) . '%')
                     ->where('longitude', 'like', $longitude[0] . '.' . substr($longitude[1], 0, 1) . '%')
                     ->min('price');
-                return $getLowestPrice;
+                
+                if (is_int($getLowestPrice) && !empty($getLowestPrice)) {
+                    return $getLowestPrice;
+                }
+                else {
+                    return '-';
+                }
             }
             else {
-                return null;
+                return '-';
             }
         });
         if (!is_int($lowestPrice) || empty($lowestPrice)) {
@@ -158,7 +164,80 @@ class PlaceController extends Controller
             $place['name'] => ''
         ]);
 
-        return view('main.contents.place', compact('place', 'hotels', 'links', 'currentPage', 'structuredData', 'lowestPrice'));
+        // No hotels found
+        $altPlaces = [];
+        $altHotels = [];
+        $altCacheKey = 'alt-place' . $place['slug'];
+
+        if (count($hotels) == 0) {
+            $altCacheData = CacheSystemDB::get($altCacheKey);
+            if ($altCacheData) {
+                extract($altCacheData);
+            }
+            else {
+                $latitude = explode('.', $place['latitude']);
+                $longitude = explode('.', $place['longitude']);
+    
+                if (count($latitude) > 1 && count($longitude) > 1) {
+                    $altPlacesModel = Place::where('latitude', 'like', $latitude[0] . '.%')
+                        ->where('longitude', 'like', $longitude[0] . '%')
+                        ->where('id', '<>', $place['id'])
+                        ->orderBy('total_views', 'DESC')
+                        ->orderBy('user_ratings_total', 'DESC')
+                        ->take(16)
+                        ->get();
+                    $altPlaces = $altPlacesModel->toArray();
+                }
+    
+                if (count($altPlaces) < 8) {
+                    $altPlacesModel = Place::where('country', $place['country']['name'])
+                        ->where('id', '<>', $place['id'])
+                        ->orderBy('total_views', 'DESC')
+                        ->orderBy('user_ratings_total', 'DESC')
+                        ->take(16)
+                        ->get();
+                    $altPlaces = $altPlacesModel->toArray();
+                }
+    
+                if (count($altPlaces) > 0) {
+                    $altHotelsModel = Hotel::where(function ($query) use ($altPlaces) {
+                            foreach ($altPlaces as $place) {
+                                $latitude = explode('.', $place['latitude']);
+                                $longitude = explode('.', $place['longitude']);
+    
+                                $query->orWhere(function ($subQuery) use ($latitude, $longitude) {
+                                    if (count($latitude) > 1 && count($longitude) > 1) {
+                                        $subQuery->where('latitude', 'like', $latitude[0] . '.' . substr($latitude[1], 0, 1) . '%')
+                                            ->where('longitude', 'like', $longitude[0] . '.' . substr($longitude[1], 0, 1) . '%');
+                                    }
+                                });
+                            }
+                        })
+                        ->orderBy('total_views', 'DESC')
+                        ->orderBy('number_of_reviews', 'DESC')
+                        ->take(5)
+                        ->get();
+                    $altHotels = [];
+                    foreach ($altHotelsModel as $altHotelModel) {
+                        $altHotelModel = $altHotelModel->toArray();
+                        $altHotelModel['photos'] = json_decode($altHotelModel['photos'], true);
+                        $altHotels[] = $altHotelModel;
+                    }
+                }
+    
+                // Generate cache for place with no hotels found
+                $altCacheTags = [];
+                $altCacheTags[] = '[place:' . $place['id'] . ']';
+                CacheSystemDB::generate($altCacheKey, compact('altPlaces', 'altHotels'), [
+                    'altPlaces' => 'place',
+                    'altHotels' => 'hotel',
+                ], $altCacheTags);
+                // [END] Generate cache for place with no hotels found
+            }
+        }
+        // [END] No hotels found
+
+        return view('main.contents.place', compact('place', 'hotels', 'links', 'currentPage', 'structuredData', 'lowestPrice', 'altPlaces', 'altHotels'));
     }
 
     private function totalViewsHandler($placeID)

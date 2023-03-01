@@ -248,6 +248,37 @@
                         </div>
                     </div>
                     <div x-show="!isLoading" x-html="results"></div>
+
+                    @if (count($hotels) == 0)
+                        <hr>
+
+                        @if (count($altPlaces) > 0)
+                            <h2 class="fs-4 mb-3">{{ __('Other Places Near :place', ['place' => $place['name']]) }}</h2>
+                            <div class="card mb-3 shadow-sm">
+                                <div class="card-body">
+                                    <div class="row">
+                                        @foreach ($altPlaces as $altPlace)
+                                            <div class="col-12 col-lg-6">
+                                                <div class="mb-2">
+                                                    <div class="tw-line-clamp-1">
+                                                        <a href="{{ route('place', [$altPlace['slug']]) }}">{{ $altPlace['name'] }}</a>
+                                                    </div>
+                                                    <div class="text-muted small tw-line-clamp-1">{{ $altPlace['address'] }}</div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
+                        @if (count($altHotels) > 0)
+                            <h2 class="fs-4 mb-3">{{ __('Hotel Recommendations') }}</h2>
+                            @foreach ($altHotels as $altHotel)
+                                <x-main.components.contents.hotel :hotel="$altHotel" />
+                            @endforeach
+                        @endif
+                    @endif
                 </div>
             </div>
         </div>
