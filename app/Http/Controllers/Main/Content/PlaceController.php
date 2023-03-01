@@ -190,13 +190,15 @@ class PlaceController extends Controller
                 }
     
                 if (count($altPlaces) < 8) {
-                    $altPlacesModel = Place::where('country', $place['country']['name'])
-                        ->where('id', '<>', $place['id'])
-                        ->orderBy('total_views', 'DESC')
-                        ->orderBy('user_ratings_total', 'DESC')
-                        ->take(16)
-                        ->get();
-                    $altPlaces = $altPlacesModel->toArray();
+                    if (isset($place['country']) && isset($place['country']['name'])) {
+                        $altPlacesModel = Place::where('country', $place['country']['name'])
+                            ->where('id', '<>', $place['id'])
+                            ->orderBy('total_views', 'DESC')
+                            ->orderBy('user_ratings_total', 'DESC')
+                            ->take(16)
+                            ->get();
+                        $altPlaces = $altPlacesModel->toArray();
+                    }
                 }
     
                 if (count($altPlaces) > 0) {
