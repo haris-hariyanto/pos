@@ -107,12 +107,7 @@ class PlaceController extends Controller
                 $hotels[] = $hotel;
             }
 
-            if ($querySortBy == 'popular') {
-                $hotels = collect($hotels)->sortBy('m_distance')->toArray();
-            }
-            else {
-                $hotels = collect($hotels)->toArray();
-            }
+            $hotels = collect($hotels)->toArray();
 
             if ($request->expectsJson()) {
                 $resultsHTML = view('main.contents.json-place', compact('place', 'hotels', 'links'))->render();
@@ -289,6 +284,10 @@ class PlaceController extends Controller
             }
         }
         // [END] No hotels found
+
+        if ($querySortBy == 'popular') {
+            $hotels = collect($hotels)->sortBy('m_distance')->toArray();
+        }
 
         return view('main.contents.place', compact('place', 'hotels', 'links', 'currentPage', 'structuredData', 'lowestPrice', 'altPlaces', 'altHotels'));
     }
