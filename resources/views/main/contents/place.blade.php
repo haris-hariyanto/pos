@@ -253,7 +253,7 @@
                         <hr>
 
                         @if (count($altPlaces) > 0)
-                            <h2 class="fs-4 mb-3">{{ __('Other Places Near :place', ['place' => $place['name']]) }}</h2>
+                            <h2 class="fs-4 mb-3">{{ __('Related Places :place', ['place' => $place['name']]) }}</h2>
                             <div class="card mb-3 shadow-sm">
                                 <div class="card-body">
                                     <div class="row">

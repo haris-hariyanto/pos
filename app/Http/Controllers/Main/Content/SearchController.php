@@ -145,7 +145,8 @@ class SearchController extends Controller
             ->withQueryString();
         
         $isSearchFromAPI = false;
-        if (count($results) < 1) {
+        $searchAPIEnabled = Settings::get('searchsettings__enabled', 'N');
+        if (count($results) < 1 && $searchAPIEnabled) {
             $googlePlaces = new GooglePlaces();
             $getPlaces = $googlePlaces->searchPlaces($query);
 

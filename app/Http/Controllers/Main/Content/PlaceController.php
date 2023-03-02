@@ -10,6 +10,8 @@ use App\Helpers\CacheSystemDB;
 use App\Helpers\StructuredData;
 use App\Helpers\Text;
 use Illuminate\Support\Facades\Cache;
+use App\Helpers\GooglePlaces;
+use App\Helpers\Settings;
 
 class PlaceController extends Controller
 {
@@ -105,7 +107,12 @@ class PlaceController extends Controller
                 $hotels[] = $hotel;
             }
 
-            $hotels = collect($hotels)->toArray();
+            if ($querySortBy == 'popular') {
+                $hotels = collect($hotels)->sortBy('m_distance')->toArray();
+            }
+            else {
+                $hotels = collect($hotels)->toArray();
+            }
 
             if ($request->expectsJson()) {
                 $resultsHTML = view('main.contents.json-place', compact('place', 'hotels', 'links'))->render();
@@ -167,7 +174,8 @@ class PlaceController extends Controller
         // No hotels found
         $altPlaces = [];
         $altHotels = [];
-        $altCacheKey = 'alt-place' . $place['slug'];
+
+        $altCacheKey = 'alternative-places' . $place['slug'];
 
         if (count($hotels) == 0) {
             $altCacheData = CacheSystemDB::get($altCacheKey);
@@ -200,6 +208,27 @@ class PlaceController extends Controller
                         $altPlaces = $altPlacesModel->toArray();
                     }
                 }
+
+                if (count($altPlaces) < 8) {
+                    $placeName = $place['name'];
+                    $placeName = preg_replace('/\s+/', ' ', $placeName);
+                    $placeName = explode(' ', $placeName);
+
+                    $altPlacesModel = Place::where(function ($query) use ($placeName) {
+                            foreach ($placeName as $placeNamePart) {
+                                $query->orWhere('name', 'like', '%' . $placeNamePart . '%');
+                                $query->orWhere('address', 'like', '%' . $placeNamePart . '%');
+                            }
+                        })
+                        ->where('name', '<>', $place['name'])
+                        ->orderBy('total_views', 'DESC')
+                        ->orderBy('user_ratings_total', 'DESC')
+                        ->take(16)
+                        ->get();
+                    if (count($altPlaces) < count($altPlacesModel)) {
+                        $altPlaces = $altPlacesModel->toArray();
+                    }
+                }
     
                 if (count($altPlaces) > 0) {
                     $altHotelsModel = Hotel::where(function ($query) use ($altPlaces) {
@@ -219,7 +248,29 @@ class PlaceController extends Controller
                         ->orderBy('number_of_reviews', 'DESC')
                         ->take(5)
                         ->get();
-                    $altHotels = [];
+                    foreach ($altHotelsModel as $altHotelModel) {
+                        $altHotelModel = $altHotelModel->toArray();
+                        $altHotelModel['photos'] = json_decode($altHotelModel['photos'], true);
+                        $altHotels[] = $altHotelModel;
+                    }
+                }
+
+                if (count($altHotels) < 5) {
+                    $placeName = $place['name'];
+                    $placeName = preg_replace('/\s+/', ' ', $placeName);
+                    $placeName = explode(' ', $placeName);
+
+                    $altHotelsModel = Hotel::where(function ($query) use ($placeName) {
+                            foreach ($placeName as $placeNamePart) {
+                                $query->orWhere('name', 'like', '%' . $placeNamePart . '%');
+                                $query->orWhere('address_line_1', 'like', '%' . $placeNamePart . '%');
+                                $query->orWhere('address_line_2', 'like', '%' . $placeNamePart . '%');
+                            }
+                        })
+                        ->orderBy('total_views', 'DESC')
+                        ->orderBy('number_of_reviews', 'DESC')
+                        ->take(5)
+                        ->get();
                     foreach ($altHotelsModel as $altHotelModel) {
                         $altHotelModel = $altHotelModel->toArray();
                         $altHotelModel['photos'] = json_decode($altHotelModel['photos'], true);
