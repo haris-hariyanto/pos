@@ -31,25 +31,25 @@ class ArticleGenerator extends Command
      */
     public function handle()
     {
-        $this->line('[ * ] Menghitung hotel...');
-
-        $hotelsTotal = Hotel::count();
-        $hotelsWithoutArticle = Hotel::where('article', '')
-            ->orWhereNull('article')
-            ->count();
-        $hotelsWithArticle = Hotel::where('article', '<>', '')
-            ->whereNotNull('article')
-            ->count();
-        
-        $this->info('[ * ] Jumlah hotel : ' . $hotelsTotal);
-        $this->info('[ * ] Hotel dengan artikel : ' . $hotelsWithArticle);
-        $this->info('[ * ] Hotel tanpa artikel : ' . $hotelsWithoutArticle);
-        $this->line('--------------------');
-
         if ($this->option('limit')) {
             $limit = $this->option('limit');
         }
         else {
+            $this->line('[ * ] Menghitung hotel...');
+
+            $hotelsTotal = Hotel::count();
+            $hotelsWithoutArticle = Hotel::where('article', '')
+                ->orWhereNull('article')
+                ->count();
+            $hotelsWithArticle = Hotel::where('article', '<>', '')
+                ->whereNotNull('article')
+                ->count();
+            
+            $this->info('[ * ] Jumlah hotel : ' . $hotelsTotal);
+            $this->info('[ * ] Hotel dengan artikel : ' . $hotelsWithArticle);
+            $this->info('[ * ] Hotel tanpa artikel : ' . $hotelsWithoutArticle);
+            $this->line('--------------------');
+            
             $limit = $this->ask('Limit Hotel', 1000);
         }
 
