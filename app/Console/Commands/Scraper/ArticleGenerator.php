@@ -15,7 +15,7 @@ class ArticleGenerator extends Command
      *
      * @var string
      */
-    protected $signature = 'scraper:articles';
+    protected $signature = 'scraper:articles {--limit=}';
 
     /**
      * The console command description.
@@ -46,7 +46,12 @@ class ArticleGenerator extends Command
         $this->info('[ * ] Hotel tanpa artikel : ' . $hotelsWithoutArticle);
         $this->line('--------------------');
 
-        $limit = $this->ask('Limit Hotel', 1000);
+        if ($this->option('limit')) {
+            $limit = $this->option('limit');
+        }
+        else {
+            $limit = $this->ask('Limit Hotel', 1000);
+        }
 
         $this->initializeKeys();
 
