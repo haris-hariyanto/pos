@@ -56,8 +56,7 @@ class ArticleGenerator extends Command
         $this->initializeKeys();
 
         for ($i = 1; $i <= $limit; $i++) {
-            $hotel = Hotel::where('article', '')
-                ->orWhereNull('article')
+            $hotel = Hotel::where('is_article_scraped', 'N')
                 ->orderBy('total_views', 'DESC')
                 ->orderBy('number_of_reviews')
                 ->first();
@@ -88,6 +87,10 @@ class ArticleGenerator extends Command
                 }
             }
 
+            $hotel->update([
+                'is_article_scraped' => 'PROCESS',
+            ]);
+
             $client = \OpenAI::client($key->key);
             try {
                 $this->info('[ * ] ' . $i . '/' . $limit);
@@ -114,6 +117,7 @@ class ArticleGenerator extends Command
             $article = trim($result['choices'][0]['text']);
             $hotel->update([
                 'article' => $article,
+                'is_article_scraped' => 'Y',
             ]);
 
             Key::where('id', '>', 0)->update([
