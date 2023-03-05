@@ -297,7 +297,7 @@
 
                                     <div class="d-grid d-lg-block mb-2">
                                         <!-- Booking link -->
-                                        <a href="{{ $hotel['url'] . $settings__agoda_suffix }}" class="btn btn-secondary px-5">{{ __('Book via :platform', ['platform' => 'Agoda']) }}</a>
+                                        <a href="{{ $hotel['url'] . $settings__agoda_suffix }}" class="btn btn-secondary px-5">Klaim Diskon Disini</a>
                                         <!-- [END] Booking link -->
                                     </div>
 

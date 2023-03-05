@@ -2,7 +2,9 @@
     <nav class="navbar navbar-expand-md navbar-dark bg-primary fixed-top">
         <div class="container px-4">
     
-            <a href="{{ route('index') }}" class="navbar-brand">{{ $settings__website_name }}</a>
+            <a href="{{ route('index') }}" class="navbar-brand">
+                <img src="{{ asset('logo.png') }}" alt="{{ $settings__website_name }}">
+            </a>
     
             <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
