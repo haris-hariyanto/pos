@@ -95,14 +95,22 @@ class ArticleGenerator extends Command
             try {
                 $this->info('[ * ] ' . $i . '/' . $limit);
                 $this->info('[ * ] Membuat artikel : ' . $hotel->name);
+                /*
                 $result = $client->completions()->create([
-                    'model' => 'text-davinci-003',
+                    'model' => 'gpt-3.5-turbo',
                     'temperature' => config('services.openai.temperature'),
                     'top_p' => 1,
                     'frequency_penalty' => 0,
                     'presence_penalty' => 0,
                     'max_tokens' => config('services.openai.max_tokens'),
                     'prompt' => $this->generatePrompt($hotel),
+                ]);
+                */
+                $result = $client->chat()->create([
+                    'model' => 'gpt-3.5-turbo',
+                    'messages' => [
+                        ['role' => 'user', 'content' => $this->generatePrompt($hotel)],
+                    ],
                 ]);
             }
             catch (\OpenAI\Exceptions\ErrorException $error) {
@@ -114,7 +122,22 @@ class ArticleGenerator extends Command
                 continue;
             }
 
-            $article = trim($result['choices'][0]['text']);
+            // $article = trim($result['choices'][0]['text']);
+            $article = $result['choices'][0]['message']['content'];
+            $finalArticle = [];
+            $paragraphs = preg_split('/\r\n|\r|\n/', $article);
+            foreach ($paragraphs as $paragraph) {
+                if (!empty($paragraph)) {
+                    if (substr(trim($paragraph), 0, 1) == '<') {
+                        $finalArticle[] = $paragraph;
+                    }
+                    else {
+                        $finalArticle[] = '<p>' . $paragraph . '</p>';
+                    }
+                }
+            }
+            $article = implode('', $finalArticle);
+
             $hotel->update([
                 'article' => $article,
                 'is_article_scraped' => 'Y',
@@ -229,7 +252,7 @@ class ArticleGenerator extends Command
             $prompt .= 'The article consists of at least 10 paragraphs. ';
             $prompt .= 'Each paragraph must have a minimum of 200 words. ';
             $prompt .= 'Write in HTML without html and body tag. ';
-            $prompt .= 'Primary title: <h2>. Subtitles: <h3>. Conclusion title: <h4>. Paragraphs: <p>.' . "\n";
+            $prompt .= 'Primary title: <h2>. Subtitles: <h3>. Conclusion title: <h4>. Paragraph: <p>.' . "\n";
 
             $prompt .= 'Hotel name : ' . $hotel->name . "\n";
 
