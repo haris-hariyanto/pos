@@ -1,5 +1,5 @@
 const cssFileName = 'app.ab305471.css';
-const jsFileName = 'app.013eeee8.js';
+const jsFileName = 'app.65f43da6.js';
 
 module.exports = {
     content: [
@@ -11,5 +11,5 @@ module.exports = {
         `public/build/assets/${cssFileName}`,
     ],
     output: `public/build/assets/${cssFileName}`,
-    safelist: ['h2', 'fs-4', 'fs-5'],
+    safelist: ['h2', 'h4', 'fs-4', 'fs-5'],
 }
