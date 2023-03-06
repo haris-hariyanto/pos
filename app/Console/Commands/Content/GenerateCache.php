@@ -21,7 +21,7 @@ class GenerateCache extends Command
      *
      * @var string
      */
-    protected $signature = 'content:cache';
+    protected $signature = '_content:cache';
 
     /**
      * The console command description.

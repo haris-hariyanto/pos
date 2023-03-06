@@ -140,6 +140,11 @@ class CacheSystemDB
         });
     }
 
+    public static function forgetSync($key) {
+        Storage::delete('caches/' . $key . '.json');
+        $cache = DB::table('page_caches')->where('key', $key)->delete();
+    }
+
     public static function flush()
     {
         Storage::deleteDirectory('caches');
