@@ -48,6 +48,9 @@ class Test extends Command
         foreach ($hotels as $hotel) {
             if (!in_array($hotel->id, $reviews)) {
                 // $this->line($hotel->id);
+                $hotel->update([
+                    'is_reviews_scraped' => 'N',
+                ]);
                 $this->line($i . ' : ' . $hotel->id);
                 $i++;
             }
