@@ -44,15 +44,13 @@ class Test extends Command
         $hotels = Hotel::where('is_reviews_scraped', 'Y')->where('number_of_reviews', 0)
             ->orderBy('number_of_reviews', 'DESC')
             ->get();
-        $skip = true;
+        $i = 1;
         foreach ($hotels as $hotel) {
-            if ($hotel->id == '1766591') {
-                $skip = false;
+            if (!in_array($hotel->id, $reviews)) {
+                // $this->line($hotel->id);
+                $this->line($i);
+                $i++;
             }
-            if ($skip) {
-                continue;
-            }
-            $this->line($hotel->id);
         }
         /*
         $hotels = Hotel::whereRaw('total_views <> weekly_views')->get();
