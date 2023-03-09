@@ -41,11 +41,18 @@ class Test extends Command
     {
         $reviews = Review::select('hotel_id')->distinct()->get();
         $reviews = $reviews->pluck('hotel_id')->toArray();
-        $hotels = Hotel::where('is_reviews_scraped', 'Y')->where('number_of_reviews', 0)->get();
+        $hotels = Hotel::where('is_reviews_scraped', 'Y')->where('number_of_reviews', 0)
+            ->orderBy('number_of_reviews', 'DESC')
+            ->get();
+        $skip = true;
         foreach ($hotels as $hotel) {
-            if (!in_array($hotel->id, $reviews)) {
-                $this->line($hotel->id);
+            if ($hotel->id == '1766591') {
+                $skip = false;
             }
+            if ($skip) {
+                continue;
+            }
+            $this->line($hotel->id);
         }
         /*
         $hotels = Hotel::whereRaw('total_views <> weekly_views')->get();
