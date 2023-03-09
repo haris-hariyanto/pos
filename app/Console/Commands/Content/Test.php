@@ -48,7 +48,7 @@ class Test extends Command
         foreach ($hotels as $hotel) {
             if (!in_array($hotel->id, $reviews)) {
                 // $this->line($hotel->id);
-                $this->line($i);
+                $this->line($i . ' : ' . $hotel->id);
                 $i++;
             }
         }
