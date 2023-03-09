@@ -41,7 +41,7 @@ class Test extends Command
     {
         $reviews = Review::select('hotel_id')->distinct()->get();
         $reviews = $reviews->pluck('hotel_id')->toArray();
-        $hotels = Hotel::where('is_reviews_scraped', 'Y')->get();
+        $hotels = Hotel::where('is_reviews_scraped', 'Y')->where('number_of_reviews', 0)->get();
         foreach ($hotels as $hotel) {
             if (!in_array($hotel->id, $reviews)) {
                 $this->line($hotel->id);
