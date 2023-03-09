@@ -124,6 +124,10 @@ class HotelReview extends Command
                         }
                     }
                     else {
+                        $additionalData = [];
+                        $additionalData['reviews'] = $findPlaceID['description'];
+                        $additionalData = json_encode($additionalData);
+
                         $this->error('[ * ] API Error : ' . $findPlaceID['description']);
                     }
                 }
@@ -132,13 +136,18 @@ class HotelReview extends Command
                 }
     
                 if ($failedToFindID) {
+                    $additionalData = [];
+                    $additionalData['reviews'] = 'ID not found';
+                    $additionalData = json_encode($additionalData);
+
                     $this->line('[ * ] ID hotel tidak ditemukan');
                 }
-    
+
                 $hotel->update([
                     'is_reviews_scraped' => 'Y',
+                    'additional_data' => isset($additionalData) ? $additionalData : null,
                 ]);
-    
+
                 $prepareData = [];
                 foreach ($reviewsToSave as $reviewToSave) {
                     $prepareData[] = new Review($reviewToSave);
