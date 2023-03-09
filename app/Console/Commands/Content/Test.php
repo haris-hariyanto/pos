@@ -7,6 +7,7 @@ use App\Models\Hotel\Hotel;
 use App\Models\Hotel\Chain;
 use App\Models\Hotel\Brand;
 use App\Models\Hotel\HotelPlace;
+use App\Models\Hotel\Review;
 use App\Models\Location\Continent;
 use App\Models\Location\Country;
 use App\Models\Location\State;
@@ -38,12 +39,22 @@ class Test extends Command
 
     public function handle()
     {
+        $reviews = Review::select('hotel_id')->distinct()->get();
+        $reviews = $reviews->pluck('hotel_id')->toArray();
+        $hotels = Hotel::where('is_reviews_scraped', 'Y')->get();
+        foreach ($hotels as $hotel) {
+            if (!in_array($hotel->id, $reviews)) {
+                $this->line($hotel->id);
+            }
+        }
+        /*
         $hotels = Hotel::whereRaw('total_views <> weekly_views')->get();
         foreach ($hotels as $hotel) {
             $hotel->update([
                 'total_views' => $hotel->weekly_views,
             ]);
         }
+        */
     }
 
     public function __handle()
