@@ -79,14 +79,27 @@ class HotelReview extends Command
     
                 if (!empty($hotel->latitude) && !empty($hotel->longitude)) {
                     $googlePlaces = new GooglePlaces();
-                    $findPlaceID = $googlePlaces->findID($hotel->name, $hotel->latitude, $hotel->longitude);
+
+                    try {
+                        $findPlaceID = $googlePlaces->findID($hotel->name, $hotel->latitude, $hotel->longitude);
+                    }
+                    catch (\Illuminate\Http\Client\RequestException $exception) {
+                        $this->error('[ * ] Error');
+                        continue;
+                    }
     
                     if ($findPlaceID['success']) {
                         $placeID = $findPlaceID['id'];
     
                         $this->line('[ * ] ID ditemukan : ' . $placeID);
     
-                        $getReviews = $googlePlaces->reviews($placeID);
+                        try {
+                            $getReviews = $googlePlaces->reviews($placeID);
+                        }
+                        catch (\Illuminate\Http\Client\RequestException $exception) {
+                            $this->error('[ * ] Error');
+                            continue;
+                        }
     
                         if ($getReviews['success'] && count($getReviews['reviews']) > 0) {
                             $reviews = $getReviews['reviews'];
