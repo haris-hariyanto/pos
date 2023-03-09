@@ -49,7 +49,7 @@ class HotelReview extends Command
         $i = 1;
         while ($loop) {
             $hotels = Hotel::where('is_reviews_scraped', 'N')
-                ->take(10)
+                ->take(100)
                 ->orderBy('number_of_reviews', 'DESC')
                 ->get();
             
