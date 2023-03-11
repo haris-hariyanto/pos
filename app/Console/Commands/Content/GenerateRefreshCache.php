@@ -153,7 +153,9 @@ class GenerateRefreshCache extends Command
 
                 if ($createCache) {
                     $this->info('[ * ] Membuat cache : ' . $route);
-                    Http::retry(5, 1000)->get($route);
+                    dispatch(function () use ($route) {
+                        Http::retry(5, 1000)->get($route);
+                    });
                 }
             }
         }
