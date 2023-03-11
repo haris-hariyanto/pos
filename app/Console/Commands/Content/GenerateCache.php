@@ -93,7 +93,9 @@ class GenerateCache extends Command
             if (!CacheSystemDB::get('hotel' . $hotel->slug)) {
                 $route = route('hotel', [$hotel->slug]);
                 $this->info('[ * ] Membuat cache : ' . $route);
-                Http::retry(5, 1000)->get($route);
+                dispatch(function () use ($route) {
+                    Http::retry(5, 1000)->get($route);
+                });
             }
         }
     }
